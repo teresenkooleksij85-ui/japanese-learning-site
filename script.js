@@ -621,8 +621,51 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 // Синхронизация с Python бэкендом
+// Проверка авторизации при загрузке страницы
+function checkAuthStatus() {
+    fetch('/api/me')
+        .then(res => {
+            if (!res.ok) throw new Error('Сеть не ответила');
+            return res.json();
+        })
+        .then(data => {
+            const authText = document.getElementById('auth-status-text');
+            const authBtn = document.getElementById('auth-main-btn');
+            const userNameElem = document.getElementById('user-name');
+
+            if (data && data.logged_in) {
+                const user = data.user;
+                if (authText) authText.textContent = `Привет, ${user.username}!`;
+                if (authBtn) {
+                    authBtn.textContent = 'Выйти';
+                    authBtn.onclick = logoutUser;
+                }
+                if (userNameElem) userNameElem.textContent = user.username;
+
+                localStorage.setItem("userName", user.username);
+                localStorage.setItem("correctCount", user.correctCount);
+                localStorage.setItem("wrongCount", user.wrongCount);
+                localStorage.setItem("streakDays", user.streakDays);
+
+                updateProfileUI();
+            }
+        })
+        .catch(() => {
+            // Если сервера нет — просто работаем локально без ошибок
+            console.log("Режим автономной работы (LocalStorage)");
+        });
+}
+
+function logoutUser() {
+    fetch('/api/logout', { method: 'POST' })
+        .then(() => location.reload())
+        .catch(() => location.reload());
+}
+
 function syncWithServer() {
-    let username = localStorage.getItem("userName") || "Ученик";
+    let username = localStorage.getItem("userName");
+    if (!username || username === "Ученик") return;
+
     let correct = parseInt(localStorage.getItem("correctCount")) || 0;
     let wrong = parseInt(localStorage.getItem("wrongCount")) || 0;
     let streak = parseInt(localStorage.getItem("streakDays")) || 0;
@@ -630,19 +673,14 @@ function syncWithServer() {
 
     fetch(`/api/profile/${encodeURIComponent(username)}`, {
         method: "POST",
-        headers: {
-            "Content-Type": "json"
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
             correctCount: correct,
             wrongCount: wrong,
             streakDays: streak,
             level: level
         })
-    })
-    .then(res => res.json())
-    .then(data => console.log("Синхронизация с сервером:", data))
-    .catch(err => console.log("Работаем в оффлайн-режиме"));
+    }).catch(() => {});
 }
 
 // Вызываем синхронизацию при обновлении UI
