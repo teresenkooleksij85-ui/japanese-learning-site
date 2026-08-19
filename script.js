@@ -313,8 +313,7 @@ function renderChoiceButtons(correctKana) {
     removeChoiceButtons();
     const container = document.getElementById("kana-test");
     const btnBox = document.createElement("div");
-    btnBox.id = "choice-container";
-    btnBox.style.cssText = "display: flex; gap: 10px; justify-content: center; margin: 15px 0;";
+    btnBox.id = "choice-container"; // Стили сетки 2х2 берутся из style.css!
 
     let choices = [correctKana];
     let allKeys = Object.keys({...kanaData, ...katakanaData});
@@ -329,7 +328,6 @@ function renderChoiceButtons(correctKana) {
         let btn = document.createElement("button");
         btn.textContent = char;
         btn.className = "action-btn";
-        btn.style.fontSize = "1.5rem";
         btn.onclick = () => checkChoiceAnswer(char, correctKana);
         btnBox.appendChild(btn);
     });
