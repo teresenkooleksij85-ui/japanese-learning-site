@@ -687,3 +687,40 @@ updateProfileUI = function() {
     originalUpdateProfileUI();
     syncWithServer();
 };
+
+// Функция для добавления правильных/неправильных ответов на сервер
+async function recordAnswer(isCorrect = true) {
+    try {
+        // 1. Узнаем, кто сейчас вошел
+        const meRes = await fetch('/api/me');
+        const meData = await meRes.json();
+
+        if (!meData.logged_in) {
+            console.log('Пользователь не авторизован — прогресс сохраняется локально');
+            return;
+        }
+
+        const user = meData.user;
+        
+        // 2. Увеличиваем счетчики
+        let correctCount = user.correctCount + (isCorrect ? 1 : 0);
+        let wrongCount = user.wrongCount + (isCorrect ? 0 : 1);
+
+        // 3. Отправляем обновленный счет на сервер (сервер сам пересчитает уровень и ачивки)
+        const saveRes = await fetch(`/api/profile/${user.username}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                correctCount: correctCount,
+                wrongCount: wrongCount,
+                streakDays: user.streakDays
+            })
+        });
+
+        const saveData = await saveRes.json();
+        console.log('Прогресс сохранен:', saveData.message);
+
+    } catch (err) {
+        console.error('Ошибка сохранения прогресса:', err);
+    }
+}
