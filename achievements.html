@@ -25,6 +25,20 @@
             gap: 15px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.05);
             border: 1px solid #eee;
+            transition: all 0.3s ease;
+        }
+
+        /* Стиль для еще НЕ полученных достижений */
+        .achievement-card.locked {
+            opacity: 0.4;
+            filter: grayscale(100%);
+            background: #f0f0f0;
+        }
+
+        /* Стиль для ПОЛУЧЕННЫХ достижений */
+        .achievement-card.unlocked {
+            border-color: #2ed573;
+            box-shadow: 0 4px 12px rgba(46, 213, 115, 0.2);
         }
 
         .achievement-icon {
@@ -55,6 +69,17 @@
         body.theme-dark .achievement-icon {
             background-color: #2a2a3d !important;
         }
+
+        .status-badge {
+            font-size: 0.75rem;
+            font-weight: bold;
+            padding: 2px 8px;
+            border-radius: 10px;
+            margin-top: 5px;
+            display: inline-block;
+        }
+        .status-badge.unlocked { background: #e8fae8; color: #2ed573; }
+        .status-badge.locked { background: #e0e0e0; color: #777; }
     </style>
 </head>
 
@@ -65,41 +90,89 @@
     <h1>実績 (Достижения)</h1>
     <p>Твой личный прогресс и награды 🏆</p>
 
-    <div class="achievements-grid">
-        <div class="achievement-card">
-            <div class="achievement-icon">🌱</div>
-            <div class="achievement-info">
-                <h3>Первый шаг</h3>
-                <p>Дать первый правильный ответ в упражнениях.</p>
-            </div>
-        </div>
-
-        <div class="achievement-card">
-            <div class="achievement-icon">🎯</div>
-            <div class="achievement-info">
-                <h3>Первая сотня</h3>
-                <p>Набрать 100 правильных ответов.</p>
-            </div>
-        </div>
-
-        <div class="achievement-card">
-            <div class="achievement-icon">🔥</div>
-            <div class="achievement-info">
-                <h3>Недельный марафон</h3>
-                <p>Заходить в приложение 7 дней подряд.</p>
-            </div>
-        </div>
-
-        <div class="achievement-card">
-            <div class="achievement-icon">👑</div>
-            <div class="achievement-info">
-                <h3>Сёгун</h3>
-                <p>Достичь 20 уровня в профиле.</p>
-            </div>
-        </div>
+    <div class="achievements-grid" id="achievementsGrid">
+        <!-- Достижения подгрузятся динамически -->
+        <p style="text-align:center; width:100%;">Загрузка достижений...</p>
     </div>
 
-    <script src="script.js"></script>
+<script>
+        const iconMap = {
+            'first_step': '🌱',
+            'hundred_correct': '🎯',
+            'week_marathon': '🔥',
+            'shogun': '👑'
+        };
+
+        // Заглушка списка достижений для незарегистрированных пользователей
+        const defaultAchievements = [
+            { id: 'first_step', title: 'Первый шаг', desc: 'Дать первый правильный ответ в упражнениях.', unlocked: false },
+            { id: 'hundred_correct', title: 'Первая сотня', desc: 'Набрать 100 правильных ответов.', unlocked: false },
+            { id: 'week_marathon', title: 'Недельный марафон', desc: 'Заходить в приложение 7 дней подряд.', unlocked: false },
+            { id: 'shogun', title: 'Сёгун', desc: 'Достичь 20 уровня в профиле.', unlocked: false }
+        ];
+
+        function renderAchievements(achievements, isLoggedIn) {
+            const grid = document.getElementById('achievementsGrid');
+            grid.innerHTML = '';
+
+            if (!isLoggedIn) {
+                const notice = document.createElement('div');
+                notice.style.gridColumn = '1 / -1';
+                notice.style.textAlign = 'center';
+                notice.style.marginBottom = '15px';
+                notice.style.color = '#e63946';
+                notice.innerHTML = '⚠️ <b>Вы не вошли в аккаунт.</b> <a href="index.html" style="color:#1d3557; text-decoration:underline;">Войдите</a>, чтобы сохранять свой прогресс и открывать достижения.';
+                grid.appendChild(notice);
+            }
+
+            achievements.forEach(ach => {
+                const card = document.createElement('div');
+                card.className = `achievement-card ${ach.unlocked ? 'unlocked' : 'locked'}`;
+                
+                const icon = iconMap[ach.id] || '🏆';
+                const statusText = ach.unlocked ? '✅ Открыто' : '🔒 Заблокировано';
+                const statusClass = ach.unlocked ? 'unlocked' : 'locked';
+
+                card.innerHTML = `
+                    <div class="achievement-icon">${icon}</div>
+                    <div class="achievement-info">
+                        <h3>${ach.title}</h3>
+                        <p>${ach.desc}</p>
+                        <span class="status-badge ${statusClass}">${statusText}</span>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        async function loadAchievements() {
+            const grid = document.getElementById('achievementsGrid');
+            try {
+                const res = await fetch('/api/achievements');
+                
+                if (res.status === 401) {
+                    // Пользователь не авторизован — показываем базовые карточки
+                    renderAchievements(defaultAchievements, false);
+                    return;
+                }
+
+                const data = await res.json();
+
+                if (data.status === 'success') {
+                    renderAchievements(data.achievements, true);
+                } else {
+                    renderAchievements(defaultAchievements, false);
+                }
+            } catch (err) {
+                console.error("Ошибка при запросе ачивок:", err);
+                grid.innerHTML = `<p style="color:red; text-align:center; grid-column: 1 / -1;">
+                    Ошибка подключения к серверу.<br>Убедитесь, что сервер Flask запущен (<code>python app.py</code>).
+                </p>`;
+            }
+        }
+
+        window.onload = loadAchievements;
+    </script>
 </body>
 
 </html>
