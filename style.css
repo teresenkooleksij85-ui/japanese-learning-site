@@ -1,0 +1,158 @@
+/* --- БАЗОВЫЕ ПЕРЕМЕННЫЕ И СТИЛИ --- */
+:root {
+    --primary-color: #e63946;
+    --bg-color: #f8f9fa;
+    --text-color: #1d3557;
+    --card-bg: #ffffff;
+    --border-color: #eee;
+    --formula-bg: #eef7ff;
+    --formula-border: #1d3557;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+/* Кнопка "Назад" */
+.back-button {
+    align-self: flex-start;
+    background: #6c757d;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-bottom: 15px;
+}
+
+h1 { color: var(--primary-color); }
+
+/* --- 🌙 ТЁМНАЯ ТЕМА (ЕДИНЫЙ СТАНДАРТ) --- */
+body.theme-dark {
+    --bg-color: #12121c;
+    --text-color: #f0f0f0;
+    --card-bg: #1e1e2d;
+    --border-color: #2a2a3d;
+    --formula-bg: #2a2d42;
+    --formula-border: #e63946;
+}
+
+/* Применение темы ко всем блокам, тестам, карточкам и аккордеонам */
+body.theme-dark .user-card,
+body.theme-dark .category-block,
+body.theme-dark .grammar-block,
+body.theme-dark #kana-test,
+body.theme-dark .word-card,
+body.theme-dark .script-option,
+body.theme-dark .test-config,
+body.theme-dark .menu-card,
+body.theme-dark #lofi-player {
+    background-color: var(--card-bg) !important;
+    color: var(--text-color) !important;
+    border-color: var(--border-color) !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* Иероглифы, Кана и Заголовки в тёмной теме */
+body.theme-dark .word-jp,
+body.theme-dark #test-kana,
+body.theme-dark .menu-card-title,
+body.theme-dark .category-header,
+body.theme-dark .grammar-header,
+body.theme-dark .jp-text {
+    color: #ff4d6d !important; /* Яркий читаемый красный */
+}
+
+/* Раскрывающиеся списки и содержимое аккордеонов */
+body.theme-dark .category-content,
+body.theme-dark .grammar-content {
+    background-color: #181826 !important;
+    color: #e0e0e0 !important;
+}
+
+/* Блоки с формулами в грамматике */
+body.theme-dark .formula-box {
+    background-color: var(--formula-bg) !important;
+    border-left-color: var(--formula-border) !important;
+    color: #ffffff !important;
+}
+
+/* Текст и подписи в тёмной теме */
+body.theme-dark p,
+body.theme-dark span,
+body.theme-dark label,
+body.theme-dark li,
+body.theme-dark i,
+body.theme-dark div {
+    color: #e0e0e0;
+}
+
+/* Поля ввода и селекты */
+body.theme-dark input[type="text"],
+body.theme-dark select {
+    background-color: #2a2a3d !important;
+    color: #ffffff !important;
+    border-color: #444466 !important;
+}
+
+body.theme-dark input::placeholder {
+    color: #aaa !important;
+}
+
+/* --- КНОПКИ КАТЕГОРИЙ СЛОВ И ГРАММАТИКИ --- */
+.category-header,
+.grammar-header {
+    width: 100%;
+    padding: 14px 18px;
+    background: #ffffff;
+    border: none;
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    box-sizing: border-box;
+    /* По умолчанию на светлом фоне — чёрный / тёмный цвет */
+    color: #1d3557 !important;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.category-header:hover,
+.grammar-header:hover {
+    background: #f0f4f8;
+}
+
+/* 🌙 В тёмной теме меняем цвет текста на кнопках на яркий красный */
+body.theme-dark .category-header,
+body.theme-dark .grammar-header {
+    background-color: #1e1e2d !important;
+    color: #ff4d6d !important; /* Красный цвет текста для тёмной темы */
+}
+
+body.theme-dark .category-header:hover,
+body.theme-dark .grammar-header:hover {
+    background-color: #2a2a3d !important;
+}
+
+/* Фиксированная сетка Годзюон по 5 колонок */
+.kana-grid-5 {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+/* Пустые ячейки для выравнивания таблицы Годзюон */
+.kana-card.empty {
+    visibility: hidden;
+    pointer-events: none;
+}

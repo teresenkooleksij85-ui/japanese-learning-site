@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Учим японский язык — 日本語</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            max-width: 450px;
+            width: 100%;
+            margin: 0 auto 90px auto; /* Запас снизу под плеер */
+            padding: 0 10px;
+        }
+
+        .menu-card {
+            background: white;
+            border-radius: 12px;
+            padding: 15px 10px;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+            transition: transform 0.2s, box-shadow 0.2s;
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #eee;
+        }
+
+        .menu-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.12);
+        }
+
+        .menu-card-icon {
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+        }
+
+        .menu-card-title {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #e63946;
+            margin: 0;
+        }
+
+        .menu-card-sub {
+            font-size: 0.8rem;
+            color: #666;
+            margin-top: 2px;
+        }
+
+        /* Адаптив под тёмную тему */
+        body.theme-dark .menu-card {
+            background-color: #28293d !important;
+            border-color: #3d3e5a !important;
+            color: #fff !important;
+        }
+
+        body.theme-dark .menu-card-title {
+            color: #ff758f !important;
+        }
+
+        body.theme-dark .menu-card-sub {
+            color: #aaa !important;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1 style="margin-top: 15px; margin-bottom: 5px;">日本語を勉強しよう！</h1>
+    <p style="margin-top: 0; color: #666;">Твой личный учебный хаб</p>
+
+    <!-- Переключатель тем -->
+    <div style="text-align: center; margin-top: 10px;">
+        <span style="font-size: 0.9rem; font-weight: bold; margin-right: 8px;">Тема:</span>
+        <button onclick="setTheme('theme-light')" style="padding: 5px 12px; border-radius: 6px; border: 1px solid #ccc; cursor: pointer; background: #fff; color: #333;">☀️ Светлая</button>
+        <button onclick="setTheme('theme-dark')" style="padding: 5px 12px; border-radius: 6px; border: 1px solid #ccc; cursor: pointer; background: #222; color: white;">🌙 Тёмная</button>
+    </div>
+
+    <!-- Карточка профиля и статистика -->
+    <div class="user-card" style="background: white; border-radius: 16px; padding: 15px 20px; max-width: 450px; width: 100%; margin: 15px auto; box-shadow: 0 4px 15px rgba(0,0,0,0.08); text-align: center; box-sizing: border-box;">
+        <div style="font-size: 2.5rem; margin-bottom: 5px;">🐱</div>
+        <h2 id="user-name" style="margin: 0 0 5px 0; font-size: 1.3rem;">Ученик</h2>
+        <div id="user-rank" style="display: inline-block; background: #e3f2fd; color: #1976d2; padding: 3px 10px; border-radius: 20px; font-weight: bold; font-size: 0.85rem; margin-bottom: 10px;">
+            「初心者」Новичок
+        </div>
+
+        <div style="display: flex; justify-content: space-around; margin-top: 10px; border-top: 1px solid #eee; padding-top: 10px;">
+            <div>
+                <div style="font-size: 1.2rem; font-weight: bold; color: #ff6b6b;" id="streak-days">🔥 0</div>
+                <div style="font-size: 0.75rem; color: #666;">дней подряд</div>
+            </div>
+            <div>
+                <div style="font-size: 1.2rem; font-weight: bold; color: #4ecdc4;" id="total-answers">🎯 0</div>
+                <div style="font-size: 0.75rem; color: #666;">правильных</div>
+            </div>
+            <div>
+                <div style="font-size: 1.2rem; font-weight: bold; color: #f7b731;" id="user-level">⭐ Lv. 1</div>
+                <div style="font-size: 0.75rem; color: #666;">уровень</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Полное меню карточками (6 разделов) -->
+    <div class="menu-grid">
+        <a href="hiragana.html" class="menu-card">
+            <div class="menu-card-icon">あ</div>
+            <h3 class="menu-card-title">ひらがな</h3>
+            <span class="menu-card-sub">Хирагана</span>
+        </a>
+
+        <a href="katakana.html" class="menu-card">
+            <div class="menu-card-icon">ア</div>
+            <h3 class="menu-card-title">カタカナ</h3>
+            <span class="menu-card-sub">Катакана</span>
+        </a>
+
+        <a href="practice.html" class="menu-card">
+            <div class="menu-card-icon">⚡</div>
+            <h3 class="menu-card-title">練習</h3>
+            <span class="menu-card-sub">Упражнения</span>
+        </a>
+
+        <a href="tango.html" class="menu-card">
+            <div class="menu-card-icon">📖</div>
+            <h3 class="menu-card-title">単語</h3>
+            <span class="menu-card-sub">Слова</span>
+        </a>
+
+        <a href="bunpou.html" class="menu-card">
+            <div class="menu-card-icon">⛩️</div>
+            <h3 class="menu-card-title">文法</h3>
+            <span class="menu-card-sub">Грамматика</span>
+        </a>
+
+        <a href="achievements.html" class="menu-card">
+            <div class="menu-card-icon">🏆</div>
+            <h3 class="menu-card-title">実績</h3>
+            <span class="menu-card-sub">Достижения</span>
+        </a>
+    </div>
+
+    <!-- Фоновый Lofi плеер -->
+    <div id="lofi-player" style="position: fixed; bottom: 15px; right: 15px; background: white; padding: 8px 14px; border-radius: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.15); display: flex; align-items: center; gap: 8px; z-index: 1000; border: 1px solid #eee;">
+        <span style="font-size: 1.1rem;">🎧</span>
+        <span style="font-size: 0.8rem; font-weight: bold; color: #333;" id="lofi-title">Lofi Radio</span>
+        <audio id="bg-audio" loop src="https://stream.zeno.fm/f3wvbbqmdg8uv"></audio>
+        <button id="play-btn" onclick="toggleLofi()" style="background: #e63946; color: white; border: none; padding: 5px 10px; border-radius: 20px; cursor: pointer; font-size: 0.75rem; font-weight: bold;">
+            ▶️ Вкл
+        </button>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        function toggleLofi() {
+            const audio = document.getElementById('bg-audio');
+            const btn = document.getElementById('play-btn');
+            if (audio.paused) {
+                audio.play();
+                btn.textContent = '⏸️ Пауза';
+                btn.style.background = '#2a9d8f';
+            } else {
+                audio.pause();
+                btn.textContent = '▶️ Вкл';
+                btn.style.background = '#e63946';
+            }
+        }
+    </script>
+</body>
+
+</html>

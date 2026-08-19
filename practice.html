@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Упражнения — Японский язык</title>
+    <style>
+        :root {
+            --primary-color: #e63946;
+            --bg-color: #f8f9fa;
+            --text-color: #1d3557;
+            --card-bg: #ffffff;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .back-button {
+            align-self: flex-start;
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-bottom: 15px;
+        }
+
+        h1 { margin-bottom: 5px; color: var(--primary-color); }
+
+        .script-settings {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+            width: 100%;
+            max-width: 800px;
+        }
+
+        .script-option {
+            background: var(--card-bg);
+            padding: 15px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            flex: 1;
+            min-width: 320px;
+        }
+
+        .toggle-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            width: 100%;
+            padding: 10px;
+            font-size: 1.2rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .row-selection { margin-top: 10px; }
+        .hidden { display: none; }
+
+        .select-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .select-buttons button {
+            flex: 1;
+            padding: 5px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            cursor: pointer;
+        }
+
+        .individual-kana-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            text-align: left;
+            max-height: 350px;
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+
+        .kana-row-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            border-bottom: 1px dashed #eee;
+            padding: 4px 0;
+        }
+
+        .kana-row-group label {
+            cursor: pointer;
+            font-size: 1.1rem;
+        }
+
+        .row-title {
+            color: var(--primary-color);
+            min-width: 75px;
+            font-size: 0.9rem !important;
+        }
+
+        #kana-test {
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+            text-align: center;
+            width: 100%;
+            max-width: 500px;
+        }
+
+        #test-answer {
+            padding: 10px;
+            font-size: 1.2rem;
+            width: 60%;
+            border: 2px solid #ccc;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .action-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            font-size: 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .hint-btn {
+            background-color: #e9c46a;
+            color: #1d3557;
+            border: none;
+            padding: 10px 18px;
+            font-size: 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        #test-result {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin: 10px 0;
+            min-height: 25px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <button class="back-button" onclick="location.href='index.html'">← Главное меню</button>
+
+    <h1>練習</h1>
+    <p>Выбери знаки для тренировки</p>
+
+    <div class="script-settings">
+
+        <!-- Хирагана -->
+        <div class="script-option">
+            <button type="button" class="toggle-btn" onclick="toggleRows('hiragana')">ひらがな (Хирагана)</button>
+            <div id="hiragana-rows" class="row-selection hidden">
+                <div class="select-buttons">
+                    <button type="button" onclick="selectAll('hiragana', true)">Выбрать всё</button>
+                    <button type="button" onclick="selectAll('hiragana', false)">Снять всё</button>
+                </div>
+                <hr style="margin: 10px 0; border: 0; border-top: 1px solid #ccc;">
+                
+                <div class="individual-kana-grid">
+                    <div class="kana-row-group">
+                        <label class="row-title"><input type="checkbox" onchange="toggleRowGroup(this, 'h-a')"> <b>А:</b></label>
+                        <label><input type="checkbox" class="kana-checkbox h-a" data-kana="あ" onchange="applySelectedRows()"> あ</label>
+                        <label><input type="checkbox" class="kana-checkbox h-a" data-kana="い" onchange="applySelectedRows()"> い</label>
+                        <label><input type="checkbox" class="kana-checkbox h-a" data-kana="う" onchange="applySelectedRows()"> う</label>
+                        <label><input type="checkbox" class="kana-checkbox h-a" data-kana="え" onchange="applySelectedRows()"> え</label>
+                        <label><input type="checkbox" class="kana-checkbox h-a" data-kana="お" onchange="applySelectedRows()"> お</label>
+                    </div>
+                    <div class="kana-row-group">
+                        <label class="row-title"><input type="checkbox" onchange="toggleRowGroup(this, 'h-ka')"> <b>КА:</b></label>
+                        <label><input type="checkbox" class="kana-checkbox h-ka" data-kana="か" onchange="applySelectedRows()"> か</label>
+                        <label><input type="checkbox" class="kana-checkbox h-ka" data-kana="き" onchange="applySelectedRows()"> き</label>
+                        <label><input type="checkbox" class="kana-checkbox h-ka" data-kana="く" onchange="applySelectedRows()"> く</label>
+                        <label><input type="checkbox" class="kana-checkbox h-ka" data-kana="け" onchange="applySelectedRows()"> け</label>
+                        <label><input type="checkbox" class="kana-checkbox h-ka" data-kana="こ" onchange="applySelectedRows()"> こ</label>
+                    </div>
+                    <div class="kana-row-group">
+                        <label class="row-title"><input type="checkbox" onchange="toggleRowGroup(this, 'h-sa')"> <b>СА:</b></label>
+                        <label><input type="checkbox" class="kana-checkbox h-sa" data-kana="さ" onchange="applySelectedRows()"> さ</label>
+                        <label><input type="checkbox" class="kana-checkbox h-sa" data-kana="し" onchange="applySelectedRows()"> し</label>
+                        <label><input type="checkbox" class="kana-checkbox h-sa" data-kana="す" onchange="applySelectedRows()"> す</label>
+                        <label><input type="checkbox" class="kana-checkbox h-sa" data-kana="せ" onchange="applySelectedRows()"> せ</label>
+                        <label><input type="checkbox" class="kana-checkbox h-sa" data-kana="そ" onchange="applySelectedRows()"> そ</label>
+                    </div>
+                    <div class="kana-row-group">
+                        <label class="row-title"><input type="checkbox" onchange="toggleRowGroup(this, 'h-ta')"> <b>ТА:</b></label>
+                        <label><input type="checkbox" class="kana-checkbox h-ta" data-kana="た" onchange="applySelectedRows()"> た</label>
+                        <label><input type="checkbox" class="kana-checkbox h-ta" data-kana="ち" onchange="applySelectedRows()"> ち</label>
+                        <label><input type="checkbox" class="kana-checkbox h-ta" data-kana="つ" onchange="applySelectedRows()"> つ</label>
+                        <label><input type="checkbox" class="kana-checkbox h-ta" data-kana="て" onchange="applySelectedRows()"> て</label>
+                        <label><input type="checkbox" class="kana-checkbox h-ta" data-kana="と" onchange="applySelectedRows()"> と</label>
+                    </div>
+                    <div class="kana-row-group">
+                        <label class="row-title"><input type="checkbox" onchange="toggleRowGroup(this, 'h-na')"> <b>НА:</b></label>
+                        <label><input type="checkbox" class="kana-checkbox h-na" data-kana="な" onchange="applySelectedRows()"> な</label>
+                        <label><input type="checkbox" class="kana-checkbox h-na" data-kana="に" onchange="applySelectedRows()"> に</label>
+                        <label><input type="checkbox" class="kana-checkbox h-na" data-kana="ぬ" onchange="applySelectedRows()"> ぬ</label>
+                        <label><input type="checkbox" class="kana-checkbox h-na" data-kana="ね" onchange="applySelectedRows()"> ね</label>
+                        <label><input type="checkbox" class="kana-checkbox h-na" data-kana="の" onchange="applySelectedRows()"> の</label>
+                    </div>
+                    <div class="kana-row-group">
+                        <label class="row-title"><input type="checkbox" onchange="toggleRowGroup(this, 'h-ha')"> <b>ХА:</b></label>
+                        <label><input type="checkbox" class="kana-checkbox h-ha" data-kana="は" onchange="applySelectedRows()"> は</label>
+                        <label><input type="checkbox" class="kana-checkbox h-ha" data-kana="ひ" onchange="applySelectedRows()"> ひ</label>
+                        <label><input type="checkbox" class="kana-checkbox h-ha" data-kana="ふ" onchange="applySelectedRows()"> ふ</label>
+                        <label><input type="checkbox" class="kana-checkbox h-ha" data-kana="へ" onchange="applySelectedRows()"> へ</label>
+                        <label><input type="checkbox" class="kana-checkbox h-ha" data-kana="ほ" onchange="applySelectedRows()"> ほ</label>
+                    </div>
+                    <div class="kana-row-group">
+                        <label class="row-title"><input type="checkbox" onchange="toggleRowGroup(this, 'h-ma')"> <b>МА:</b></label>
+                        <label><input type="checkbox" class="kana-checkbox h-ma" data-kana="ま" onchange="applySelectedRows()"> ま</label>
+                        <label><input type="checkbox" class="kana-checkbox h-ma" data-kana="み" onchange="applySelectedRows()"> み</label>
+                        <label><input type="checkbox" class="kana-checkbox h-ma" data-kana="む" onchange="applySelectedRows()"> む</label>
+                        <label><input type="checkbox" class="kana-checkbox h-ma" data-kana="め" onchange="applySelectedRows()"> め</label>
+                        <label><input type="checkbox" class="kana-checkbox h-ma" data-kana="も" onchange="applySelectedRows()"> も</label>
+                    </div>
+                    <div class="kana-row-group">
+                        <label class="row-title"><input type="checkbox" onchange="toggleRowGroup(this, 'h-ya')"> <b>Я:</b></label>
+                        <label><input type="checkbox" class="kana-checkbox h-ya" data-kana="や" onchange="applySelectedRows()"> や</label>
+                        <label><input type="checkbox" class="kana-checkbox h-ya" data-kana="ゆ" onchange="applySelectedRows()"> ゆ</label>
+                        <label><input type="checkbox" class="kana-checkbox h-ya" data-kana="よ" onchange="applySelectedRows()"> よ</label>
+                    </div>
+                    <div class="kana-row-group">
+                        <label class="row-title"><input type="checkbox" onchange="toggleRowGroup(this, 'h-ra')"> <b>РА:</b></label>
+                        <label><input type="checkbox" class="kana-checkbox h-ra" data-kana="ら" onchange="applySelectedRows()"> ら</label>
+                        <label><input type="checkbox" class="kana-checkbox h-ra" data-kana="り" onchange="applySelectedRows()"> り</label>
+                        <label><input type="checkbox" class="kana-checkbox h-ra" data-kana="る" onchange="applySelectedRows()"> る</label>
+                        <label><input type="checkbox" class="kana-checkbox h-ra" data-kana="れ" onchange="applySelectedRows()"> れ</label>
+                        <label><input type="checkbox" class="kana-checkbox h-ra" data-kana="ろ" onchange="applySelectedRows()"> ろ</label>
+                    </div>
+                    <div class="kana-row-group">
+                        <label class="row-title"><input type="checkbox" onchange="toggleRowGroup(this, 'h-wa')"> <b>ВА/Н:</b></label>
+                        <label><input type="checkbox" class="kana-checkbox h-wa" data-kana="わ" onchange="applySelectedRows()"> わ</label>
+                        <label><input type="checkbox" class="kana-checkbox h-wa" data-kana="を" onchange="applySelectedRows()"> を</label>
+                        <label><input type="checkbox" class="kana-checkbox h-wa" data-kana="ん" onchange="applySelectedRows()"> ん</label>
+                    </div>
+                    <div class="kana-row-group" style="background: #eef7ff; padding: 4px; border-radius: 6px;">
+                        <label class="row-title"><input type="checkbox" onchange="toggleRowGroup(this, 'h-ga')"> <b>ГА:</b></label>
+                        <label><input type="checkbox" class="kana-checkbox h-ga" data-kana="が" onchange="applySelectedRows()"> が</label>
+                        <label><input type="checkbox" class="kana-checkbox h-ga" data-kana="ぎ" onchange="applySelectedRows()"> ぎ</label>
+                        <label><input type="checkbox" class="kana-checkbox h-ga" data-kana="ぐ" onchange="applySelectedRows()"> ぐ</label>
+                        <label><input type="checkbox" class="kana-checkbox h-ga" data-kana="げ" onchange="applySelectedRows()"> げ</label>
+                        <label><input type="checkbox" class="kana-checkbox h-ga" data-kana="ご" onchange="applySelectedRows()"> ご</label>
+                    </div>
+                    <div class="kana-row-group" style="background: #eef7ff; padding: 4px; border-radius: 6px;">
+                        <label class="row-title"><input type="checkbox" onchange="toggleRowGroup(this, 'h-za')"> <b>ДЗА:</b></label>
+                        <label><input type="checkbox" class="kana-checkbox h-za" data-kana="ざ" onchange="applySelectedRows()"> ざ</label>
+                        <label><input type="checkbox" class="kana-checkbox h-za" data-kana="じ" onchange="applySelectedRows()"> じ</label>
+                        <label><input type="checkbox" class="kana-checkbox h-za" data-kana="ず" onchange="applySelectedRows()"> ず</label>
+                        <label><input type="checkbox" class="kana-checkbox h-za" data-kana="ぜ" onchange="applySelectedRows()"> ぜ</label>
+                        <label><input type="checkbox" class="kana-checkbox h-za" data-kana="ぞ" onchange="applySelectedRows()"> ぞ</label>
+                    </div>
+                    <div class="kana-row-group" style="background: #eef7ff; padding: 4px; border-radius: 6px;">
+                        <label class="row-title"><input type="checkbox" onchange="toggleRowGroup(this, 'h-da')"> <b>ДА:</b></label>
+                        <label><input type="checkbox" class="kana-checkbox h-da" data-kana="だ" onchange="applySelectedRows()"> だ</label>
+                        <label><input type="checkbox" class="kana-checkbox h-da" data-kana="ぢ" onchange="applySelectedRows()"> ぢ</label>
+                        <label><input type="checkbox" class="kana-checkbox h-da" data-kana="づ" onchange="applySelectedRows()"> づ</label>
+                        <label><input type="checkbox" class="kana-checkbox h-da" data-kana="で" onchange="applySelectedRows()"> で</label>
+                        <label><input type="checkbox" class="kana-checkbox h-da" data-kana="ど" onchange="applySelectedRows()"> ど</label>
+                    </div>
+                    <div class="kana-row-group" style="background: #eef7ff; padding: 4px; border-radius: 6px;">
+                        <label class="row-title"><input type="checkbox" onchange="toggleRowGroup(this, 'h-ba')"> <b>БА:</b></label>
+                        <label><input type="checkbox" class="kana-checkbox h-ba" data-kana="ば" onchange="applySelectedRows()"> ば</label>
+                        <label><input type="checkbox" class="kana-checkbox h-ba" data-kana="び" onchange="applySelectedRows()"> び</label>
+                        <label><input type="checkbox" class="kana-checkbox h-ba" data-kana="ぶ" onchange="applySelectedRows()"> ぶ</label>
+                        <label><input type="checkbox" class="kana-checkbox h-ba" data-kana="べ" onchange="applySelectedRows()"> べ</label>
+                        <label><input type="checkbox" class="kana-checkbox h-ba" data-kana="ぼ" onchange="applySelectedRows()"> ぼ</label>
+                    </div>
+                    <div class="kana-row-group" style="background: #eef7ff; padding: 4px; border-radius: 6px;">
+                        <label class="row-title"><input type="checkbox" onchange="toggleRowGroup(this, 'h-pa')"> <b>ПА:</b></label>
+                        <label><input type="checkbox" class="kana-checkbox h-pa" data-kana="ぱ" onchange="applySelectedRows()"> ぱ</label>
+                        <label><input type="checkbox" class="kana-checkbox h-pa" data-kana="ぴ" onchange="applySelectedRows()"> ぴ</label>
+                        <label><input type="checkbox" class="kana-checkbox h-pa" data-kana="ぷ" onchange="applySelectedRows()"> ぷ</label>
+                        <label><input type="checkbox" class="kana-checkbox h-pa" data-kana="ぺ" onchange="applySelectedRows()"> ぺ</label>
+                        <label><input type="checkbox" class="kana-checkbox h-pa" data-kana="ぽ" onchange="applySelectedRows()"> ぽ</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Катакана -->
+        <div class="script-option">
+            <button type="button" class="toggle-btn" onclick="toggleRows('katakana')">カタカナ (Катакана)</button>
+            <div id="katakana-rows" class="row-selection hidden">
+                <div class="select-buttons">
+                    <button type="button" onclick="selectAll('katakana', true)">Выбрать всё</button>
+                    <button type="button" onclick="selectAll('katakana', false)">Снять всё</button>
+                </div>
+                <hr style="margin: 10px 0; border: 0; border-top: 1px solid #ccc;">
+                
+                <div class="individual-kana-grid">
+                    <div class="kana-row-group" style="background: #ffebeb; padding: 4px; border-radius: 6px;">
+                        <label class="row-title"><input type="checkbox" onchange="toggleRowGroup(this, 'k-urod')"> <b>🔥 4 Урода:</b></label>
+                        <label><input type="checkbox" class="kana-checkbox k-urod" data-kana="シ" onchange="applySelectedRows()"> シ</label>
+                        <label><input type="checkbox" class="kana-checkbox k-urod" data-kana="ツ" onchange="applySelectedRows()"> ツ</label>
+                        <label><input type="checkbox" class="kana-checkbox k-urod" data-kana="ソ" onchange="applySelectedRows()"> ソ</label>
+                        <label><input type="checkbox" class="kana-checkbox k-urod" data-kana="ン" onchange="applySelectedRows()"> ン</label>
+                    </div>
+                    <div class="kana-row-group">
+                        <label class="row-title"><input type="checkbox" onchange="toggleRowGroup(this, 'k-a')"> <b>А:</b></label>
+                        <label><input type="checkbox" class="kana-checkbox k-a" data-kana="ア" onchange="applySelectedRows()"> ア</label>
+                        <label><input type="checkbox" class="kana-checkbox k-a" data-kana="イ" onchange="applySelectedRows()"> イ</label>
+                        <label><input type="checkbox" class="kana-checkbox k-a" data-kana="ウ" onchange="applySelectedRows()"> ウ</label>
+                        <label><input type="checkbox" class="kana-checkbox k-a" data-kana="エ" onchange="applySelectedRows()"> エ</label>
+                        <label><input type="checkbox" class="kana-checkbox k-a" data-kana="オ" onchange="applySelectedRows()"> オ</label>
+                    </div>
+                    <div class="kana-row-group">
+                        <label class="row-title"><input type="checkbox" onchange="toggleRowGroup(this, 'k-ka')"> <b>КА:</b></label>
+                        <label><input type="checkbox" class="kana-checkbox k-ka" data-kana="カ" onchange="applySelectedRows()"> カ</label>
+                        <label><input type="checkbox" class="kana-checkbox k-ka" data-kana="キ" onchange="applySelectedRows()"> キ</label>
+                        <label><input type="checkbox" class="kana-checkbox k-ka" data-kana="ク" onchange="applySelectedRows()"> ク</label>
+                        <label><input type="checkbox" class="kana-checkbox k-ka" data-kana="ケ" onchange="applySelectedRows()"> ケ</label>
+                        <label><input type="checkbox" class="kana-checkbox k-ka" data-kana="コ" onchange="applySelectedRows()"> コ</label>
+                    </div>
+                    <div class="kana-row-group">
+                        <label class="row-title"><input type="checkbox" onchange="toggleRowGroup(this, 'k-sa')"> <b>СА:</b></label>
+                        <label><input type="checkbox" class="kana-checkbox k-sa" data-kana="サ" onchange="applySelectedRows()"> サ</label>
+                        <label><input type="checkbox" class="kana-checkbox k-sa" data-kana="シ" onchange="applySelectedRows()"> シ</label>
+                        <label><input type="checkbox" class="kana-checkbox k-sa" data-kana="ス" onchange="applySelectedRows()"> ス</label>
+                        <label><input type="checkbox" class="kana-checkbox k-sa" data-kana="セ" onchange="applySelectedRows()"> セ</label>
+                        <label><input type="checkbox" class="kana-checkbox k-sa" data-kana="ソ" onchange="applySelectedRows()"> ソ</label>
+                    </div>
+                    <div class="kana-row-group">
+                        <label class="row-title"><input type="checkbox" onchange="toggleRowGroup(this, 'k-ta')"> <b>ТА:</b></label>
+                        <label><input type="checkbox" class="kana-checkbox k-ta" data-kana="タ" onchange="applySelectedRows()"> タ</label>
+                        <label><input type="checkbox" class="kana-checkbox k-ta" data-kana="チ" onchange="applySelectedRows()"> チ</label>
+                        <label><input type="checkbox" class="kana-checkbox k-ta" data-kana="ツ" onchange="applySelectedRows()"> ツ</label>
+                        <label><input type="checkbox" class="kana-checkbox k-ta" data-kana="テ" onchange="applySelectedRows()"> テ</label>
+                        <label><input type="checkbox" class="kana-checkbox k-ta" data-kana="ト" onchange="applySelectedRows()"> ト</label>
+                    </div>
+                    <div class="kana-row-group">
+                        <label class="row-title"><input type="checkbox" onchange="toggleRowGroup(this, 'k-na')"> <b>НА:</b></label>
+                        <label><input type="checkbox" class="kana-checkbox k-na" data-kana="ナ" onchange="applySelectedRows()"> ナ</label>
+                        <label><input type="checkbox" class="kana-checkbox k-na" data-kana="ニ" onchange="applySelectedRows()"> ニ</label>
+                        <label><input type="checkbox" class="kana-checkbox k-na" data-kana="ヌ" onchange="applySelectedRows()"> ヌ</label>
+                        <label><input type="checkbox" class="kana-checkbox k-na" data-kana="ネ" onchange="applySelectedRows()"> ネ</label>
+                        <label><input type="checkbox" class="kana-checkbox k-na" data-kana="ノ" onchange="applySelectedRows()"> ノ</label>
+                    </div>
+                    <div class="kana-row-group">
+                        <label class="row-title"><input type="checkbox" onchange="toggleRowGroup(this, 'k-ha')"> <b>ХА:</b></label>
+                        <label><input type="checkbox" class="kana-checkbox k-ha" data-kana="ハ" onchange="applySelectedRows()"> ハ</label>
+                        <label><input type="checkbox" class="kana-checkbox k-ha" data-kana="ヒ" onchange="applySelectedRows()"> ヒ</label>
+                        <label><input type="checkbox" class="kana-checkbox k-ha" data-kana="フ" onchange="applySelectedRows()"> フ</label>
+                        <label><input type="checkbox" class="kana-checkbox k-ha" data-kana="ヘ" onchange="applySelectedRows()"> ヘ</label>
+                        <label><input type="checkbox" class="kana-checkbox k-ha" data-kana="ホ" onchange="applySelectedRows()"> ホ</label>
+                    </div>
+                    <div class="kana-row-group">
+                        <label class="row-title"><input type="checkbox" onchange="toggleRowGroup(this, 'k-ma')"> <b>МА:</b></label>
+                        <label><input type="checkbox" class="kana-checkbox k-ma" data-kana="マ" onchange="applySelectedRows()"> マ</label>
+                        <label><input type="checkbox" class="kana-checkbox k-ma" data-kana="ミ" onchange="applySelectedRows()"> ミ</label>
+                        <label><input type="checkbox" class="kana-checkbox k-ma" data-kana="ム" onchange="applySelectedRows()"> ム</label>
+                        <label><input type="checkbox" class="kana-checkbox k-ma" data-kana="メ" onchange="applySelectedRows()"> メ</label>
+                        <label><input type="checkbox" class="kana-checkbox k-ma" data-kana="モ" onchange="applySelectedRows()"> モ</label>
+                    </div>
+                    <div class="kana-row-group">
+                        <label class="row-title"><input type="checkbox" onchange="toggleRowGroup(this, 'k-ya')"> <b>Я:</b></label>
+                        <label><input type="checkbox" class="kana-checkbox k-ya" data-kana="ヤ" onchange="applySelectedRows()"> ヤ</label>
+                        <label><input type="checkbox" class="kana-checkbox k-ya" data-kana="ユ" onchange="applySelectedRows()"> ユ</label>
+                        <label><input type="checkbox" class="kana-checkbox k-ya" data-kana="ヨ" onchange="applySelectedRows()"> ヨ</label>
+                    </div>
+                    <div class="kana-row-group">
+                        <label class="row-title"><input type="checkbox" onchange="toggleRowGroup(this, 'k-ra')"> <b>РА:</b></label>
+                        <label><input type="checkbox" class="kana-checkbox k-ra" data-kana="ラ" onchange="applySelectedRows()"> ラ</label>
+                        <label><input type="checkbox" class="kana-checkbox k-ra" data-kana="リ" onchange="applySelectedRows()"> リ</label>
+                        <label><input type="checkbox" class="kana-checkbox k-ra" data-kana="ル" onchange="applySelectedRows()"> ル</label>
+                        <label><input type="checkbox" class="kana-checkbox k-ra" data-kana="レ" onchange="applySelectedRows()"> レ</label>
+                        <label><input type="checkbox" class="kana-checkbox k-ra" data-kana="ロ" onchange="applySelectedRows()"> ロ</label>
+                    </div>
+                    <div class="kana-row-group">
+                        <label class="row-title"><input type="checkbox" onchange="toggleRowGroup(this, 'k-wa')"> <b>ВА/Н:</b></label>
+                        <label><input type="checkbox" class="kana-checkbox k-wa" data-kana="ワ" onchange="applySelectedRows()"> ワ</label>
+                        <label><input type="checkbox" class="kana-checkbox k-wa" data-kana="ヲ" onchange="applySelectedRows()"> ヲ</label>
+                        <label><input type="checkbox" class="kana-checkbox k-wa" data-kana="ン" onchange="applySelectedRows()"> ン</label>
+                    </div>
+                    <div class="kana-row-group" style="background: #eef7ff; padding: 4px; border-radius: 6px;">
+                        <label class="row-title"><input type="checkbox" onchange="toggleRowGroup(this, 'k-ga')"> <b>ГА:</b></label>
+                        <label><input type="checkbox" class="kana-checkbox k-ga" data-kana="ガ" onchange="applySelectedRows()"> ガ</label>
+                        <label><input type="checkbox" class="kana-checkbox k-ga" data-kana="ギ" onchange="applySelectedRows()"> ギ</label>
+                        <label><input type="checkbox" class="kana-checkbox k-ga" data-kana="グ" onchange="applySelectedRows()"> グ</label>
+                        <label><input type="checkbox" class="kana-checkbox k-ga" data-kana="ゲ" onchange="applySelectedRows()"> ゲ</label>
+                        <label><input type="checkbox" class="kana-checkbox k-ga" data-kana="ゴ" onchange="applySelectedRows()"> ゴ</label>
+                    </div>
+                    <div class="kana-row-group" style="background: #eef7ff; padding: 4px; border-radius: 6px;">
+                        <label class="row-title"><input type="checkbox" onchange="toggleRowGroup(this, 'k-ba')"> <b>БА:</b></label>
+                        <label><input type="checkbox" class="kana-checkbox k-ba" data-kana="バ" onchange="applySelectedRows()"> バ</label>
+                        <label><input type="checkbox" class="kana-checkbox k-ba" data-kana="ビ" onchange="applySelectedRows()"> ビ</label>
+                        <label><input type="checkbox" class="kana-checkbox k-ba" data-kana="ブ" onchange="applySelectedRows()"> ブ</label>
+                        <label><input type="checkbox" class="kana-checkbox k-ba" data-kana="ベ" onchange="applySelectedRows()"> ベ</label>
+                        <label><input type="checkbox" class="kana-checkbox k-ba" data-kana="ボ" onchange="applySelectedRows()"> ボ</label>
+                    </div>
+                    <div class="kana-row-group" style="background: #eef7ff; padding: 4px; border-radius: 6px;">
+                        <label class="row-title"><input type="checkbox" onchange="toggleRowGroup(this, 'k-pa')"> <b>ПА:</b></label>
+                        <label><input type="checkbox" class="kana-checkbox k-pa" data-kana="パ" onchange="applySelectedRows()"> パ</label>
+                        <label><input type="checkbox" class="kana-checkbox k-pa" data-kana="ピ" onchange="applySelectedRows()"> ピ</label>
+                        <label><input type="checkbox" class="kana-checkbox k-pa" data-kana="プ" onchange="applySelectedRows()"> プ</label>
+                        <label><input type="checkbox" class="kana-checkbox k-pa" data-kana="ペ" onchange="applySelectedRows()"> ペ</label>
+                        <label><input type="checkbox" class="kana-checkbox k-pa" data-kana="ポ" onchange="applySelectedRows()"> ポ</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <p id="select-warning" style="text-align: center; font-weight: bold; margin-bottom: 15px;">
+        Выберите хотя бы один символ выше ⬆️
+    </p>
+
+    <!-- Выбор режима и количества вопросов -->
+    <div class="test-config" style="background: white; padding: 15px; border-radius: 12px; margin-bottom: 20px; text-align: center; max-width: 500px; width: 100%;">
+        <label style="margin-right: 15px;">
+            <b>Тип теста:</b>
+            <select id="test-type" onchange="switchTestType()" style="padding: 5px; border-radius: 6px;">
+                <option value="kana">Азбука (Кана)</option>
+                <option value="words">Слова (単語)</option>
+            </select>
+        </label>
+
+        <label style="margin-right: 15px;">
+            <b>Режим:</b>
+            <select id="test-mode" onchange="applySelectedRows()" style="padding: 5px; border-radius: 6px;">
+                <option value="write">Кана → Ввод чтения</option>
+                <option value="choice">Чтение → Выбор каны</option>
+            </select>
+        </label>
+
+        <label>
+            <b>Вопросов:</b>
+            <select id="test-limit" onchange="applySelectedRows()" style="padding: 5px; border-radius: 6px;">
+                <option value="10">10</option>
+                <option value="20">20</option>
+                <option value="50">50</option>
+                <option value="inf" selected>∞ Бесконечно</option>
+            </select>
+        </label>
+    </div>
+
+    <div id="kana-test">
+        <h2>Тестирование</h2>
+        <p id="test-kana" style="font-size: 70px; margin: 10px 0; color: #e63946;">-</p>
+        <input type="text" id="test-answer" placeholder="чтение (a, ka, i...)">
+        <br>
+        <button class="action-btn" onclick="checkAnswer()">Проверить</button>
+        <button class="hint-btn" onclick="showHint()">💡 Подсказка</button>
+
+        <p id="test-result"></p>
+        <div id="test-hint"></div>
+
+        <hr style="margin: 15px 0; border: 0; border-top: 1px solid #eee;">
+        <p>Правильно: <span id="correct-count" style="color: green; font-weight: bold;">0</span> | Неправильно: <span id="wrong-count" style="color: red; font-weight: bold;">0</span></p>
+
+        <button onclick="resetStats()" style="margin-top: 10px; background-color: #ff4d4d; color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer;">
+            🔄 Сбросить статистику
+        </button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Грамматика — 文法</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .grammar-block {
+            max-width: 800px;
+            margin: 20px auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+
+        .grammar-header {
+            width: 100%;
+            padding: 18px 20px;
+            background: #ffffff;
+            border: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #e63946;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .grammar-header:hover { background: #fff5f5; }
+
+        .arrow-icon {
+            font-size: 1.1rem;
+            transition: transform 0.3s ease;
+        }
+
+        .grammar-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease-in-out;
+            background: #fafafa;
+        }
+
+        .grammar-block.active .grammar-content {
+            max-height: 1500px;
+            padding: 20px;
+        }
+
+        .grammar-block.active .arrow-icon {
+            transform: rotate(180deg);
+        }
+
+        .formula-box {
+            background: #eef7ff;
+            border-left: 5px solid #1d3557;
+            padding: 12px 15px;
+            margin: 15px 0;
+            font-weight: bold;
+            border-radius: 4px;
+        }
+
+        .example-list {
+            margin-top: 10px;
+            padding-left: 20px;
+        }
+
+        .example-item {
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+        }
+
+        .jp-text {
+            color: #e63946;
+            font-weight: bold;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+    <button class="back-button" onclick="location.href='index.html'">← Главное меню</button>
+
+    <h1>文法 (Грамматика)</h1>
+    <p>Базовые конструкции японского языка для начинающих 📚</p>
+
+    <!-- Урок 1: Связка DESU -->
+    <div class="grammar-block">
+        <button class="grammar-header" onclick="toggleCategory(this)">
+            <span>1. Конструкция «A является B» (です - desu)</span>
+            <span class="arrow-icon">▼</span>
+        </button>
+        <div class="grammar-content">
+            <p>В японском языке связка <b>です (desu)</b> ставится в самом конце предложения и соответствует глаголам «есть», «является».</p>
+            
+            <div class="formula-box">
+                [Существительное A] + は (wa) + [Существительное B] + です (desu)
+            </div>
+
+            <p><b>Частица は (читается как wa):</b> указывает на главную тему предложения.</p>
+
+            <h3>Примеры:</h3>
+            <ul class="example-list">
+                <li class="example-item">
+                    <span class="jp-text" onclick="speakKana('わたしはたなかです')">私は田中です。</span><br>
+                    <i>Watashi wa Tanaka desu.</i> — Я (есть) Танака.
+                </li>
+                <li class="example-item">
+                    <span class="jp-text" onclick="speakKana('これはほんです')">これは本です。</span><br>
+                    <i>Kore wa hon desu.</i> — Это (есть) книга.
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Урок 2: Отрицание -->
+    <div class="grammar-block">
+        <button class="grammar-header" onclick="toggleCategory(this)">
+            <span>2. Отрицание «Не является...» (ではありません)</span>
+            <span class="arrow-icon">▼</span>
+        </button>
+        <div class="grammar-content">
+            <p>Чтобы сказать «НЕ является», мы меняем <b>です</b> на <b>ではありません (dewa arimasen)</b> или разговорное <b>じゃないです (janai desu)</b>.</p>
+
+            <div class="formula-box">
+                [Существительное A] + は (wa) + [Существительное B] + ではありません
+            </div>
+
+            <h3>Примеры:</h3>
+            <ul class="example-list">
+                <li class="example-item">
+                    <span class="jp-text" onclick="speakKana('わたしはせんせいではありません')">私は先生ではありません。</span><br>
+                    <i>Watashi wa sensei dewa arimasen.</i> — Я не учитель.
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Урок 3: Вопрос -->
+    <div class="grammar-block">
+        <button class="grammar-header" onclick="toggleCategory(this)">
+            <span>3. Вопросы с частицей か (ka)</span>
+            <span class="arrow-icon">▼</span>
+        </button>
+        <div class="grammar-content">
+            <p>Чтобы сделать предложение вопросительным, в самом конце просто добавляется частица <b>か (ka)</b>. Вопросительный знак «?» в японском ставить не обязательно!</p>
+
+            <div class="formula-box">
+                [Утвердительное предложение] + か (ka)
+            </div>
+
+            <h3>Примеры:</h3>
+            <ul class="example-list">
+                <li class="example-item">
+                    <span class="jp-text" onclick="speakKana('あなたはせんせいですか')">あなたは先生ですか。</span><br>
+                    <i>Anata wa sensei desu ka?</i> — Вы учитель?
+                </li>
+            </ul>
+        </div>
+    </div>
+    
+    <!-- Урок 4: Частица WO (Обозначение объекта действия) -->
+    <div class="grammar-block">
+        <button class="grammar-header" onclick="toggleCategory(this)">
+            <span>4. Винительный падеж ( を - wo/o )</span>
+            <span class="arrow-icon">▼</span>
+        </button>
+        <div class="grammar-content">
+            <p>Частица <b>を (пишется wo, произносится o)</b> показывает, над каким предметом совершается действие (что именно читают, едят или пьют).</p>
+
+            <div class="formula-box">
+                [Предмет] + を (o) + [Действие / Глагол]
+            </div>
+
+            <h3>Примеры:</h3>
+            <ul class="example-list">
+                <li class="example-item">
+                    <span class="jp-text" onclick="speakKana('みずをのみます')">水を飲みます。</span><br>
+                    <i>Mizu o nomimasu.</i> — Пью воду.
+                </li>
+                <li class="example-item">
+                    <span class="jp-text" onclick="speakKana('ほんをよみます')">本を読みます。</span><br>
+                    <i>Hon o yomimasu.</i> — Читаю книгу.
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Урок 5: Частицы NI и DE (Место и Направление) -->
+    <div class="grammar-block">
+        <button class="grammar-header" onclick="toggleCategory(this)">
+            <span>5. Место и цель ( に - ni / で - de )</span>
+            <span class="arrow-icon">▼</span>
+        </button>
+        <div class="grammar-content">
+            <p>• <b>に (ni)</b> — указывает на время или направление движения (куда? во сколько?).<br>
+               • <b>で (de)</b> — указывает на место, где происходит активное действие (где?).</p>
+
+            <div class="formula-box">
+                [Место] + に (ni) + いきます (иду)<br>
+                [Место] + で (de) + [Действие]
+            </div>
+
+            <h3>Примеры:</h3>
+            <ul class="example-list">
+                <li class="example-item">
+                    <span class="jp-text" onclick="speakKana('とうきょうにいきます')">東京に行きます。</span><br>
+                    <i>Toukyou ni ikimasu.</i> — Еду в Токио.
+                </li>
+                <li class="example-item">
+                    <span class="jp-text" onclick="speakKana('うちでべんきょうします')">うちで勉強します。</span><br>
+                    <i>Uchi de benkyou shimasu.</i> — Учусь дома.
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        function toggleCategory(button) {
+            const block = button.parentElement;
+            block.classList.toggle('active');
+        }
+    </script>
+</body>
+
+</html>

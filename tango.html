@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Слова — 単語</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .category-block {
+            max-width: 900px;
+            margin: 15px auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+
+        .category-header {
+            width: 100%;
+            padding: 18px 20px;
+            background: #ffffff;
+            border: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #e63946;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .category-header:hover {
+            background: #fff5f5;
+        }
+
+        .arrow-icon {
+            font-size: 1.1rem;
+            transition: transform 0.3s ease;
+        }
+
+        .category-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s cubic-bezier(0, 1, 0, 1);
+            background: #fafafa;
+        }
+
+        .category-block.active .category-content {
+            max-height: 2000px; /* Достаточный запас по высоте */
+            transition: max-height 0.4s ease-in-out;
+            padding: 15px 15px 25px 15px;
+        }
+
+        .category-block.active .arrow-icon {
+            transform: rotate(180deg);
+        }
+
+        .words-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 15px;
+        }
+
+        .word-card {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            border: 1px solid #eee;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .word-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 12px rgba(0,0,0,0.1);
+        }
+
+        .word-jp {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #1d3557;
+        }
+
+        .word-reading {
+            color: #e63946;
+            font-size: 0.9rem;
+            margin: 4px 0;
+        }
+
+        .word-meaning {
+            color: #555;
+            font-size: 1rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <button class="back-button" onclick="location.href='index.html'">← Главное меню</button>
+
+    <h1>単語 (Слова)</h1>
+    <p>Выберите категорию и нажимайте на карточки для озвучки 🔊</p>
+
+    <!-- Блок 1: Базовые слова -->
+    <div class="category-block">
+        <button class="category-header" onclick="toggleCategory(this)">
+            <span>🌱 Базовые слова</span>
+            <span class="arrow-icon">▼</span>
+        </button>
+        <div class="category-content">
+            <div class="words-grid">
+                <div class="word-card" onclick="speakKana('わたし')">
+                    <div class="word-jp">私</div>
+                    <div class="word-reading">わたし (watashi)</div>
+                    <div class="word-meaning">Я</div>
+                </div>
+                <div class="word-card" onclick="speakKana('あなた')">
+                    <div class="word-jp">あなた</div>
+                    <div class="word-reading">Anata</div>
+                    <div class="word-meaning">Вы / Ты</div>
+                </div>
+                <div class="word-card" onclick="speakKana('はい')">
+                    <div class="word-jp">はい</div>
+                    <div class="word-reading">Hai</div>
+                    <div class="word-meaning">Да</div>
+                </div>
+                <div class="word-card" onclick="speakKana('いいえ')">
+                    <div class="word-jp">いいえ</div>
+                    <div class="word-reading">Iie</div>
+                    <div class="word-meaning">Нет</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Блок 2: Животные -->
+    <div class="category-block">
+        <button class="category-header" onclick="toggleCategory(this)">
+            <span>🐱 Животные</span>
+            <span class="arrow-icon">▼</span>
+        </button>
+        <div class="category-content">
+            <div class="words-grid">
+                <div class="word-card" onclick="speakKana('ねこ')">
+                    <div class="word-jp">猫</div>
+                    <div class="word-reading">ねこ (neko)</div>
+                    <div class="word-meaning">Кошка</div>
+                </div>
+                <div class="word-card" onclick="speakKana('いぬ')">
+                    <div class="word-jp">犬</div>
+                    <div class="word-reading">いぬ (inu)</div>
+                    <div class="word-meaning">Собака</div>
+                </div>
+                <div class="word-card" onclick="speakKana('とり')">
+                    <div class="word-jp">鳥</div>
+                    <div class="word-reading">とり (tori)</div>
+                    <div class="word-meaning">Птица</div>
+                </div>
+                <div class="word-card" onclick="speakKana('さかな')">
+                    <div class="word-jp">魚</div>
+                    <div class="word-reading">さかな (sakana)</div>
+                    <div class="word-meaning">Рыба</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Блок 3: Еда и напитки -->
+    <div class="category-block">
+        <button class="category-header" onclick="toggleCategory(this)">
+            <span>🍱 Еда и напитки</span>
+            <span class="arrow-icon">▼</span>
+        </button>
+        <div class="category-content">
+            <div class="words-grid">
+                <div class="word-card" onclick="speakKana('みず')">
+                    <div class="word-jp">水</div>
+                    <div class="word-reading">みず (mizu)</div>
+                    <div class="word-meaning">Вода</div>
+                </div>
+                <div class="word-card" onclick="speakKana('おちゃ')">
+                    <div class="word-jp">お茶</div>
+                    <div class="word-reading">おちゃ (ocha)</div>
+                    <div class="word-meaning">Чай</div>
+                </div>
+                <div class="word-card" onclick="speakKana('ごはん')">
+                    <div class="word-jp">ご飯</div>
+                    <div class="word-reading">ごはん (gohan)</div>
+                    <div class="word-meaning">Рис / Еда</div>
+                </div>
+                <div class="word-card" onclick="speakKana('ラーメン')">
+                    <div class="word-jp">ラーメン</div>
+                    <div class="word-reading">Raamen</div>
+                    <div class="word-meaning">Рамен</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        function toggleCategory(button) {
+            const block = button.parentElement;
+            block.classList.toggle('active');
+        }
+    </script>
+</body>
+
+</html>

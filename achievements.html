@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Достижения — 実績</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .achievements-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 15px;
+            max-width: 800px;
+            width: 100%;
+            margin: 20px auto;
+        }
+
+        .achievement-card {
+            background: white;
+            border-radius: 12px;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            border: 1px solid #eee;
+        }
+
+        .achievement-icon {
+            font-size: 2.5rem;
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 50%;
+        }
+
+        .achievement-info h3 {
+            margin: 0 0 5px 0;
+            color: #e63946;
+            font-size: 1.1rem;
+        }
+
+        .achievement-info p {
+            margin: 0;
+            font-size: 0.85rem;
+            color: #666;
+        }
+
+        body.theme-dark .achievement-card {
+            background-color: #1e1e2d !important;
+            border-color: #2a2a3d !important;
+            color: #fff !important;
+        }
+
+        body.theme-dark .achievement-icon {
+            background-color: #2a2a3d !important;
+        }
+    </style>
+</head>
+
+<body>
+
+    <button class="back-button" onclick="location.href='index.html'">← Главное меню</button>
+
+    <h1>実績 (Достижения)</h1>
+    <p>Твой личный прогресс и награды 🏆</p>
+
+    <div class="achievements-grid">
+        <div class="achievement-card">
+            <div class="achievement-icon">🌱</div>
+            <div class="achievement-info">
+                <h3>Первый шаг</h3>
+                <p>Дать первый правильный ответ в упражнениях.</p>
+            </div>
+        </div>
+
+        <div class="achievement-card">
+            <div class="achievement-icon">🎯</div>
+            <div class="achievement-info">
+                <h3>Первая сотня</h3>
+                <p>Набрать 100 правильных ответов.</p>
+            </div>
+        </div>
+
+        <div class="achievement-card">
+            <div class="achievement-icon">🔥</div>
+            <div class="achievement-info">
+                <h3>Недельный марафон</h3>
+                <p>Заходить в приложение 7 дней подряд.</p>
+            </div>
+        </div>
+
+        <div class="achievement-card">
+            <div class="achievement-icon">👑</div>
+            <div class="achievement-info">
+                <h3>Сёгун</h3>
+                <p>Достичь 20 уровня в профиле.</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

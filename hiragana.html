@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Хирагана — ひらがな</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .kana-layout {
+            display: flex;
+            gap: 20px;
+            max-width: 900px;
+            width: 100%;
+            margin: 20px auto;
+            align-items: flex-start;
+        }
+
+        .accordion-container {
+            flex: 1;
+            width: 100%;
+        }
+
+        .category-block {
+            background: white;
+            border-radius: 12px;
+            border: 1px solid #eee;
+            margin-bottom: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+
+        .category-header {
+            width: 100%;
+            padding: 14px 18px;
+            background: white;
+            border: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 1.05rem;
+            font-weight: bold;
+            cursor: pointer;
+            color: #1d3557;
+        }
+
+        .category-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            background: #fafafa;
+        }
+
+        .category-block.active .category-content {
+            max-height: 2000px;
+            padding: 15px;
+        }
+
+        .kana-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+            gap: 8px;
+        }
+
+        .kana-card {
+            background: white;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            padding: 8px 4px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.15s, border-color 0.15s;
+        }
+
+        .kana-card:hover {
+            transform: translateY(-2px);
+            border-color: #e63946;
+        }
+
+        .kana-symbol {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #e63946;
+        }
+
+        .kana-romaji {
+            font-size: 0.75rem;
+            color: #666;
+        }
+
+        /* Информационная панель справа */
+        .info-panel {
+            width: 250px;
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid #eee;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 20px;
+            text-align: center;
+        }
+
+        .info-symbol {
+            font-size: 3.5rem;
+            font-weight: bold;
+            color: #e63946;
+            margin: 10px 0;
+        }
+
+        @media (max-width: 768px) {
+            .kana-layout { flex-direction: column-reverse; }
+            .info-panel { width: 100%; position: static; box-sizing: border-box; }
+        }
+
+        /* Тёмная тема */
+        body.theme-dark .category-block,
+        body.theme-dark .info-panel,
+        body.theme-dark .kana-card {
+            background-color: #1e1e2d !important;
+            border-color: #2a2a3d !important;
+            color: #fff !important;
+        }
+        body.theme-dark .category-content { background-color: #181826 !important; }
+        body.theme-dark .category-header { color: #ff4d6d !important; background-color: #1e1e2d !important; }
+        body.theme-dark .kana-symbol, body.theme-dark .info-symbol { color: #ff4d6d !important; }
+    </style>
+</head>
+
+<body>
+
+    <button class="back-button" onclick="location.href='index.html'">← Главное меню</button>
+
+    <h1>ひらがな (Хирагана)</h1>
+
+    <div class="kana-layout">
+        <!-- Аккордеоны с категориями -->
+        <div class="accordion-container">
+            
+            <div class="category-block active">
+                <button class="category-header" onclick="toggleCategory(this)">
+                    <span>1. Базовые знаки (清音)</span>
+                    <span>▼</span>
+                </button>
+                <div class="category-content">
+    <!-- Ряд A -->
+    <div class="kana-grid-5">
+        <div class="kana-card" onclick="selectKana('あ')"><div class="kana-symbol">あ</div><div class="kana-romaji">a</div></div>
+        <div class="kana-card" onclick="selectKana('い')"><div class="kana-symbol">い</div><div class="kana-romaji">i</div></div>
+        <div class="kana-card" onclick="selectKana('う')"><div class="kana-symbol">う</div><div class="kana-romaji">u</div></div>
+        <div class="kana-card" onclick="selectKana('え')"><div class="kana-symbol">え</div><div class="kana-romaji">e</div></div>
+        <div class="kana-card" onclick="selectKana('お')"><div class="kana-symbol">お</div><div class="kana-romaji">o</div></div>
+    </div>
+
+    <!-- Ряд KA -->
+    <div class="kana-grid-5">
+        <div class="kana-card" onclick="selectKana('か')"><div class="kana-symbol">か</div><div class="kana-romaji">ka</div></div>
+        <div class="kana-card" onclick="selectKana('き')"><div class="kana-symbol">き</div><div class="kana-romaji">ki</div></div>
+        <div class="kana-card" onclick="selectKana('く')"><div class="kana-symbol">く</div><div class="kana-romaji">ku</div></div>
+        <div class="kana-card" onclick="selectKana('け')"><div class="kana-symbol">け</div><div class="kana-romaji">ke</div></div>
+        <div class="kana-card" onclick="selectKana('こ')"><div class="kana-symbol">こ</div><div class="kana-romaji">ko</div></div>
+    </div>
+
+    <!-- Ряд SA -->
+    <div class="kana-grid-5">
+        <div class="kana-card" onclick="selectKana('さ')"><div class="kana-symbol">さ</div><div class="kana-romaji">sa</div></div>
+        <div class="kana-card" onclick="selectKana('し')"><div class="kana-symbol">し</div><div class="kana-romaji">shi</div></div>
+        <div class="kana-card" onclick="selectKana('す')"><div class="kana-symbol">す</div><div class="kana-romaji">su</div></div>
+        <div class="kana-card" onclick="selectKana('せ')"><div class="kana-symbol">せ</div><div class="kana-romaji">se</div></div>
+        <div class="kana-card" onclick="selectKana('そ')"><div class="kana-symbol">そ</div><div class="kana-romaji">so</div></div>
+    </div>
+
+    <!-- Ряд TA -->
+    <div class="kana-grid-5">
+        <div class="kana-card" onclick="selectKana('た')"><div class="kana-symbol">た</div><div class="kana-romaji">ta</div></div>
+        <div class="kana-card" onclick="selectKana('ち')"><div class="kana-symbol">ち</div><div class="kana-romaji">chi</div></div>
+        <div class="kana-card" onclick="selectKana('つ')"><div class="kana-symbol">つ</div><div class="kana-romaji">tsu</div></div>
+        <div class="kana-card" onclick="selectKana('て')"><div class="kana-symbol">て</div><div class="kana-romaji">te</div></div>
+        <div class="kana-card" onclick="selectKana('と')"><div class="kana-symbol">と</div><div class="kana-romaji">to</div></div>
+    </div>
+
+    <!-- Ряд NA -->
+    <div class="kana-grid-5">
+        <div class="kana-card" onclick="selectKana('な')"><div class="kana-symbol">な</div><div class="kana-romaji">na</div></div>
+        <div class="kana-card" onclick="selectKana('に')"><div class="kana-symbol">に</div><div class="kana-romaji">ni</div></div>
+        <div class="kana-card" onclick="selectKana('ぬ')"><div class="kana-symbol">ぬ</div><div class="kana-romaji">nu</div></div>
+        <div class="kana-card" onclick="selectKana('ね')"><div class="kana-symbol">ね</div><div class="kana-romaji">ne</div></div>
+        <div class="kana-card" onclick="selectKana('の')"><div class="kana-symbol">の</div><div class="kana-romaji">no</div></div>
+    </div>
+
+    <!-- Ряд HA -->
+    <div class="kana-grid-5">
+        <div class="kana-card" onclick="selectKana('は')"><div class="kana-symbol">は</div><div class="kana-romaji">ha</div></div>
+        <div class="kana-card" onclick="selectKana('ひ')"><div class="kana-symbol">ひ</div><div class="kana-romaji">hi</div></div>
+        <div class="kana-card" onclick="selectKana('ふ')"><div class="kana-symbol">ふ</div><div class="kana-romaji">fu</div></div>
+        <div class="kana-card" onclick="selectKana('へ')"><div class="kana-symbol">へ</div><div class="kana-romaji">he</div></div>
+        <div class="kana-card" onclick="selectKana('ほ')"><div class="kana-symbol">ほ</div><div class="kana-romaji">ho</div></div>
+    </div>
+
+    <!-- Ряд MA -->
+    <div class="kana-grid-5">
+        <div class="kana-card" onclick="selectKana('ま')"><div class="kana-symbol">ま</div><div class="kana-romaji">ma</div></div>
+        <div class="kana-card" onclick="selectKana('み')"><div class="kana-symbol">み</div><div class="kana-romaji">mi</div></div>
+        <div class="kana-card" onclick="selectKana('む')"><div class="kana-symbol">む</div><div class="kana-romaji">mu</div></div>
+        <div class="kana-card" onclick="selectKana('め')"><div class="kana-symbol">め</div><div class="kana-romaji">me</div></div>
+        <div class="kana-card" onclick="selectKana('も')"><div class="kana-symbol">も</div><div class="kana-romaji">mo</div></div>
+    </div>
+
+<!-- Ряд YA (ya, -, yu, -, yo) -->
+    <div class="kana-grid-5">
+        <div class="kana-card" onclick="selectKana('や')"><div class="kana-symbol">や</div><div class="kana-romaji">ya</div></div>
+        <div class="kana-card empty"></div>
+        <div class="kana-card" onclick="selectKana('ゆ')"><div class="kana-symbol">ゆ</div><div class="kana-romaji">yu</div></div>
+        <div class="kana-card empty"></div>
+        <div class="kana-card" onclick="selectKana('よ')"><div class="kana-symbol">よ</div><div class="kana-romaji">yo</div></div>
+    </div>
+
+    <!-- Ряд RA -->
+    <div class="kana-grid-5">
+        <div class="kana-card" onclick="selectKana('ら')"><div class="kana-symbol">ら</div><div class="kana-romaji">ra</div></div>
+        <div class="kana-card" onclick="selectKana('り')"><div class="kana-symbol">り</div><div class="kana-romaji">ri</div></div>
+        <div class="kana-card" onclick="selectKana('る')"><div class="kana-symbol">る</div><div class="kana-romaji">ru</div></div>
+        <div class="kana-card" onclick="selectKana('れ')"><div class="kana-symbol">れ</div><div class="kana-romaji">re</div></div>
+        <div class="kana-card" onclick="selectKana('ろ')"><div class="kana-symbol">ろ</div><div class="kana-romaji">ro</div></div>
+    </div>
+
+    <!-- Ряд WA (wa, -, -, -, wo) -->
+    <div class="kana-grid-5">
+        <div class="kana-card" onclick="selectKana('わ')"><div class="kana-symbol">わ</div><div class="kana-romaji">wa</div></div>
+        <div class="kana-card empty"></div>
+        <div class="kana-card empty"></div>
+        <div class="kana-card empty"></div>
+        <div class="kana-card" onclick="selectKana('を')"><div class="kana-symbol">を</div><div class="kana-romaji">wo</div></div>
+    </div>
+
+    <!-- Ряд N (посередине) -->
+    <div class="kana-grid-5">
+        <div class="kana-card empty"></div>
+        <div class="kana-card empty"></div>
+        <div class="kana-card" onclick="selectKana('ん')"><div class="kana-symbol">ん</div><div class="kana-romaji">n</div></div>
+        <div class="kana-card empty"></div>
+        <div class="kana-card empty"></div>
+    </div>
+</div>
+            </div>
+
+            <div class="category-block">
+                <button class="category-header" onclick="toggleCategory(this)">
+                    <span>2. Озвончённые знаки (濁音・半濁音)</span>
+                    <span>▼</span>
+                </button>
+                <div class="category-content">
+                    <div class="kana-grid">
+                        <div class="kana-card" onclick="selectKana('が')"><div class="kana-symbol">が</div><div class="kana-romaji">ga</div></div>
+                        <div class="kana-card" onclick="selectKana('ぎ')"><div class="kana-symbol">ぎ</div><div class="kana-romaji">gi</div></div>
+                        <div class="kana-card" onclick="selectKana('ぐ')"><div class="kana-symbol">ぐ</div><div class="kana-romaji">gu</div></div>
+                        <div class="kana-card" onclick="selectKana('げ')"><div class="kana-symbol">げ</div><div class="kana-romaji">ge</div></div>
+                        <div class="kana-card" onclick="selectKana('ご')"><div class="kana-symbol">ご</div><div class="kana-romaji">go</div></div>
+
+                        <div class="kana-card" onclick="selectKana('ざ')"><div class="kana-symbol">ざ</div><div class="kana-romaji">za</div></div>
+                        <div class="kana-card" onclick="selectKana('じ')"><div class="kana-symbol">じ</div><div class="kana-romaji">ji</div></div>
+                        <div class="kana-card" onclick="selectKana('ず')"><div class="kana-symbol">ず</div><div class="kana-romaji">zu</div></div>
+                        <div class="kana-card" onclick="selectKana('ぜ')"><div class="kana-symbol">ぜ</div><div class="kana-romaji">ze</div></div>
+                        <div class="kana-card" onclick="selectKana('ぞ')"><div class="kana-symbol">ぞ</div><div class="kana-romaji">zo</div></div>
+
+                        <div class="kana-card" onclick="selectKana('だ')"><div class="kana-symbol">だ</div><div class="kana-romaji">da</div></div>
+                        <div class="kana-card" onclick="selectKana('ぢ')"><div class="kana-symbol">ぢ</div><div class="kana-romaji">ji</div></div>
+                        <div class="kana-card" onclick="selectKana('づ')"><div class="kana-symbol">づ</div><div class="kana-romaji">zu</div></div>
+                        <div class="kana-card" onclick="selectKana('で')"><div class="kana-symbol">で</div><div class="kana-romaji">de</div></div>
+                        <div class="kana-card" onclick="selectKana('ど')"><div class="kana-symbol">ど</div><div class="kana-romaji">do</div></div>
+
+                        <div class="kana-card" onclick="selectKana('ば')"><div class="kana-symbol">ば</div><div class="kana-romaji">ba</div></div>
+                        <div class="kana-card" onclick="selectKana('び')"><div class="kana-symbol">び</div><div class="kana-romaji">bi</div></div>
+                        <div class="kana-card" onclick="selectKana('ぶ')"><div class="kana-symbol">ぶ</div><div class="kana-romaji">bu</div></div>
+                        <div class="kana-card" onclick="selectKana('べ')"><div class="kana-symbol">べ</div><div class="kana-romaji">be</div></div>
+                        <div class="kana-card" onclick="selectKana('ぼ')"><div class="kana-symbol">ぼ</div><div class="kana-romaji">bo</div></div>
+
+                        <div class="kana-card" onclick="selectKana('ぱ')"><div class="kana-symbol">ぱ</div><div class="kana-romaji">pa</div></div>
+                        <div class="kana-card" onclick="selectKana('ぴ')"><div class="kana-symbol">ぴ</div><div class="kana-romaji">pi</div></div>
+                        <div class="kana-card" onclick="selectKana('ぷ')"><div class="kana-symbol">ぷ</div><div class="kana-romaji">pu</div></div>
+                        <div class="kana-card" onclick="selectKana('ぺ')"><div class="kana-symbol">ぺ</div><div class="kana-romaji">pe</div></div>
+                        <div class="kana-card" onclick="selectKana('ぽ')"><div class="kana-symbol">ぽ</div><div class="kana-romaji">po</div></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="category-block">
+                <button class="category-header" onclick="toggleCategory(this)">
+                    <span>3. Составные знаки (拗音)</span>
+                    <span>▼</span>
+                </button>
+                <div class="category-content">
+                    <div class="kana-grid">
+                        <div class="kana-card" onclick="selectKana('きゃ')"><div class="kana-symbol">きゃ</div><div class="kana-romaji">kya</div></div>
+                        <div class="kana-card" onclick="selectKana('きゅ')"><div class="kana-symbol">きゅ</div><div class="kana-romaji">kyu</div></div>
+                        <div class="kana-card" onclick="selectKana('きょ')"><div class="kana-symbol">きょ</div><div class="kana-romaji">kyo</div></div>
+
+                        <div class="kana-card" onclick="selectKana('しゃ')"><div class="kana-symbol">しゃ</div><div class="kana-romaji">sha</div></div>
+                        <div class="kana-card" onclick="selectKana('しゅ')"><div class="kana-symbol">しゅ</div><div class="kana-romaji">shu</div></div>
+                        <div class="kana-card" onclick="selectKana('しょ')"><div class="kana-symbol">しょ</div><div class="kana-romaji">sho</div></div>
+
+                        <div class="kana-card" onclick="selectKana('ちゃ')"><div class="kana-symbol">ちゃ</div><div class="kana-romaji">cha</div></div>
+                        <div class="kana-card" onclick="selectKana('ちゅ')"><div class="kana-symbol">ちゅ</div><div class="kana-romaji">chu</div></div>
+                        <div class="kana-card" onclick="selectKana('ちょ')"><div class="kana-symbol">ちょ</div><div class="kana-romaji">cho</div></div>
+
+                        <div class="kana-card" onclick="selectKana('にゃ')"><div class="kana-symbol">にゃ</div><div class="kana-romaji">nya</div></div>
+                        <div class="kana-card" onclick="selectKana('にゅ')"><div class="kana-symbol">にゅ</div><div class="kana-romaji">nyu</div></div>
+                        <div class="kana-card" onclick="selectKana('にょ')"><div class="kana-symbol">にょ</div><div class="kana-romaji">nyo</div></div>
+
+                        <div class="kana-card" onclick="selectKana('ひゃ')"><div class="kana-symbol">ひゃ</div><div class="kana-romaji">hya</div></div>
+                        <div class="kana-card" onclick="selectKana('ひゅ')"><div class="kana-symbol">ひゅ</div><div class="kana-romaji">hyu</div></div>
+                        <div class="kana-card" onclick="selectKana('ひょ')"><div class="kana-symbol">ひょ</div><div class="kana-romaji">hyo</div></div>
+
+                        <div class="kana-card" onclick="selectKana('みゃ')"><div class="kana-symbol">みゃ</div><div class="kana-romaji">mya</div></div>
+                        <div class="kana-card" onclick="selectKana('みゅ')"><div class="kana-symbol">みゅ</div><div class="kana-romaji">myu</div></div>
+                        <div class="kana-card" onclick="selectKana('みょ')"><div class="kana-symbol">みょ</div><div class="kana-romaji">myo</div></div>
+
+                        <div class="kana-card" onclick="selectKana('りゃ')"><div class="kana-symbol">りゃ</div><div class="kana-romaji">rya</div></div>
+                        <div class="kana-card" onclick="selectKana('りゅ')"><div class="kana-symbol">りゅ</div><div class="kana-romaji">ryu</div></div>
+                        <div class="kana-card" onclick="selectKana('りょ')"><div class="kana-symbol">りょ</div><div class="kana-romaji">ryo</div></div>
+
+                        <div class="kana-card" onclick="selectKana('ぎゃ')"><div class="kana-symbol">ぎゃ</div><div class="kana-romaji">gya</div></div>
+                        <div class="kana-card" onclick="selectKana('ぎゅ')"><div class="kana-symbol">ぎゅ</div><div class="kana-romaji">gyu</div></div>
+                        <div class="kana-card" onclick="selectKana('ぎょ')"><div class="kana-symbol">ぎょ</div><div class="kana-romaji">gyo</div></div>
+
+                        <div class="kana-card" onclick="selectKana('じゃ')"><div class="kana-symbol">じゃ</div><div class="kana-romaji">ja</div></div>
+                        <div class="kana-card" onclick="selectKana('じゅ')"><div class="kana-symbol">じゅ</div><div class="kana-romaji">ju</div></div>
+                        <div class="kana-card" onclick="selectKana('じょ')"><div class="kana-symbol">じょ</div><div class="kana-romaji">jo</div></div>
+
+                        <div class="kana-card" onclick="selectKana('びゃ')"><div class="kana-symbol">びゃ</div><div class="kana-romaji">bya</div></div>
+                        <div class="kana-card" onclick="selectKana('びゅ')"><div class="kana-symbol">びゅ</div><div class="kana-romaji">byu</div></div>
+                        <div class="kana-card" onclick="selectKana('びょ')"><div class="kana-symbol">びょ</div><div class="kana-romaji">byo</div></div>
+
+                        <div class="kana-card" onclick="selectKana('ぴゃ')"><div class="kana-symbol">ぴゃ</div><div class="kana-romaji">pya</div></div>
+                        <div class="kana-card" onclick="selectKana('ぴゅ')"><div class="kana-symbol">ぴゅ</div><div class="kana-romaji">pyu</div></div>
+                        <div class="kana-card" onclick="selectKana('ぴょ')"><div class="kana-symbol">ぴょ</div><div class="kana-romaji">pyo</div></div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Табличка информации сбоку -->
+        <div class="info-panel">
+            <h3 style="margin: 0; color: #666; font-size: 0.9rem;">Информация</h3>
+            <div id="info-char" class="info-symbol">あ</div>
+            <div id="info-reading" style="font-weight: bold; font-size: 1.1rem; margin-bottom: 10px;">[a]</div>
+            <div id="info-example" style="font-size: 0.9rem; color: #555;">Пример: <b>朝 (asa)</b> — утро</div>
+            <button onclick="speakCurrentInfo()" style="margin-top: 15px; background: #e63946; color: white; border: none; padding: 8px 15px; border-radius: 20px; cursor: pointer; font-weight: bold;">🔊 Озвучить</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        let currentSelected = 'あ';
+
+        function toggleCategory(button) {
+            const block = button.parentElement;
+            block.classList.toggle('active');
+        }
+
+        function selectKana(char) {
+            currentSelected = char;
+            speakKana(char);
+            
+            let data = kanaData[char];
+            document.getElementById('info-char').textContent = char;
+            
+            if (data) {
+                document.getElementById('info-reading').textContent = `[${data.reading}]`;
+                document.getElementById('info-example').innerHTML = `Пример: <b>${data.example} (${data.exampleReading})</b> — ${data.meaning}`;
+            } else {
+                document.getElementById('info-reading').textContent = `[-]`;
+                document.getElementById('info-example').textContent = `Информация пополняется`;
+            }
+        }
+
+        function speakCurrentInfo() {
+            speakKana(currentSelected);
+        }
+    </script>
+</body>
+
+</html>
