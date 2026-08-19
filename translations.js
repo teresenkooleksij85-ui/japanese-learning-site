@@ -43,9 +43,11 @@ const translations = {
     }
 };
 
-// Функция переключения языка
+// Функция переключения и сохранения языка
 function setLanguage(lang) {
     localStorage.setItem('selected_lang', lang);
+    
+    // Находим все элементы с атрибутом data-i18n
     document.querySelectorAll('[data-i18n]').forEach(el => {
         const key = el.getAttribute('data-i18n');
         if (translations[lang] && translations[lang][key]) {
@@ -53,19 +55,21 @@ function setLanguage(lang) {
         }
     });
 
+    // Обновляем текст на самой кнопке
     const langBtn = document.getElementById('langToggleBtn');
     if (langBtn) {
         langBtn.textContent = lang === 'ru' ? '🌐 RU' : '🌐 EN';
     }
 }
 
-function toggleLanguage() {
+// Вызывается при нажатии на кнопку
+window.toggleLanguage = function() {
     const currentLang = localStorage.getItem('selected_lang') || 'ru';
     const newLang = currentLang === 'ru' ? 'en' : 'ru';
     setLanguage(newLang);
-}
+};
 
-// При загрузке страницы проверяем сохранённый язык
+// Автоматически применяем выбранный язык при загрузке
 document.addEventListener('DOMContentLoaded', () => {
     const savedLang = localStorage.getItem('selected_lang') || 'ru';
     setLanguage(savedLang);
