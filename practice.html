@@ -481,7 +481,90 @@
         </button>
     </div>
 
-    <script src="script.js"></script>
+<script src="script.js"></script>
+    <script>
+        // База каны для теста
+        const kanaQuizData = [
+            { char: 'あ', romaji: 'a' },  { char: 'い', romaji: 'i' },  { char: 'う', romaji: 'u' },  { char: 'え', romaji: 'e' },  { char: 'お', romaji: 'o' },
+            { char: 'か', romaji: 'ka' }, { char: 'き', romaji: 'ki' }, { char: 'く', romaji: 'ku' }, { char: 'け', romaji: 'ke' }, { char: 'こ', romaji: 'ko' },
+            { char: 'さ', romaji: 'sa' }, { char: 'し', romaji: 'shi' },{ char: 'す', romaji: 'su' }, { char: 'せ', romaji: 'se' }, { char: 'そ', romaji: 'so' },
+            { char: 'た', romaji: 'ta' }, { char: 'ち', romaji: 'chi' },{ char: 'つ', romaji: 'tsu' }, { char: 'て', romaji: 'te' }, { char: 'と', romaji: 'to' },
+            { char: 'な', romaji: 'na' }, { char: 'に', romaji: 'ni' }, { char: 'ぬ', romaji: 'nu' }, { char: 'ね', romaji: 'ne' }, { char: 'の', romaji: 'no' }
+        ];
+
+        let currentQuizKana = null;
+        let correctCounter = 0;
+        let wrongCounter = 0;
+
+        function loadNextKana() {
+            const randomIndex = Math.floor(Math.random() * kanaQuizData.length);
+            currentQuizKana = kanaQuizData[randomIndex];
+            
+            document.getElementById('test-kana').innerText = currentQuizKana.char;
+            document.getElementById('test-answer').value = '';
+            document.getElementById('test-hint').innerText = '';
+            document.getElementById('test-result').innerText = '';
+            document.getElementById('test-answer').focus();
+        }
+
+        function checkAnswer() {
+            const inputField = document.getElementById('test-answer');
+            const userAnswer = inputField.value.trim().toLowerCase();
+            const resultDisplay = document.getElementById('test-result');
+
+            if (!userAnswer) return;
+
+            if (userAnswer === currentQuizKana.romaji) {
+                correctCounter++;
+                document.getElementById('correct-count').innerText = correctCounter;
+                resultDisplay.style.color = 'green';
+                resultDisplay.innerText = '✅ Правильно!';
+                
+                // 🚀 Отправляем правильный ответ на сервер для зачета ачивки
+                if (typeof recordAnswer === 'function') {
+                    recordAnswer(true);
+                }
+
+                setTimeout(loadNextKana, 800);
+            } else {
+                wrongCounter++;
+                document.getElementById('wrong-count').innerText = wrongCounter;
+                resultDisplay.style.color = 'red';
+                resultDisplay.innerText = `❌ Ошибка! Правильно: "${currentQuizKana.romaji}"`;
+
+                // ❌ Отправляем ошибку на сервер
+                if (typeof recordAnswer === 'function') {
+                    recordAnswer(false);
+                }
+
+                setTimeout(loadNextKana, 1500);
+            }
+        }
+
+        function showHint() {
+            if (currentQuizKana) {
+                document.getElementById('test-hint').innerText = `💡 Чтение начинается на: "${currentQuizKana.romaji[0]}"`;
+            }
+        }
+
+        function resetStats() {
+            correctCounter = 0;
+            wrongCounter = 0;
+            document.getElementById('correct-count').innerText = 0;
+            document.getElementById('wrong-count').innerText = 0;
+            document.getElementById('test-result').innerText = 'Статистика сброшена';
+        }
+
+        // Обработка нажатия Enter в поле ввода
+        document.getElementById('test-answer').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                checkAnswer();
+            }
+        });
+
+        // Запуск первого вопроса при открытии страницы
+        window.onload = loadNextKana;
+    </script>
 </body>
 
 </html>
