@@ -82,7 +82,7 @@
         }
 
         .grammar-block.active .grammar-content {
-            max-height: 3000px; /* Увеличено для длинных уроков */
+            max-height: 3000px;
             padding: 20px;
         }
 
@@ -134,12 +134,13 @@
 
 <body>
 
-    <button class="back-button" onclick="location.href='index.html'">← Главное меню</button>
+    <button id="langToggleBtn" class="lang-btn" onclick="toggleLanguage()">🌐 RU</button>
+    <button class="back-button" onclick="location.href='index.html'" data-i18n="back_menu">← Главное меню</button>
 
-    <h1>文法 (Грамматика)</h1>
-    <p class="subtitle">Базовые и продвинутые конструкции японского языка для изучения 📚</p>
+    <h1 data-i18n="grammar_title">文法 (Грамматика)</h1>
+    <p class="subtitle" data-i18n="grammar_subtitle">Базовые и продвинутые конструкции японского языка для изучения 📚</p>
 
-    <!-- Урок 1: Связка DESU -->
+    <!-- Уроки грамматики -->
     <div class="grammar-block">
         <button class="grammar-header" onclick="toggleCategory(this)">
             <span>1. Конструкция «A является B» (です - desu)</span>
@@ -147,13 +148,8 @@
         </button>
         <div class="grammar-content">
             <p>В японском языке связка <b>です (desu)</b> ставится в самом конце предложения и соответствует глаголам «есть», «является».</p>
-            
-            <div class="formula-box">
-                [Существительное A] + は (wa) + [Существительное B] + です (desu)
-            </div>
-
+            <div class="formula-box">[Существительное A] + は (wa) + [Существительное B] + です (desu)</div>
             <p><b>Частица は (читается как wa):</b> указывает на главную тему предложения.</p>
-
             <h3>Примеры (нажмите для озвучки):</h3>
             <ul class="example-list">
                 <li class="example-item">
@@ -172,19 +168,15 @@
         </div>
     </div>
 
-    <!-- Урок 2: Отрицание -->
+    <!-- Урок 2 -->
     <div class="grammar-block">
         <button class="grammar-header" onclick="toggleCategory(this)">
             <span>2. Отрицание «Не является...» (ではありません / じゃないです)</span>
             <span class="arrow-icon">▼</span>
         </button>
         <div class="grammar-content">
-            <p>Чтобы сказать «НЕ является», мы меняем <b>です</b> на <b>ではありません (dewa arimasen)</b> [официально] или разговорное <b>じゃないです (janai desu)</b>.</p>
-
-            <div class="formula-box">
-                [Существительное A] + は (wa) + [Существительное B] + ではありません
-            </div>
-
+            <p>Чтобы сказать «НЕ является», мы меняем <b>です</b> на <b>ではありません (dewa arimasen)</b> или <b>じゃないです (janai desu)</b>.</p>
+            <div class="formula-box">[Существительное A] + は (wa) + [Существительное B] + ではありません</div>
             <h3>Примеры:</h3>
             <ul class="example-list">
                 <li class="example-item">
@@ -193,25 +185,21 @@
                 </li>
                 <li class="example-item">
                     <span class="jp-text" onclick="speakKana('これはわたしのかばんじゃないです')">これは私の鞄じゃないです。</span><br>
-                    <i>Kore wa watashi no kaban janai desu.</i> — Это не моя сумка (разговорно).
+                    <i>Kore wa watashi no kaban janai desu.</i> — Это не моя сумка.
                 </li>
             </ul>
         </div>
     </div>
 
-    <!-- Урок 3: Вопрос -->
+    <!-- Урок 3 -->
     <div class="grammar-block">
         <button class="grammar-header" onclick="toggleCategory(this)">
             <span>3. Вопросы с частицей か (ka)</span>
             <span class="arrow-icon">▼</span>
         </button>
         <div class="grammar-content">
-            <p>Чтобы сделать предложение вопросительным, в самом конце просто добавляется частица <b>か (ka)</b>. Вопросительный знак «?» в японском ставить не обязательно!</p>
-
-            <div class="formula-box">
-                [Утвердительное предложение] + か (ka)
-            </div>
-
+            <p>Чтобы сделать предложение вопросительным, в самом конце просто добавляется частица <b>か (ka)</b>.</p>
+            <div class="formula-box">[Утвердительное предложение] + か (ka)</div>
             <h3>Примеры:</h3>
             <ul class="example-list">
                 <li class="example-item">
@@ -226,19 +214,15 @@
         </div>
     </div>
 
-    <!-- Урок 4: Принадлежность (Притяжательная частица NO) -->
+    <!-- Урок 4 -->
     <div class="grammar-block">
         <button class="grammar-header" onclick="toggleCategory(this)">
-            <span>4. Принадлежность и обладание ( の - no )</span>
+            <span>4. Принадлежность ( の - no )</span>
             <span class="arrow-icon">▼</span>
         </button>
         <div class="grammar-content">
-            <p>Частица <b>の (no)</b> объединяет два существительных и связывает их по принципу «Чей? Кого? Какого?». Она работает так же, как 's в английском языке.</p>
-
-            <div class="formula-box">
-                [Обладатель] + の (no) + [Предмет / Качество]
-            </div>
-
+            <p>Частица <b>の (no)</b> объединяет два существительных и связывает их по принципу «Чей? Кого? Какого?».</p>
+            <div class="formula-box">[Обладатель] + の (no) + [Предмет / Качество]</div>
             <h3>Примеры:</h3>
             <ul class="example-list">
                 <li class="example-item">
@@ -249,15 +233,11 @@
                     <span class="jp-text" onclick="speakKana('にほんごのせんせい')">日本語の先生。</span><br>
                     <i>Nihongo no sensei.</i> — Учитель японского языка.
                 </li>
-                <li class="example-item">
-                    <span class="jp-text" onclick="speakKana('わたしのかぞく')">私の家族。</span><br>
-                    <i>Watashi no kazoku.</i> — Моя семья.
-                </li>
             </ul>
         </div>
     </div>
 
-    <!-- Урок 5: Союз «Тоже / Также» (Частица MO) -->
+    <!-- Урок 5 -->
     <div class="grammar-block">
         <button class="grammar-header" onclick="toggleCategory(this)">
             <span>5. Тоже / Также ( も - mo )</span>
@@ -265,170 +245,110 @@
         </button>
         <div class="grammar-content">
             <p>Частица <b>も (mo)</b> заменяет частицы <b>は (wa)</b> или <b>が (ga)</b> и означает «тоже», «также».</p>
-
-            <div class="formula-box">
-                [Существительное] + も (mo) + [Качество / Действие]
-            </div>
-
+            <div class="formula-box">[Существительное] + も (mo) + [Качество / Действие]</div>
             <h3>Примеры:</h3>
             <ul class="example-list">
                 <li class="example-item">
-                    <span class="jp-text" onclick="speakKana('わたしもがくせいです')">私も学生です。</span><br>
+                    <span class="jp-text" onclick="speakKana('わたしも가くせいです')">私も学生です。</span><br>
                     <i>Watashi mo gakusei desu.</i> — Я тоже студент.
-                </li>
-                <li class="example-item">
-                    <span class="jp-text" onclick="speakKana('これもほんです')">これも本です。</span><br>
-                    <i>Kore mo hon desu.</i> — Это тоже книга.
                 </li>
             </ul>
         </div>
     </div>
 
-    <!-- Урок 6: Частица WO (Объект действия) -->
+    <!-- Урок 6 -->
     <div class="grammar-block">
         <button class="grammar-header" onclick="toggleCategory(this)">
             <span>6. Винительный падеж ( を - wo/o )</span>
             <span class="arrow-icon">▼</span>
         </button>
         <div class="grammar-content">
-            <p>Частица <b>を (пишется wo, произносится o)</b> показывает, над каким предметом совершается действие (что именно читают, едят или пьют).</p>
-
-            <div class="formula-box">
-                [Предмет] + を (o) + [Действие / Глагол]
-            </div>
-
+            <p>Частица <b>を (пишется wo, произносится o)</b> показывает, над каким предметом совершается действие.</p>
+            <div class="formula-box">[Предмет] + を (o) + [Действие / Глагол]</div>
             <h3>Примеры:</h3>
             <ul class="example-list">
                 <li class="example-item">
                     <span class="jp-text" onclick="speakKana('みずをのみます')">水を飲みます。</span><br>
                     <i>Mizu o nomimasu.</i> — Пью воду.
                 </li>
-                <li class="example-item">
-                    <span class="jp-text" onclick="speakKana('ほんをよみます')">本を読みます。</span><br>
-                    <i>Hon o yomimasu.</i> — Читаю книгу.
-                </li>
-                <li class="example-item">
-                    <span class="jp-text" onclick="speakKana('ラーメンをたべます')">ラーメンを食べます。</span><br>
-                    <i>Raamen o tabemasu.</i> — Ем рамен.
-                </li>
             </ul>
         </div>
     </div>
 
-    <!-- Урок 7: Частицы NI и DE -->
+    <!-- Урок 7 -->
     <div class="grammar-block">
         <button class="grammar-header" onclick="toggleCategory(this)">
             <span>7. Место и цель ( に - ni / で - de )</span>
             <span class="arrow-icon">▼</span>
         </button>
         <div class="grammar-content">
-            <p>• <b>に (ni)</b> — указывает на время или направление движения (куда? во сколько?).<br>
-               • <b>で (de)</b> — указывает на место, где происходит активное действие (где?).</p>
-
-            <div class="formula-box">
-                [Место] + に (ni) + いきます (иду)<br>
-                [Место] + で (de) + [Действие]
-            </div>
-
+            <p>• <b>に (ni)</b> — указывает на время или направление движения.<br>
+               • <b>で (de)</b> — указывает на место, где происходит активное действие.</p>
+            <div class="formula-box">[Место] + に (ni) + いきます<br>[Место] + で (de) + [Действие]</div>
             <h3>Примеры:</h3>
             <ul class="example-list">
                 <li class="example-item">
                     <span class="jp-text" onclick="speakKana('とうきょうにいきます')">東京に行きます。</span><br>
                     <i>Toukyou ni ikimasu.</i> — Еду в Токио.
                 </li>
-                <li class="example-item">
-                    <span class="jp-text" onclick="speakKana('うちでべんきょうします')">うちで勉強します。</span><br>
-                    <i>Uchi de benkyou shimasu.</i> — Учусь дома.
-                </li>
-                <li class="example-item">
-                    <span class="jp-text" onclick="speakKana('しちじにおきます')">7時に起きます。</span><br>
-                    <i>Shichiji ni okimasu.</i> — Встаю в 7 часов.
-                </li>
             </ul>
         </div>
     </div>
 
-    <!-- Урок 8: Наличие предмета (ARIMASU / IMASU) -->
+    <!-- Урок 8 -->
     <div class="grammar-block">
         <button class="grammar-header" onclick="toggleCategory(this)">
-            <span>8. Быть / Находиться ( あります - arimasu / います - imasu )</span>
+            <span>8. Быть / Находиться ( あります / います )</span>
             <span class="arrow-icon">▼</span>
         </button>
         <div class="grammar-content">
-            <p>В японском языке глаголы существования делятся на неодушевленные и одушевленные objects:</p>
-            <p>• <b>あります (arimasu)</b> — для предметов, неодушевленных вещей и растений.<br>
+            <p>• <b>あります (arimasu)</b> — для предметов и растений.<br>
                • <b>います (imasu)</b> — для людей и животных.</p>
-
-            <div class="formula-box">
-                [Предмет] + が (ga) + あります / います
-            </div>
-
+            <div class="formula-box">[Предмет] + が (ga) + あります / います</div>
             <h3>Примеры:</h3>
             <ul class="example-list">
                 <li class="example-item">
                     <span class="jp-text" onclick="speakKana('ほんがあります')">本があります。</span><br>
-                    <i>Hon ga arimasu.</i> — Есть книга (Имеется книга).
-                </li>
-                <li class="example-item">
-                    <span class="jp-text" onclick="speakKana('ねこがいます')">猫がいます。</span><br>
-                    <i>Neko ga imasu.</i> — Есть кошка (Находится кошка).
+                    <i>Hon ga arimasu.</i> — Есть книга.
                 </li>
             </ul>
         </div>
     </div>
 
-    <!-- Урок 9: Прошедшее время -->
+    <!-- Урок 9 -->
     <div class="grammar-block">
         <button class="grammar-header" onclick="toggleCategory(this)">
             <span>9. Прошедшее время ( でした / ました )</span>
             <span class="arrow-icon">▼</span>
         </button>
         <div class="grammar-content">
-            <p>Чтобы поставить предложение в прошедшее время:</p>
-            <p>• Для существительных: <b>です (desu)</b> ➔ <b>でした (deshita)</b><br>
-               • Для глаголов: окончания <b>〜ます (-masu)</b> ➔ <b>〜ました (-mashita)</b></p>
-
-            <div class="formula-box">
-                Настоящее: たべます (ем) ➔ Прошедшее: たべました (ел/поел)<br>
-                Настоящее: せんせいです (учитель) ➔ Прошедшее: せんせいでした (был учителем)
-            </div>
-
+            <p>• Для существительных: <b>です</b> ➔ <b>でした</b><br>
+               • Для глаголов: <b>〜ます</b> ➔ <b>〜ました</b></p>
+            <div class="formula-box">たべます ➔ たべました</div>
             <h3>Примеры:</h3>
             <ul class="example-list">
                 <li class="example-item">
                     <span class="jp-text" onclick="speakKana('きのうえいがをみました')">昨日映画を見ました。</span><br>
                     <i>Kinou eiga o mimashita.</i> — Вчера я смотрел фильм.
                 </li>
-                <li class="example-item">
-                    <span class="jp-text" onclick="speakKana('きのうはあめでした')"> me вчера雨でした。</span><br>
-                    <i>Kinou wa ame deshita.</i> — Вчера был дождь.
-                </li>
             </ul>
         </div>
     </div>
 
-    <!-- Урок 10: Желание «Хочу...» ( -TAI DESU ) -->
+    <!-- Урок 10 -->
     <div class="grammar-block">
         <button class="grammar-header" onclick="toggleCategory(this)">
-            <span>10. Выражение желания «Хочу сделать...» ( 〜たいです )</span>
+            <span>10. Выражение желания ( 〜たいです )</span>
             <span class="arrow-icon">▼</span>
         </button>
         <div class="grammar-content">
-            <p>Чтобы сказать «Я хочу сделать что-то», у основы глагола отбрасывается окончание <b>〜ます (-masu)</b> и добавляется <b>〜たいです (-tai desu)</b>.</p>
-
-            <div class="formula-box">
-                [Глагол без ます] + たいです (tai desu)
-            </div>
-
+            <p>У основы глагола отбрасывается <b>〜ます</b> и добавляется <b>〜たいです (-tai desu)</b>.</p>
+            <div class="formula-box">[Глагол без ます] + たいです</div>
             <h3>Примеры:</h3>
             <ul class="example-list">
                 <li class="example-item">
                     <span class="jp-text" onclick="speakKana('みずをのみたいです')">水を飲みたいです。</span><br>
                     <i>Mizu o nomitai desu.</i> — Я хочу выпить воды.
-                </li>
-                <li class="example-item">
-                    <span class="jp-text" onclick="speakKana('にほんにいきたいです')">日本に行きたいです。</span><br>
-                    <i>Nihon ni ikitai desu.</i> — Я хочу поехать в Японию.
                 </li>
             </ul>
         </div>
@@ -441,7 +361,6 @@
             block.classList.toggle('active');
         }
 
-        // Встроенная функция озвучки
         function speakKana(text) {
             if ('speechSynthesis' in window) {
                 window.speechSynthesis.cancel();
@@ -454,6 +373,7 @@
             }
         }
     </script>
+    <script src="translations.js"></script>
 </body>
 
 </html>

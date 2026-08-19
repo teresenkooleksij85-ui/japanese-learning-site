@@ -28,14 +28,12 @@
             transition: all 0.3s ease;
         }
 
-        /* Стиль для еще НЕ полученных достижений */
         .achievement-card.locked {
             opacity: 0.4;
             filter: grayscale(100%);
             background: #f0f0f0;
         }
 
-        /* Стиль для ПОЛУЧЕННЫХ достижений */
         .achievement-card.unlocked {
             border-color: #2ed573;
             box-shadow: 0 4px 12px rgba(46, 213, 115, 0.2);
@@ -85,13 +83,13 @@
 
 <body>
 
-    <button class="back-button" onclick="location.href='index.html'">← Главное меню</button>
+    <button id="langToggleBtn" class="lang-btn" onclick="toggleLanguage()">🌐 RU</button>
+    <button class="back-button" onclick="location.href='index.html'" data-i18n="back_menu">← Главное меню</button>
 
-    <h1>実績 (Достижения)</h1>
-    <p>Твой личный прогресс и награды 🏆</p>
+    <h1 data-i18n="achievements_title">実績 (Достижения)</h1>
+    <p data-i18n="achievements_subtitle">Твой личный прогресс и награды 🏆</p>
 
     <div class="achievements-grid" id="achievementsGrid">
-        <!-- Достижения подгрузятся динамически -->
         <p style="text-align:center; width:100%;">Загрузка достижений...</p>
     </div>
 
@@ -103,7 +101,6 @@
             'shogun': '👑'
         };
 
-        // Заглушка списка достижений для незарегистрированных пользователей
         const defaultAchievements = [
             { id: 'first_step', title: 'Первый шаг', desc: 'Дать первый правильный ответ в упражнениях.', unlocked: false },
             { id: 'hundred_correct', title: 'Первая сотня', desc: 'Набрать 100 правильных ответов.', unlocked: false },
@@ -151,7 +148,6 @@
                 const res = await fetch('/api/achievements');
                 
                 if (res.status === 401) {
-                    // Пользователь не авторизован — показываем базовые карточки
                     renderAchievements(defaultAchievements, false);
                     return;
                 }
@@ -173,6 +169,7 @@
 
         window.onload = loadAchievements;
     </script>
+    <script src="translations.js"></script>
 </body>
 
 </html>

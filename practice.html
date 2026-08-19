@@ -191,6 +191,8 @@
 
     <button class="back-button" onclick="location.href='index.html'">← Главное меню</button>
 
+<button id="langToggleBtn" class="lang-btn" onclick="toggleLanguage()">🌐 RU</button>
+
     <h1>練習</h1>
     <p>Выбери знаки или слова для тренировки</p>
 
@@ -739,6 +741,52 @@
             applySelectedRows();
         };
     </script>
+    
+    <script src="translations.js"></script>
+    
 </body>
 
 </html>
+
+/* Шапка авторизации вверху страницы */
+.user-header-widget {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: #ffffff;
+    padding: 8px 16px;
+    border-radius: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    font-size: 0.95rem;
+}
+
+.user-avatar {
+    background: #e63946;
+    color: white;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+.logout-btn {
+    background: #f8f9fa;
+    border: 1px solid #ccc;
+    padding: 5px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: background 0.2s;
+}
+
+.logout-btn:hover {
+    background: #ffebeb;
+    color: #e63946;
+    border-color: #e63946;
+}
