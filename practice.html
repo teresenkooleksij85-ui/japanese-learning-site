@@ -162,6 +162,28 @@
             margin: 10px 0;
             min-height: 25px;
         }
+
+        .choice-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .choice-btn {
+            background-color: #e63946;
+            color: white;
+            border: none;
+            padding: 15px;
+            font-size: 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: transform 0.1s;
+        }
+
+        .choice-btn:hover {
+            transform: scale(1.03);
+        }
     </style>
 </head>
 
@@ -170,9 +192,9 @@
     <button class="back-button" onclick="location.href='index.html'">← Главное меню</button>
 
     <h1>練習</h1>
-    <p>Выбери знаки для тренировки</p>
+    <p>Выбери знаки или слова для тренировки</p>
 
-    <div class="script-settings">
+    <div class="script-settings" id="script-settings">
 
         <!-- Хирагана -->
         <div class="script-option">
@@ -465,10 +487,17 @@
     <div id="kana-test">
         <h2>Тестирование</h2>
         <p id="test-kana" style="font-size: 70px; margin: 10px 0; color: #e63946;">-</p>
-        <input type="text" id="test-answer" placeholder="чтение (a, ka, i...)">
-        <br>
-        <button class="action-btn" onclick="checkAnswer()">Проверить</button>
-        <button class="hint-btn" onclick="showHint()">💡 Подсказка</button>
+        
+        <div id="input-container">
+            <input type="text" id="test-answer" placeholder="чтение (a, ka, i...)">
+            <br>
+            <button class="action-btn" onclick="checkAnswer()">Проверить</button>
+            <button class="hint-btn" onclick="showHint()">💡 Подсказка</button>
+        </div>
+
+        <div id="choice-container" class="choice-grid hidden">
+            <!-- Кнопки выбора ответов -->
+        </div>
 
         <p id="test-result"></p>
         <div id="test-hint"></div>
@@ -481,69 +510,212 @@
         </button>
     </div>
 
-<script src="script.js"></script>
+    <script src="script.js"></script>
     <script>
-        // База каны для теста
-        const kanaQuizData = [
-            { char: 'あ', romaji: 'a' },  { char: 'い', romaji: 'i' },  { char: 'う', romaji: 'u' },  { char: 'え', romaji: 'e' },  { char: 'お', romaji: 'o' },
-            { char: 'か', romaji: 'ka' }, { char: 'き', romaji: 'ki' }, { char: 'く', romaji: 'ku' }, { char: 'け', romaji: 'ke' }, { char: 'こ', romaji: 'ko' },
-            { char: 'さ', romaji: 'sa' }, { char: 'し', romaji: 'shi' },{ char: 'す', romaji: 'su' }, { char: 'せ', romaji: 'se' }, { char: 'そ', romaji: 'so' },
-            { char: 'た', romaji: 'ta' }, { char: 'ち', romaji: 'chi' },{ char: 'つ', romaji: 'tsu' }, { char: 'て', romaji: 'te' }, { char: 'と', romaji: 'to' },
-            { char: 'な', romaji: 'na' }, { char: 'に', romaji: 'ni' }, { char: 'ぬ', romaji: 'nu' }, { char: 'ね', romaji: 'ne' }, { char: 'の', romaji: 'no' }
+        // Общая база данных каны
+        const allKanaMap = {
+            'あ':'a','い':'i','う':'u','え':'e','お':'o',
+            'か':'ka','き':'ki','く':'ku','け':'ke','こ':'ko',
+            'さ':'sa','し':'shi','す':'su','せ':'se','そ':'so',
+            'た':'ta','ち':'chi','つ':'tsu','て':'te','と':'to',
+            'な':'na','に':'ni','ぬ':'nu','ね':'ne','の':'no',
+            'は':'ha','ひ':'hi','ふ':'fu','へ':'he','ほ':'ho',
+            'ま':'ma','み':'mi','む':'mu','め':'me','も':'mo',
+            'や':'ya','ゆ':'yu','よ':'yo',
+            'ら':'ra','り':'ri','る':'ru','れ':'re','ろ':'ro',
+            'わ':'wa','を':'wo','ん':'n',
+            'が':'ga','ぎ':'gi','ぐ':'gu','げ':'ge','ご':'go',
+            'ざ':'za','じ':'ji','ず':'zu','ぜ':'ze','ぞ':'zo',
+            'だ':'da','ぢ':'ji','づ':'zu','で':'de','ど':'do',
+            'ば':'ba','び':'bi','ぶ':'bu','べ':'be','ぼ':'bo',
+            'ぱ':'pa','ぴ':'pi','ぷ':'pu','ぺ':'pe','ぽ':'po',
+            'ア':'a','イ':'i','ウ':'u','エ':'e','オ':'o',
+            'カ':'ka','キ':'ki','ク':'ku','ケ':'ke','コ':'ko',
+            'サ':'sa','シ':'shi','ス':'su','セ':'se','ソ':'so',
+            'タ':'ta','チ':'chi','ツ':'tsu','テ':'te','ト':'to',
+            'ナ':'na','ニ':'ni','ヌ':'nu','ネ':'ne','ノ':'no',
+            'ハ':'ha','ヒ':'hi','フ':'fu','ヘ':'he','ホ':'ho',
+            'マ':'ma','ミ':'mi','ム':'mu','メ':'me','モ':'mo',
+            'ヤ':'ya','ユ':'yu','ヨ':'yo',
+            'ラ':'ra','リ':'ri','ル':'ru','レ':'re','ロ':'ro',
+            'ワ':'wa','ヲ':'wo','ン':'n',
+            'ガ':'ga','ギ':'gi','グ':'gu','ゲ':'ge','ゴ':'go',
+            'バ':'ba','ビ':'bi','ブ':'bu','ベ':'be','ボ':'bo',
+            'パ':'pa','ピ':'pi','プ':'pu','ペ':'pe','ポ':'po'
+        };
+
+        // База слов
+        const wordsData = [
+            { question: 'кошка', answer: 'ねこ', options: ['ねこ', 'いぬ', 'さかな', 'とり'] },
+            { question: 'собака', answer: 'いぬ', options: ['いぬ', 'ねこ', 'うま', 'さる'] },
+            { question: 'рыба', answer: 'さかな', options: ['さかな', 'ふね', 'みず', 'ほし'] },
+            { question: 'книга', answer: 'ほん', options: ['ほん', 'ペン', 'つくえ', 'やま'] },
+            { question: 'вода', answer: 'みず', options: ['みず', 'おちゃ', 'さけ', '川'] }
         ];
 
-        let currentQuizKana = null;
+        let activePool = [];
+        let currentItem = null;
         let correctCounter = 0;
         let wrongCounter = 0;
 
-        function loadNextKana() {
-            const randomIndex = Math.floor(Math.random() * kanaQuizData.length);
-            currentQuizKana = kanaQuizData[randomIndex];
-            
-            document.getElementById('test-kana').innerText = currentQuizKana.char;
-            document.getElementById('test-answer').value = '';
+        function toggleRows(type) {
+            const rows = document.getElementById(`${type}-rows`);
+            rows.classList.toggle('hidden');
+        }
+
+        function selectAll(type, check) {
+            const checkboxes = document.querySelectorAll(`#${type}-rows .kana-checkbox`);
+            checkboxes.forEach(cb => cb.checked = check);
+            applySelectedRows();
+        }
+
+        function toggleRowGroup(masterCb, groupClass) {
+            const checkboxes = document.querySelectorAll(`.${groupClass}`);
+            checkboxes.forEach(cb => cb.checked = masterCb.checked);
+            applySelectedRows();
+        }
+
+        function switchTestType() {
+            const type = document.getElementById('test-type').value;
+            const settings = document.getElementById('script-settings');
+            const warning = document.getElementById('select-warning');
+
+            if (type === 'words') {
+                settings.classList.add('hidden');
+                warning.classList.add('hidden');
+                document.getElementById('test-mode').value = 'choice';
+            } else {
+                settings.classList.remove('hidden');
+                warning.classList.remove('hidden');
+            }
+            applySelectedRows();
+        }
+
+        function applySelectedRows() {
+            const type = document.getElementById('test-type').value;
+
+            if (type === 'words') {
+                activePool = wordsData;
+                document.getElementById('select-warning').classList.add('hidden');
+            } else {
+                const checked = document.querySelectorAll('.kana-checkbox:checked');
+                activePool = [];
+                checked.forEach(cb => {
+                    const char = cb.getAttribute('data-kana');
+                    if (char && allKanaMap[char]) {
+                        activePool.push({ char: char, romaji: allKanaMap[char] });
+                    }
+                });
+
+                const warning = document.getElementById('select-warning');
+                if (activePool.length === 0) {
+                    warning.classList.remove('hidden');
+                    document.getElementById('test-kana').innerText = '-';
+                    return;
+                } else {
+                    warning.classList.add('hidden');
+                }
+            }
+
+            loadNextQuestion();
+        }
+
+        function loadNextQuestion() {
+            if (activePool.length === 0) return;
+
+            const mode = document.getElementById('test-mode').value;
+            const type = document.getElementById('test-type').value;
+            const inputContainer = document.getElementById('input-container');
+            const choiceContainer = document.getElementById('choice-container');
+
+            const randomIndex = Math.floor(Math.random() * activePool.length);
+            currentItem = activePool[randomIndex];
+
             document.getElementById('test-hint').innerText = '';
             document.getElementById('test-result').innerText = '';
-            document.getElementById('test-answer').focus();
+
+            if (type === 'words' || mode === 'choice') {
+                inputContainer.classList.add('hidden');
+                choiceContainer.classList.remove('hidden');
+
+                if (type === 'words') {
+                    document.getElementById('test-kana').innerText = currentItem.question;
+                    renderChoiceButtons(currentItem.options, currentItem.answer);
+                } else {
+                    document.getElementById('test-kana').innerText = currentItem.romaji;
+                    
+                    // Генерируем 4 варианта ответов для каны
+                    let options = [currentItem.char];
+                    while (options.length < 4) {
+                        const randomChar = Object.keys(allKanaMap)[Math.floor(Math.random() * Object.keys(allKanaMap).length)];
+                        if (!options.includes(randomChar)) options.push(randomChar);
+                    }
+                    options.sort(() => Math.random() - 0.5);
+                    renderChoiceButtons(options, currentItem.char);
+                }
+            } else {
+                inputContainer.classList.remove('hidden');
+                choiceContainer.classList.add('hidden');
+                document.getElementById('test-kana').innerText = currentItem.char;
+                document.getElementById('test-answer').value = '';
+                document.getElementById('test-answer').focus();
+            }
+        }
+
+        function renderChoiceButtons(options, correctAnswer) {
+            const container = document.getElementById('choice-container');
+            container.innerHTML = '';
+            options.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = 'choice-btn';
+                btn.innerText = opt;
+                btn.onclick = () => handleAnswer(opt === correctAnswer, correctAnswer);
+                container.appendChild(btn);
+            });
         }
 
         function checkAnswer() {
             const inputField = document.getElementById('test-answer');
             const userAnswer = inputField.value.trim().toLowerCase();
+            if (!userAnswer || !currentItem) return;
+
+            const isCorrect = (userAnswer === currentItem.romaji);
+            handleAnswer(isCorrect, currentItem.romaji);
+        }
+
+        function handleAnswer(isCorrect, expected) {
             const resultDisplay = document.getElementById('test-result');
 
-            if (!userAnswer) return;
-
-            if (userAnswer === currentQuizKana.romaji) {
+            if (isCorrect) {
                 correctCounter++;
                 document.getElementById('correct-count').innerText = correctCounter;
                 resultDisplay.style.color = 'green';
-                resultDisplay.innerText = '✅ Правильно!';
-                
-                // 🚀 Отправляем правильный ответ на сервер для зачета ачивки
+                resultDisplay.innerText = 'Правильно! 🎉';
+
+                // 🚀 ОТПРАВЛЯЕМ УСПЕХ НА СЕРВЕР ДЛЯ ВЫДАЧИ АЧИВОК
                 if (typeof recordAnswer === 'function') {
                     recordAnswer(true);
                 }
 
-                setTimeout(loadNextKana, 800);
+                setTimeout(loadNextQuestion, 800);
             } else {
                 wrongCounter++;
                 document.getElementById('wrong-count').innerText = wrongCounter;
                 resultDisplay.style.color = 'red';
-                resultDisplay.innerText = `❌ Ошибка! Правильно: "${currentQuizKana.romaji}"`;
+                resultDisplay.innerText = `❌ Ошибка! Правильно: "${expected}"`;
 
-                // ❌ Отправляем ошибку на сервер
+                // ❌ ОТПРАВЛЯЕМ ОШИБКУ НА СЕРВЕР
                 if (typeof recordAnswer === 'function') {
                     recordAnswer(false);
                 }
 
-                setTimeout(loadNextKana, 1500);
+                setTimeout(loadNextQuestion, 1500);
             }
         }
 
         function showHint() {
-            if (currentQuizKana) {
-                document.getElementById('test-hint').innerText = `💡 Чтение начинается на: "${currentQuizKana.romaji[0]}"`;
+            if (currentItem && currentItem.romaji) {
+                document.getElementById('test-hint').innerText = `💡 Чтение начинается на: "${currentItem.romaji[0]}"`;
             }
         }
 
@@ -555,15 +727,17 @@
             document.getElementById('test-result').innerText = 'Статистика сброшена';
         }
 
-        // Обработка нажатия Enter в поле ввода
         document.getElementById('test-answer').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                checkAnswer();
-            }
+            if (e.key === 'Enter') checkAnswer();
         });
 
-        // Запуск первого вопроса при открытии страницы
-        window.onload = loadNextKana;
+        // Запуск при загрузке
+        window.onload = function() {
+            // Выбираем первые 5 букв Хираганы по умолчанию
+            const defaultCbs = document.querySelectorAll('.h-a');
+            defaultCbs.forEach(cb => cb.checked = true);
+            applySelectedRows();
+        };
     </script>
 </body>
 
