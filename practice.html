@@ -1,7 +1,37 @@
 <!DOCTYPE html>
+<script>
+    // Применяем тему ДО загрузки страницы
+    (function() {
+        const theme = localStorage.getItem('selectedTheme');
+        if (theme === 'theme-dark') {
+            document.documentElement.classList.add('theme-dark');
+        }
+        // Если тема не выбрана - по умолчанию светлая
+    })();
+</script>
+
 <html lang="ru">
 
 <head>
+
+<style>
+    /* Скрываем всё до загрузки */
+    html.loading * {
+        opacity: 0 !important;
+        transition: none !important;
+    }
+    html:not(.loading) * {
+        opacity: 1 !important;
+        transition: opacity 0.3s ease !important;
+    }
+</style>
+<script>
+    document.documentElement.classList.add('loading');
+    window.addEventListener('load', function() {
+        document.documentElement.classList.remove('loading');
+    });
+</script>
+
     <link rel="stylesheet" href="style.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -38,6 +68,7 @@
             border-radius: 20px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
             font-size: 0.95rem;
+            z-index: 100;
         }
 
         .user-avatar {
@@ -80,12 +111,6 @@
         }
 
         .lang-btn {
-            /* Раньше здесь было position: fixed; left: 170px —
-               на узких экранах (~375px) это растягивало кнопку
-               почти на всю правую половину страницы, поверх
-               остального контента. Теперь кнопка — обычный элемент
-               в потоке документа, в одном ряду с кнопкой "Назад",
-               и никуда не наезжает. */
             background: #1d3557;
             color: white;
             border: none;
@@ -251,6 +276,20 @@
         .choice-btn:hover {
             transform: scale(1.03);
         }
+
+        body.theme-dark .user-header-widget {
+            background: #1e1e2d;
+            color: white;
+        }
+        body.theme-dark .logout-btn {
+            background: #2a2a3d;
+            color: white;
+            border-color: #444;
+        }
+        body.theme-dark .logout-btn:hover {
+            background: #3a1a1a;
+            color: #ff4d6d;
+        }
     </style>
 </head>
 
@@ -263,7 +302,7 @@
 
     <div class="user-header-widget" id="userWidget">
         <div class="user-avatar" id="userAvatar">U</div>
-        <span id="userName">Гость</span>
+        <span id="userName" data-i18n="guest">Гость</span>
         <button class="logout-btn" onclick="logout()" id="logoutBtn" data-i18n="logout_btn">Выйти</button>
     </div>
 
@@ -274,7 +313,7 @@
 
         <!-- Хирагана -->
         <div class="script-option">
-            <button type="button" class="toggle-btn" onclick="toggleRows('hiragana')">ひらがな (Хирагана)</button>
+            <button type="button" class="toggle-btn" onclick="toggleRows('hiragana')" data-i18n="mode_hiragana">ひらがな (Хирагана)</button>
             <div id="hiragana-rows" class="row-selection hidden">
                 <div class="select-buttons">
                     <button type="button" onclick="selectAll('hiragana', true)" data-i18n="select_all">Выбрать всё</button>
@@ -405,7 +444,7 @@
 
         <!-- Катакана -->
         <div class="script-option">
-            <button type="button" class="toggle-btn" onclick="toggleRows('katakana')">カタカナ (Катакана)</button>
+            <button type="button" class="toggle-btn" onclick="toggleRows('katakana')" data-i18n="mode_katakana">カタカナ (Катакана)</button>
             <div id="katakana-rows" class="row-selection hidden">
                 <div class="select-buttons">
                     <button type="button" onclick="selectAll('katakana', true)" data-i18n="select_all">Выбрать всё</button>
@@ -527,7 +566,7 @@
 
     </div>
 
-    <p id="select-warning" style="text-align: center; font-weight: bold; margin-bottom: 15px;" data-i18n="select_symbol_warning">
+    <p id="select-warning" style="text-align: center; font-weight: bold; margin-bottom: 15px; display: none;" data-i18n="select_symbol_warning">
         Выберите хотя бы один символ выше ⬆️
     </p>
 
@@ -589,7 +628,9 @@
     <script src="script.js"></script>
     <script src="translations.js"></script>
     <script>
-        // Общая база данных каны
+        // ==========================================
+        // 1. БАЗА ДАННЫХ ВСЕХ КАН (из script.js)
+        // ==========================================
         const allKanaMap = {
             'あ':'a','い':'i','う':'u','え':'e','お':'o',
             'か':'ka','き':'ki','く':'ku','け':'ke','こ':'ko',
@@ -621,28 +662,64 @@
             'パ':'pa','ピ':'pi','プ':'pu','ペ':'pe','ポ':'po'
         };
 
-        // Локальное имя (practiceWordsData), а не wordsData —
-        // script.js тоже объявляет const wordsData на верхнем уровне,
-        // и при одинаковом имени браузер выбрасывал SyntaxError
-        // "Identifier 'wordsData' has already been declared",
-        // из-за чего вообще весь тренажёр переставал работать.
-        const practiceWordsData = [
-            { question: 'кошка', answer: 'ねこ', options: ['ねこ', 'いぬ', 'さかな', 'とり'] },
-            { question: 'собака', answer: 'いぬ', options: ['いぬ', 'ねこ', 'うま', 'さる'] },
-            { question: 'рыба', answer: 'さかな', options: ['さかな', 'ふね', 'みず', 'ほし'] },
-            { question: 'книга', answer: 'ほん', options: ['ほん', 'ペン', 'つくえ', 'やま'] },
-            { question: 'вода', answer: 'みず', options: ['みず', 'おちゃ', 'さけ', '川'] },
-            { question: 'дом', answer: 'いえ', options: ['いえ', 'みせ', 'えき', 'こうえん'] },
-            { question: 'друг', answer: 'ともだち', options: ['ともだち', 'かぞく', 'せんせい', 'がくせい'] },
-            { question: 'утро', answer: 'あさ', options: ['あさ', 'ひる', 'よる', 'いま'] },
-            { question: 'красный', answer: 'あか', options: ['あか', 'あお', 'しろ', 'くろ'] },
-            { question: 'пить', answer: 'のむ', options: ['のむ', 'たべる', 'いく', 'みる'] }
+        // ==========================================
+        // 2. ПОЛНАЯ БАЗА СЛОВ (из script.js)
+        // ==========================================
+        const fullWordsData = [
+            { jp: "私", reading: "watashi", ru: "Я" },
+            { jp: "あなた", reading: "anata", ru: "Вы / Ты" },
+            { jp: "友達", reading: "tomodachi", ru: "Друг" },
+            { jp: "先生", reading: "sensei", ru: "Учитель" },
+            { jp: "学生", reading: "gakusei", ru: "Студент" },
+            { jp: "はい", reading: "hai", ru: "Да" },
+            { jp: "いいえ", reading: "iie", ru: "Нет" },
+            { jp: "ありがとう", reading: "arigatou", ru: "Спасибо" },
+            { jp: "さようなら", reading: "sayounara", ru: "До свидания" },
+            { jp: "猫", reading: "neko", ru: "Кошка" },
+            { jp: "犬", reading: "inu", ru: "Собака" },
+            { jp: "鳥", reading: "tori", ru: "Птица" },
+            { jp: "魚", reading: "sakana", ru: "Рыба" },
+            { jp: "水", reading: "mizu", ru: "Вода" },
+            { jp: "お茶", reading: "ocha", ru: "Чай" },
+            { jp: "ご飯", reading: "gohan", ru: "Рис / Еда" },
+            { jp: "ラーメン", reading: "raamen", ru: "Рамен" },
+            { jp: "パン", reading: "pan", ru: "Хлеб" },
+            { jp: "肉", reading: "niku", ru: "Мясо" },
+            { jp: "家", reading: "ie", ru: "Дом" },
+            { jp: "学校", reading: "gakkou", ru: "Школа" },
+            { jp: "本", reading: "hon", ru: "Книга" },
+            { jp: "車", reading: "kuruma", ru: "Машина" },
+            { jp: "山", reading: "yama", ru: "Гора" },
+            { jp: "川", reading: "kawa", ru: "Река" },
+            { jp: "赤", reading: "aka", ru: "Красный" },
+            { jp: "青", reading: "ao", ru: "Синий" },
+            { jp: "白", reading: "shiro", ru: "Белый" },
+            { jp: "黒", reading: "kuro", ru: "Черный" },
+            { jp: "黄色", reading: "kiiro", ru: "Желтый" },
+            { jp: "緑", reading: "midori", ru: "Зеленый" },
+            { jp: "食べる", reading: "taberu", ru: "Есть / Кушать" },
+            { jp: "飲む", reading: "nomu", ru: "Пить" },
+            { jp: "行く", reading: "iku", ru: "Идти / Ехать" },
+            { jp: "来る", reading: "kuru", ru: "Приходить" },
+            { jp: "見る", reading: "miru", ru: "Смотреть" },
+            { jp: "聞く", reading: "kiku", ru: "Слушать / Спрашивать" },
+            { jp: "する", reading: "suru", ru: "Делать" }
         ];
 
+        // ==========================================
+        // 3. ПЕРЕМЕННЫЕ
+        // ==========================================
         let activePool = [];
-        let currentItem = null;
+        let currentQuestion = 0;
+        let questionsAnswered = 0;
+        let totalQuestionsLimit = Infinity;
+        let currentMode = 'write';
         let correctCounter = 0;
         let wrongCounter = 0;
+
+        // ==========================================
+        // 4. ФУНКЦИИ УПРАВЛЕНИЯ ТЕСТОМ
+        // ==========================================
 
         function toggleRows(type) {
             const rows = document.getElementById(`${type}-rows`);
@@ -681,7 +758,16 @@
             const type = document.getElementById('test-type').value;
 
             if (type === 'words') {
-                activePool = practiceWordsData;
+                // Используем полную базу слов
+                activePool = fullWordsData.map(w => ({
+                    question: w.ru,
+                    answer: w.jp,
+                    reading: w.reading,
+                    speech: w.reading,
+                    isWord: true,
+                    // Генерируем варианты ответов
+                    options: generateWordOptions(w.jp)
+                }));
                 document.getElementById('select-warning').classList.add('hidden');
             } else {
                 const checked = document.querySelectorAll('.kana-checkbox:checked');
@@ -689,7 +775,11 @@
                 checked.forEach(cb => {
                     const char = cb.getAttribute('data-kana');
                     if (char && allKanaMap[char]) {
-                        activePool.push({ char: char, romaji: allKanaMap[char] });
+                        activePool.push({
+                            char: char,
+                            romaji: allKanaMap[char],
+                            isWord: false
+                        });
                     }
                 });
 
@@ -703,40 +793,86 @@
                 }
             }
 
-            loadNextQuestion();
+            // Перемешиваем и начинаем тест
+            shuffleArray(activePool);
+            questionsAnswered = 0;
+            currentQuestion = 0;
+            showQuestion();
         }
 
-        function loadNextQuestion() {
-            if (activePool.length === 0) return;
+        function generateWordOptions(correctAnswer) {
+            const options = [correctAnswer];
+            const allWords = fullWordsData.map(w => w.jp);
+            const shuffled = shuffleArray(allWords);
+            
+            for (let word of shuffled) {
+                if (!options.includes(word) && options.length < 4) {
+                    options.push(word);
+                }
+            }
+            return shuffleArray(options);
+        }
+
+        function shuffleArray(array) {
+            const arr = [...array];
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+        }
+
+        function showQuestion() {
+            if (!activePool || activePool.length === 0) {
+                document.getElementById('test-kana').innerText = '-';
+                return;
+            }
 
             const mode = document.getElementById('test-mode').value;
             const type = document.getElementById('test-type').value;
+            const limitSelect = document.getElementById('test-limit');
+            totalQuestionsLimit = (limitSelect && limitSelect.value !== 'inf') ? parseInt(limitSelect.value) : Infinity;
+
+            if (questionsAnswered >= totalQuestionsLimit) {
+                document.getElementById('test-kana').innerText = '🎉';
+                document.getElementById('test-result').textContent = 
+                    `Сессия окончена! Пройдено вопросов: ${questionsAnswered}`;
+                document.getElementById('input-container').classList.add('hidden');
+                document.getElementById('choice-container').classList.add('hidden');
+                return;
+            }
+
+            // Если дошли до конца массива - перемешиваем заново
+            if (currentQuestion >= activePool.length) {
+                shuffleArray(activePool);
+                currentQuestion = 0;
+            }
+
+            const currentItem = activePool[currentQuestion];
             const inputContainer = document.getElementById('input-container');
             const choiceContainer = document.getElementById('choice-container');
 
-            const randomIndex = Math.floor(Math.random() * activePool.length);
-            currentItem = activePool[randomIndex];
+            document.getElementById('test-hint').innerHTML = '';
+            document.getElementById('test-result').innerHTML = '';
 
-            document.getElementById('test-hint').innerText = '';
-            document.getElementById('test-result').innerText = '';
-
-            if (type === 'words' || mode === 'choice') {
+            if (currentItem.isWord || mode === 'choice') {
                 inputContainer.classList.add('hidden');
                 choiceContainer.classList.remove('hidden');
 
-                if (type === 'words') {
+                if (currentItem.isWord) {
+                    // Режим "Слова": показываем перевод, выбираем японское слово
                     document.getElementById('test-kana').innerText = currentItem.question;
-                    renderChoiceButtons(currentItem.options, currentItem.answer);
+                    renderChoiceButtons(currentItem.options, currentItem.answer, true);
                 } else {
+                    // Режим "Кана": показываем чтение, выбираем кану
                     document.getElementById('test-kana').innerText = currentItem.romaji;
-                    
                     let options = [currentItem.char];
+                    const allChars = Object.keys(allKanaMap);
                     while (options.length < 4) {
-                        const randomChar = Object.keys(allKanaMap)[Math.floor(Math.random() * Object.keys(allKanaMap).length)];
+                        const randomChar = allChars[Math.floor(Math.random() * allChars.length)];
                         if (!options.includes(randomChar)) options.push(randomChar);
                     }
-                    options.sort(() => Math.random() - 0.5);
-                    renderChoiceButtons(options, currentItem.char);
+                    renderChoiceButtons(shuffleArray(options), currentItem.char, false);
                 }
             } else {
                 inputContainer.classList.remove('hidden');
@@ -747,14 +883,19 @@
             }
         }
 
-        function renderChoiceButtons(options, correctAnswer) {
+        function renderChoiceButtons(options, correctAnswer, isWordMode) {
             const container = document.getElementById('choice-container');
             container.innerHTML = '';
+            container.classList.remove('hidden');
+            
             options.forEach(opt => {
                 const btn = document.createElement('button');
                 btn.className = 'choice-btn';
                 btn.innerText = opt;
-                btn.onclick = () => handleAnswer(opt === correctAnswer, correctAnswer);
+                btn.onclick = () => {
+                    const isCorrect = (opt === correctAnswer);
+                    handleAnswer(isCorrect, correctAnswer, isWordMode);
+                };
                 container.appendChild(btn);
             });
         }
@@ -762,13 +903,14 @@
         function checkAnswer() {
             const inputField = document.getElementById('test-answer');
             const userAnswer = inputField.value.trim().toLowerCase();
-            if (!userAnswer || !currentItem) return;
+            if (!userAnswer || !activePool || activePool.length === 0) return;
 
+            const currentItem = activePool[currentQuestion];
             const isCorrect = (userAnswer === currentItem.romaji);
-            handleAnswer(isCorrect, currentItem.romaji);
+            handleAnswer(isCorrect, currentItem.romaji, false);
         }
 
-        function handleAnswer(isCorrect, expected) {
+        function handleAnswer(isCorrect, expected, isWordMode) {
             const resultDisplay = document.getElementById('test-result');
 
             if (isCorrect) {
@@ -781,7 +923,15 @@
                     recordAnswer(true);
                 }
 
-                setTimeout(loadNextQuestion, 800);
+                // Переходим к следующему вопросу (случайному)
+                setTimeout(() => {
+                    questionsAnswered++;
+                    // Выбираем случайный вопрос
+                    if (activePool.length > 0) {
+                        currentQuestion = Math.floor(Math.random() * activePool.length);
+                        showQuestion();
+                    }
+                }, 800);
             } else {
                 wrongCounter++;
                 document.getElementById('wrong-count').innerText = wrongCounter;
@@ -792,51 +942,182 @@
                     recordAnswer(false);
                 }
 
-                setTimeout(loadNextQuestion, 1500);
+                // Показываем новый вопрос через секунду
+                setTimeout(() => {
+                    if (activePool.length > 0) {
+                        currentQuestion = Math.floor(Math.random() * activePool.length);
+                        showQuestion();
+                    }
+                }, 1200);
             }
         }
 
         function showHint() {
-            if (currentItem && currentItem.romaji) {
-                document.getElementById('test-hint').innerText = `💡 Чтение начинается на: "${currentItem.romaji[0]}"`;
+            if (!activePool || activePool.length === 0 || !activePool[currentQuestion]) return;
+
+            const currentItem = activePool[currentQuestion];
+            const typeSelect = document.getElementById('test-type');
+            const isWordsMode = typeSelect && typeSelect.value === 'words';
+            const hintElem = document.getElementById('test-hint');
+
+            // Озвучиваем
+            const textToSpeak = currentItem.speech || currentItem.reading || currentItem.answer || currentItem.char;
+            if (textToSpeak && typeof speakKana === 'function') {
+                speakKana(textToSpeak);
+            }
+
+            if (hintElem) {
+                if (isWordsMode || currentItem.isWord) {
+                    // Для слов показываем полную информацию
+                    const wordData = fullWordsData.find(w => 
+                        w.jp === currentItem.answer || 
+                        w.ru === currentItem.question
+                    );
+                    
+                    if (wordData) {
+                        hintElem.innerHTML = `
+                            <br><strong>${wordData.jp}</strong><br>
+                            Чтение: ${wordData.reading}<br>
+                            Перевод: ${wordData.ru}
+                        `;
+                    } else if (currentItem.answer) {
+                        hintElem.innerHTML = `
+                            <br><strong>${currentItem.answer}</strong><br>
+                            Чтение: ${currentItem.reading || '?'}
+                        `;
+                    }
+                } else {
+                    // Для каны
+                    const char = currentItem.char;
+                    const data = window.kanaData ? window.kanaData[char] : null;
+                    if (data) {
+                        hintElem.innerHTML = `
+                            <br><strong>${char}</strong><br>
+                            Читается: ${data.reading}<br>
+                            Пример: ${data.example} (${data.exampleReading}) — ${data.meaning}
+                        `;
+                    } else {
+                        hintElem.innerHTML = `
+                            <br><strong>${char}</strong><br>
+                            Чтение: ${currentItem.romaji}
+                        `;
+                    }
+                }
             }
         }
 
         function resetStats() {
-            correctCounter = 0;
-            wrongCounter = 0;
-            document.getElementById('correct-count').innerText = 0;
-            document.getElementById('wrong-count').innerText = 0;
-            document.getElementById('test-result').innerText = 'Статистика сброшена';
+            if (confirm('Сбросить статистику?')) {
+                correctCounter = 0;
+                wrongCounter = 0;
+                document.getElementById('correct-count').innerText = 0;
+                document.getElementById('wrong-count').innerText = 0;
+                document.getElementById('test-result').innerText = 'Статистика сброшена';
+                
+                if (typeof localStorage !== 'undefined') {
+                    localStorage.removeItem('correctCount');
+                    localStorage.removeItem('wrongCount');
+                }
+            }
         }
+
+        // ==========================================
+        // 5. ВИДЖЕТ ПОЛЬЗОВАТЕЛЯ
+        // ==========================================
 
         function logout() {
-            localStorage.removeItem('user');
-            location.href = 'index.html';
+            fetch('/api/logout', { method: 'POST' })
+                .then(() => {
+                    localStorage.removeItem('user');
+                    location.reload();
+                })
+                .catch(() => {
+                    localStorage.removeItem('user');
+                    location.reload();
+                });
         }
 
-        document.getElementById('test-answer').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') checkAnswer();
-        });
+        // ==========================================
+        // 6. ИНИЦИАЛИЗАЦИЯ
+        // ==========================================
 
-        window.onload = function() {
+        document.addEventListener('DOMContentLoaded', function() {
+            // Проверяем авторизацию
+            fetch('/api/me')
+                .then(res => res.json())
+                .then(data => {
+                    if (data && data.logged_in) {
+                        const user = data.user;
+                        document.getElementById('userName').innerText = user.username;
+                        document.getElementById('userAvatar').innerText = user.username[0].toUpperCase();
+                        document.getElementById('logoutBtn').style.display = 'block';
+                        // Загружаем статистику с сервера
+                        if (user.correctCount !== undefined) {
+                            correctCounter = user.correctCount;
+                            document.getElementById('correct-count').innerText = correctCounter;
+                        }
+                        if (user.wrongCount !== undefined) {
+                            wrongCounter = user.wrongCount;
+                            document.getElementById('wrong-count').innerText = wrongCounter;
+                        }
+                    } else {
+                        document.getElementById('userName').innerText = 'Гость';
+                        document.getElementById('logoutBtn').style.display = 'none';
+                        // Загружаем статистику из localStorage
+                        const savedCorrect = parseInt(localStorage.getItem('correctCount')) || 0;
+                        const savedWrong = parseInt(localStorage.getItem('wrongCount')) || 0;
+                        correctCounter = savedCorrect;
+                        wrongCounter = savedWrong;
+                        document.getElementById('correct-count').innerText = correctCounter;
+                        document.getElementById('wrong-count').innerText = wrongCounter;
+                    }
+                })
+                .catch(() => {
+                    // Офлайн режим
+                    document.getElementById('userName').innerText = 'Гость';
+                    document.getElementById('logoutBtn').style.display = 'none';
+                    const savedCorrect = parseInt(localStorage.getItem('correctCount')) || 0;
+                    const savedWrong = parseInt(localStorage.getItem('wrongCount')) || 0;
+                    correctCounter = savedCorrect;
+                    wrongCounter = savedWrong;
+                    document.getElementById('correct-count').innerText = correctCounter;
+                    document.getElementById('wrong-count').innerText = wrongCounter;
+                });
+
+            // Выбираем первые 5 хирагана по умолчанию
             const defaultCbs = document.querySelectorAll('.h-a');
             defaultCbs.forEach(cb => cb.checked = true);
-            applySelectedRows();
-
-            const savedUser = JSON.parse(localStorage.getItem('user') || 'null');
-            if (savedUser && savedUser.username) {
-                document.getElementById('userName').innerText = savedUser.username;
-                document.getElementById('userAvatar').innerText = savedUser.username[0].toUpperCase();
-            } else {
-                document.getElementById('userName').innerText = 'Гость';
-                document.getElementById('logoutBtn').style.display = 'none';
-            }
-
+            
+            // Применяем переводы
             if (typeof applyTranslations === 'function') {
                 applyTranslations();
             }
-        };
+
+            // Запускаем тест
+            setTimeout(() => {
+                applySelectedRows();
+            }, 100);
+        });
+
+        // Поддержка Enter в поле ввода
+        document.addEventListener('keypress', function(e) {
+            if (e.target.id === 'test-answer' && e.key === 'Enter') {
+                checkAnswer();
+            }
+        });
+
+        // Функция speakKana (если не определена в script.js)
+        if (typeof speakKana === 'undefined') {
+            window.speakKana = function(text) {
+                if ('speechSynthesis' in window) {
+                    window.speechSynthesis.cancel();
+                    const utterance = new SpeechSynthesisUtterance(text);
+                    utterance.lang = 'ja-JP';
+                    utterance.rate = 0.8;
+                    window.speechSynthesis.speak(utterance);
+                }
+            };
+        }
     </script>
 </body>
 

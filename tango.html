@@ -1,7 +1,37 @@
 <!DOCTYPE html>
+<script>
+    // Применяем тему ДО загрузки страницы
+    (function() {
+        const theme = localStorage.getItem('selectedTheme');
+        if (theme === 'theme-dark') {
+            document.documentElement.classList.add('theme-dark');
+        }
+        // Если тема не выбрана - по умолчанию светлая
+    })();
+</script>
+
 <html lang="ru">
 
 <head>
+
+<style>
+    /* Скрываем всё до загрузки */
+    html.loading * {
+        opacity: 0 !important;
+        transition: none !important;
+    }
+    html:not(.loading) * {
+        opacity: 1 !important;
+        transition: opacity 0.3s ease !important;
+    }
+</style>
+<script>
+    document.documentElement.classList.add('loading');
+    window.addEventListener('load', function() {
+        document.documentElement.classList.remove('loading');
+    });
+</script>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Слова — 単語</title>

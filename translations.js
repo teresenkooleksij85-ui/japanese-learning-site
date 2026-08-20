@@ -1,6 +1,7 @@
 const translations = {
     ru: {
         // Навигация и общие кнопки
+        
         "back_menu": "← Главное меню",
         "lang_btn": "🌐 RU",
         "speak_btn": "🔊 Озвучить",
@@ -14,7 +15,68 @@ const translations = {
         "locked_status": "Заблокировано",
         "server_error": "Ошибка подключения к серверу",
 
-        // Страница "О проекте"
+        // Главная страница
+        "main_title": "日本語を勉強しよう！",
+        "main_subtitle": "Твой личный учебный хаб",
+        "guest_status": "Гость (прогресс локальный)",
+        "auth_login_btn": "Войти / Регистрация",
+        "theme_label": "Тема:",
+        "theme_light": "☀️ Светлая",
+        "theme_dark": "🌙 Тёмная",
+        "default_username": "Ученик",
+        "rank_beginner": "Новичок",
+        "stat_streak": "дней подряд",
+        "stat_correct_short": "правильных",
+        "stat_level": "уровень",
+
+        // Меню
+        "menu_hiragana_sub": "Хирагана",
+        "menu_katakana_sub": "Катакана",
+        "menu_practice_sub": "Упражнения",
+        "menu_tango_sub": "Слова",
+        "menu_bunpou_sub": "Грамматика",
+        "menu_achievements_sub": "Достижения",
+        "menu_about": "О проекте",
+
+        // Lofi плеер
+        "lofi_title": "Lofi Radio",
+        "lofi_play": "▶️ Вкл",
+        "lofi_pause": "⏸️ Пауза",
+
+        // Модалка авторизации
+        "auth_login_title": "Вход в аккаунт",
+        "auth_register_title": "Регистрация",
+        "auth_username_placeholder": "Имя пользователя",
+        "auth_password_placeholder": "Пароль",
+        "auth_submit_btn": "Продолжить",
+        "auth_cancel_btn": "Отмена",
+        "auth_register_link": "Нет аккаунта? Зарегистрироваться",
+        "auth_login_link": "Уже есть аккаунт? Войти",
+        "auth_error_empty": "Заполните все поля!",
+        "auth_error_server": "Ошибка соединения с сервером",
+        "auth_error_short": "Ошибка авторизации",
+
+        // Практика
+        "test_type": "Тип теста:",
+        "opt_type_kana": "Азбука (Кана)",
+        "opt_type_words": "Слова (単語)",
+        "test_mode": "Режим:",
+        "opt_mode_write": "Кана → Ввод чтения",
+        "opt_mode_choice": "Чтение → Выбор каны",
+        "questions_limit": "Вопросов:",
+        "opt_limit_inf": "∞ Бесконечно",
+        "testing_header": "Тестирование",
+        "btn_check": "Проверить",
+        "btn_hint": "💡 Подсказка",
+        "stat_correct": "Правильно:",
+        "stat_wrong": "Неправильно:",
+        "btn_reset_stats": "🔄 Сбросить статистику",
+        "select_symbol_warning": "Выберите хотя бы один символ выше ⬆️",
+        "select_all": "Выбрать всё",
+        "deselect_all": "Снять всё",
+        "logout_btn": "Выйти",
+
+        // О проекте
         "about_title": "О проекте 🌸",
         "about_desc": "Этот сайт создан для того, чтобы сделать изучение японского языка простым, интерактивным и интересным!",
         "mission_title": "🎯 Наша миссия",
@@ -29,14 +91,13 @@ const translations = {
         "feedback_title": "💬 Обратная связь",
         "feedback_desc": "Проект активно развивается! Если у вас есть идеи или вы нашли ошибку, пишите нам!",
 
-        // Азбука (Категории)
+        // Азбука
         "hiragana_title": "ひらがな (Хирагана)",
         "katakana_title": "カタカナ (Катакана)",
         "kana_cat_base": "1. Базовые знаки (清音)",
         "kana_cat_voiced": "2. Озвончённые знаки (濁音・半濁音)",
         "kana_cat_combo": "3. Составные знаки (拗音)",
 
-        // Практика
         "practice_title": "練習 (Практика)",
         "practice_subtitle": "Проверь свои знания азбуки и слов!",
         "mode_hiragana": "Хирагана",
@@ -45,17 +106,41 @@ const translations = {
         "score_correct": "Верно:",
         "score_wrong": "Ошибок:",
 
-        // Достижения (Заголовки и описания)
+        // Достижения (achievements.html)
         "achievements_title": "実績 (Достижения)",
         "achievements_subtitle": "Твой личный прогресс и награды 🏆",
-        "ach_first_step_title": "Первый шаг",
-        "ach_first_step_desc": "Завершите свою первую тренировку",
-        "ach_hundred_correct_title": "Снайпер",
-        "ach_hundred_correct_desc": "Дайте 100 правильных ответов",
-        "ach_week_marathon_title": "Марафонец",
-        "ach_week_marathon_desc": "Занимайтесь 7 дней подряд",
-        "ach_shogun_title": "Сёгун",
-        "ach_shogun_desc": "Изучите все базовые знаки азбуки",
+
+        // Прогресс-бар
+        "progress_correct": "Правильных ответов",
+        "progress_streak": "Дней подряд",
+        "progress_level": "Уровень",
+
+        // Названия достижений
+        "ach_first_step_title": "🐣 Первый шаг",
+        "ach_first_step_desc": "Сделай свой первый правильный ответ в тренажёре!",
+        "ach_first_step_progress": "Прогресс: {current}/{max} ответов",
+
+        "ach_hundred_correct_title": "🎯 Снайпер",
+        "ach_hundred_correct_desc": "Продолжай в том же духе! 100 правильных ответов — это серьёзно!",
+        "ach_hundred_correct_progress": "Прогресс: {current}/{max} ответов",
+
+        "ach_week_marathon_title": "🔥 Марафонец",
+        "ach_week_marathon_desc": "Занимайся каждый день! 7 дней подряд — это дисциплина!",
+        "ach_week_marathon_progress": "Прогресс: {current}/{max} дней",
+
+        "ach_shogun_title": "🏯 Сёгун",
+        "ach_shogun_desc": "Ты достиг высшего уровня! 20 уровень — ты настоящий мастер!",
+        "ach_shogun_progress": "Прогресс: {current}/{max} уровень",
+
+        "ach_requirement_prefix": "Требуется:",
+
+        // Статусы
+        "unlocked_status": "✅ Разблокировано",
+        "locked_status": "🔒 Заблокировано",
+        "loading_achievements": "Загрузка достижений...",
+        "not_logged_notice": "Вы не вошли в аккаунт.",
+        "login_link": "Войдите на главной странице",
+        "not_logged_suffix": "чтобы сохранять свой прогресс и получать достижения!",
 
         // Грамматика
         "grammar_title": "文法 (Грамматика)",
@@ -67,56 +152,47 @@ const translations = {
         "ex_1_1": "Я (есть) Танака.",
         "ex_1_2": "Это (есть) книга.",
         "ex_1_3": "Он студент.",
-
         "g_topic_2": "2. Отрицание «Не является...» (ではありません / じゃないです)",
         "g_desc_2": "Чтобы сказать «НЕ является», мы меняем です на ではありません (dewa arimasen) или じゃないです (janai desu).",
         "g_formula_2": "[Существительное A] + は (wa) + [Существительное B] + ではありません",
         "ex_2_1": "Я не учитель.",
         "ex_2_2": "Это не моя сумка.",
-
         "g_topic_3": "3. Вопросы с частицей か (ka)",
         "g_desc_3": "Чтобы сделать предложение вопросительным, в самом конце просто добавляется частица か (ka).",
         "g_formula_3": "[Утвердительное предложение] + か (ka)",
         "ex_3_1": "Вы учитель?",
         "ex_3_2": "Это чай?",
-
         "g_topic_4": "4. Принадлежность ( の - no )",
         "g_desc_4": "Частица の (no) объединяет два существительных и связывает их по принципу «Чей? Кого? Какого?».",
         "g_formula_4": "[Обладатель] + の (no) + [Предмет / Качество]",
         "ex_4_1": "Моя книга.",
         "ex_4_2": "Учитель японского языка.",
-
         "g_topic_5": "5. Тоже / Также ( も - mo )",
         "g_desc_5": "Частица も (mo) заменяет частицы は (wa) или が (ga) и означает «тоже», «также».",
         "g_formula_5": "[Существительное] + も (mo) + [Качество / Действие]",
         "ex_5_1": "Я тоже студент.",
-
         "g_topic_6": "6. Винительный падеж ( を - wo/o )",
         "g_desc_6": "Частица を (пишется wo, произносится o) показывает, над каким предметом совершается действие.",
         "g_formula_6": "[Предмет] + を (o) + [Действие / Глагол]",
         "ex_6_1": "Пью воду.",
-
         "g_topic_7": "7. Место и цель ( に - ni / で - de )",
         "g_desc_7": "• に (ni) — указывает на время или направление движения.\n• で (de) — указывает на место, где происходит активное действие.",
         "g_formula_7": "[Место] + に (ni) + いきます\n[Место] + で (de) + [Действие]",
         "ex_7_1": "Еду в Токио.",
-
         "g_topic_8": "8. Быть / Находиться ( あります / います )",
         "g_desc_8": "• あります (arimasu) — для предметов и растений.\n• います (imasu) — для людей и животных.",
         "g_formula_8": "[Предмет] + が (ga) + あります / います",
         "ex_8_1": "Есть книга.",
-
         "g_topic_9": "9. Прошедшее время ( でした / ました )",
         "g_desc_9": "• Для существительных: です ➔ でした\n• Для глаголов: 〜ます ➔ 〜ました",
         "g_formula_9": "たべます ➔ たべました",
         "ex_9_1": "Вчера я смотрел фильм.",
-
         "g_topic_10": "10. Выражение желания ( 〜たいです )",
         "g_desc_10": "У основы глагола отбрасывается 〜ます и добавляется 〜たいです (-tai desu).",
         "g_formula_10": "[Глагол без ます] + たいです",
         "ex_10_1": "Я хочу выпить воды.",
 
-        // Танго (Словарь)
+        // Танго (Слова)
         "tango_title": "単語 (Слова)",
         "tango_subtitle": "Выберите категорию и нажимайте на карточки для озвучки 🔊",
         "cat_base": "🌱 Базовые слова и Местоимения",
@@ -127,8 +203,29 @@ const translations = {
         "cat_colors": "🎨 Цвета",
         "cat_places": "🏙️ Места и Город",
         "cat_verbs": "🏃 Основные Глаголы",
+        
+        // О нас (about.html)
+        "about_us_title": "👥 О нас",
+        "about_us_desc": "Мы — команда энтузиастов, которые любят японский язык и хотят сделать его изучение доступным для всех.",
+        "about_us_dev": "Разработчик",
+        "about_us_dev_desc": "Создаёт сайт, пишет код и делает магию",
+        "about_us_design": "Дизайнер",
+        "about_us_design_desc": "Придумывает красивый интерфейс и иконки",
+        "about_us_content": "Контент-мейкер",
+        "about_us_content_desc": "Собирает слова, примеры и грамматику",
+        "about_us_translator": "Переводчик",
+        "about_us_translator_desc": "Переводит всё на русский и английский",
 
-        // Перевод отдельных слов
+        // Комментарии
+        "comments_title": "💬 Комментарии",
+        "comments_desc": "Поделитесь своим мнением о проекте!",
+        "comments_list_title": "📝 Комментарии",
+        "comment_name_placeholder": "Ваше имя",
+        "comment_text_placeholder": "Ваш комментарий...",
+        "comment_submit_btn": "📩 Отправить",
+        "no_comments": "Пока нет комментариев. Будьте первым! 🎉",
+
+        // Слова
         "w_watashi": "Я",
         "w_anata": "Вы / Ты",
         "w_kare": "Он",
@@ -192,6 +289,7 @@ const translations = {
         "w_suru": "Делать"
     },
     en: {
+        // Navigation
         "back_menu": "← Main Menu",
         "lang_btn": "🌐 EN",
         "speak_btn": "🔊 Speak",
@@ -205,6 +303,68 @@ const translations = {
         "locked_status": "Locked",
         "server_error": "Server connection error",
 
+        // Main page
+        "main_title": "Let's Study Japanese!",
+        "main_subtitle": "Your Personal Study Hub",
+        "guest_status": "Guest (local progress)",
+        "auth_login_btn": "Login / Register",
+        "theme_label": "Theme:",
+        "theme_light": "☀️ Light",
+        "theme_dark": "🌙 Dark",
+        "default_username": "Student",
+        "rank_beginner": "Beginner",
+        "stat_streak": "days in a row",
+        "stat_correct_short": "correct",
+        "stat_level": "level",
+
+        // Menu
+        "menu_hiragana_sub": "Hiragana",
+        "menu_katakana_sub": "Katakana",
+        "menu_practice_sub": "Practice",
+        "menu_tango_sub": "Words",
+        "menu_bunpou_sub": "Grammar",
+        "menu_achievements_sub": "Achievements",
+        "menu_about": "About",
+
+        // Lofi player
+        "lofi_title": "Lofi Radio",
+        "lofi_play": "▶️ Play",
+        "lofi_pause": "⏸️ Pause",
+
+        // Auth modal
+        "auth_login_title": "Login",
+        "auth_register_title": "Register",
+        "auth_username_placeholder": "Username",
+        "auth_password_placeholder": "Password",
+        "auth_submit_btn": "Submit",
+        "auth_cancel_btn": "Cancel",
+        "auth_register_link": "No account? Register",
+        "auth_login_link": "Already have an account? Login",
+        "auth_error_empty": "Please fill in all fields!",
+        "auth_error_server": "Server connection error",
+        "auth_error_short": "Authentication error",
+
+        // Practice
+        "test_type": "Test type:",
+        "opt_type_kana": "Kana",
+        "opt_type_words": "Words (単語)",
+        "test_mode": "Mode:",
+        "opt_mode_write": "Kana → Input reading",
+        "opt_mode_choice": "Reading → Choose kana",
+        "questions_limit": "Questions:",
+        "opt_limit_inf": "∞ Infinite",
+        "testing_header": "Testing",
+        "btn_check": "Check",
+        "btn_hint": "💡 Hint",
+        "stat_correct": "Correct:",
+        "stat_wrong": "Wrong:",
+        "btn_reset_stats": "🔄 Reset stats",
+        "select_symbol_warning": "Select at least one character above ⬆️",
+        "select_all": "Select all",
+        "deselect_all": "Deselect all",
+        "logout_btn": "Logout",
+
+        // About
         "about_title": "About the Project 🌸",
         "about_desc": "This site was created to make learning Japanese simple, interactive, and fun!",
         "mission_title": "🎯 Our Mission",
@@ -219,6 +379,7 @@ const translations = {
         "feedback_title": "💬 Feedback",
         "feedback_desc": "The project is actively developing! If you have ideas or found a bug, write to us!",
 
+        // Alphabets
         "hiragana_title": "ひらがな (Hiragana)",
         "katakana_title": "カタカナ (Katakana)",
         "kana_cat_base": "1. Main Characters (清音)",
@@ -233,17 +394,40 @@ const translations = {
         "score_correct": "Correct:",
         "score_wrong": "Wrong:",
 
+        // Achievements
         "achievements_title": "実績 (Achievements)",
         "achievements_subtitle": "Your personal progress and rewards 🏆",
-        "ach_first_step_title": "First Step",
-        "ach_first_step_desc": "Complete your first training session",
-        "ach_hundred_correct_title": "Sniper",
-        "ach_hundred_correct_desc": "Give 100 correct answers",
-        "ach_week_marathon_title": "Marathoner",
-        "ach_week_marathon_desc": "Study 7 days in a row",
-        "ach_shogun_title": "Shogun",
-        "ach_shogun_desc": "Learn all basic alphabet characters",
 
+        "progress_correct": "Correct answers",
+        "progress_streak": "Days streak",
+        "progress_level": "Level",
+
+        "ach_first_step_title": "🐣 First Step",
+        "ach_first_step_desc": "Make your first correct answer in the trainer!",
+        "ach_first_step_progress": "Progress: {current}/{max} answers",
+
+        "ach_hundred_correct_title": "🎯 Sniper",
+        "ach_hundred_correct_desc": "Keep it up! 100 correct answers is serious!",
+        "ach_hundred_correct_progress": "Progress: {current}/{max} answers",
+
+        "ach_week_marathon_title": "🔥 Marathoner",
+        "ach_week_marathon_desc": "Study every day! 7 days in a row is discipline!",
+        "ach_week_marathon_progress": "Progress: {current}/{max} days",
+
+        "ach_shogun_title": "🏯 Shogun",
+        "ach_shogun_desc": "You've reached the highest level! Level 20 — you're a true master!",
+        "ach_shogun_progress": "Progress: {current}/{max} level",
+
+        "ach_requirement_prefix": "Requirement:",
+
+        "unlocked_status": "✅ Unlocked",
+        "locked_status": "🔒 Locked",
+        "loading_achievements": "Loading achievements...",
+        "not_logged_notice": "You are not logged in.",
+        "login_link": "Log in on the home page",
+        "not_logged_suffix": "to save your progress and unlock achievements!",
+
+        // Grammar
         "grammar_title": "文法 (Grammar)",
         "grammar_subtitle": "Basic and advanced Japanese structures to study 📚",
         "g_topic_1": "1. Construction «A is B» (です - desu)",
@@ -253,55 +437,47 @@ const translations = {
         "ex_1_1": "I am Tanaka.",
         "ex_1_2": "This is a book.",
         "ex_1_3": "He is a student.",
-
         "g_topic_2": "2. Negation «Is not...» (ではありません / じゃないです)",
         "g_desc_2": "To say 'is NOT', we change です to ではありません (dewa arimasen) or じゃないです (janai desu).",
         "g_formula_2": "[Noun A] + は (wa) + [Noun B] + ではありません",
         "ex_2_1": "I am not a teacher.",
         "ex_2_2": "This is not my bag.",
-
         "g_topic_3": "3. Questions with particle か (ka)",
         "g_desc_3": "To make a sentence interrogative, simply add particle か (ka) at the end.",
         "g_formula_3": "[Statement sentence] + か (ka)",
         "ex_3_1": "Are you a teacher?",
         "ex_3_2": "Is this tea?",
-
         "g_topic_4": "4. Possession ( の - no )",
         "g_desc_4": "Particle の (no) connects two nouns, indicating ownership or relation.",
         "g_formula_4": "[Owner] + の (no) + [Item / Quality]",
         "ex_4_1": "My book.",
         "ex_4_2": "Japanese language teacher.",
-
         "g_topic_5": "5. Also / Too ( も - mo )",
         "g_desc_5": "Particle も (mo) replaces は (wa) or が (ga) and means 'also' or 'too'.",
         "g_formula_5": "[Noun] + も (mo) + [Quality / Action]",
         "ex_5_1": "I am a student too.",
-
         "g_topic_6": "6. Direct Object ( を - wo/o )",
         "g_desc_6": "Particle を (written wo, pronounced o) indicates the object of an action.",
         "g_formula_6": "[Object] + を (o) + [Action / Verb]",
         "ex_6_1": "Drink water.",
-
         "g_topic_7": "7. Place and Target ( に - ni / で - de )",
         "g_desc_7": "• に (ni) — indicates time or direction of movement.\n• で (de) — indicates the location where an active action occurs.",
         "g_formula_7": "[Place] + に (ni) + いきます\n[Place] + で (de) + [Action]",
         "ex_7_1": "Going to Tokyo.",
-
         "g_topic_8": "8. Existence ( あります / います )",
         "g_desc_8": "• あります (arimasu) — for inanimate objects and plants.\n• います (imasu) — for living people and animals.",
         "g_formula_8": "[Item] + が (ga) + あります / います",
         "ex_8_1": "There is a book.",
-
         "g_topic_9": "9. Past Tense ( でした / ました )",
         "g_desc_9": "• For nouns: です ➔ でした\n• For verbs: 〜ます ➔ 〜ました",
         "g_formula_9": "たべます ➔ たべました",
         "ex_9_1": "I watched a movie yesterday.",
-
         "g_topic_10": "10. Expressing Desire ( 〜たいです )",
         "g_desc_10": "Remove 〜ます from the verb stem and add 〜たいです (-tai desu).",
         "g_formula_10": "[Verb stem] + たいです",
         "ex_10_1": "I want to drink water.",
 
+        // Tango (Words)
         "tango_title": "単語 (Words)",
         "tango_subtitle": "Select a category and click on cards to listen 🔊",
         "cat_base": "🌱 Basic Words & Pronouns",
@@ -312,7 +488,28 @@ const translations = {
         "cat_colors": "🎨 Colors",
         "cat_places": "🏙️ Places & City",
         "cat_verbs": "🏃 Basic Verbs",
+        
+        // О нас (about.html)
+        "about_us_title": "👥 About Us",
+        "about_us_desc": "We are a team of enthusiasts who love Japanese and want to make learning it accessible to everyone.",
+        "about_us_dev": "Developer",
+        "about_us_dev_desc": "Builds the site, writes code and makes magic",
+        "about_us_design": "Designer",
+        "about_us_design_desc": "Creates beautiful interfaces and icons",
+        "about_us_content": "Content Maker",
+        "about_us_content_desc": "Collects words, examples and grammar",
+        "about_us_translator": "Translator",
+        "about_us_translator_desc": "Translates everything to Russian and English",
 
+        "comments_title": "💬 Comments",
+        "comments_desc": "Share your opinion about the project!",
+        "comments_list_title": "📝 Comments",
+        "comment_name_placeholder": "Your name",
+        "comment_text_placeholder": "Your comment...",
+        "comment_submit_btn": "📩 Send",
+        "no_comments": "No comments yet. Be the first! 🎉",
+        
+        // Words
         "w_watashi": "I",
         "w_anata": "You",
         "w_kare": "He",

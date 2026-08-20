@@ -1,7 +1,37 @@
 <!DOCTYPE html>
+<script>
+    // Применяем тему ДО загрузки страницы
+    (function() {
+        const theme = localStorage.getItem('selectedTheme');
+        if (theme === 'theme-dark') {
+            document.documentElement.classList.add('theme-dark');
+        }
+        // Если тема не выбрана - по умолчанию светлая
+    })();
+</script>
+
 <html lang="ru">
 
 <head>
+
+<style>
+    /* Скрываем всё до загрузки */
+    html.loading * {
+        opacity: 0 !important;
+        transition: none !important;
+    }
+    html:not(.loading) * {
+        opacity: 1 !important;
+        transition: opacity 0.3s ease !important;
+    }
+</style>
+<script>
+    document.documentElement.classList.add('loading');
+    window.addEventListener('load', function() {
+        document.documentElement.classList.remove('loading');
+    });
+</script>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Достижения — 実績</title>
@@ -68,6 +98,7 @@
             border-radius: 12px;
             border: 2px solid #e9ecef;
             transition: all 0.3s ease;
+            position: relative;
         }
 
         .ach-card.unlocked {
@@ -76,7 +107,7 @@
         }
 
         .ach-card.locked {
-            opacity: 0.6;
+            opacity: 0.7;
             filter: grayscale(80%);
         }
 
@@ -92,6 +123,10 @@
             box-shadow: 0 4px 8px rgba(0,0,0,0.05);
         }
 
+        .ach-info {
+            flex: 1;
+        }
+
         .ach-info h3 {
             margin: 0 0 5px 0;
             font-size: 1.1rem;
@@ -104,12 +139,18 @@
             color: #666;
         }
 
+        .ach-progress {
+            margin-top: 8px;
+            font-size: 0.8rem;
+            color: #888;
+        }
+
         .ach-status {
             display: inline-block;
             margin-top: 8px;
             font-size: 0.75rem;
             font-weight: bold;
-            padding: 3px 8px;
+            padding: 3px 10px;
             border-radius: 10px;
             text-transform: uppercase;
         }
@@ -132,6 +173,37 @@
             margin-bottom: 25px;
             text-align: center;
             border: 1px solid #ffeeba;
+        }
+
+        .auth-notice a {
+            color: #856404;
+            font-weight: bold;
+        }
+
+        /* Статистика прогресса */
+        .progress-summary {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 12px;
+        }
+
+        .progress-item {
+            text-align: center;
+        }
+
+        .progress-item .value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #1d3557;
+        }
+
+        .progress-item .label {
+            font-size: 0.8rem;
+            color: #666;
         }
 
         body.theme-dark .achievements-container {
@@ -160,21 +232,61 @@
         body.theme-dark .ach-info p {
             color: #aaa;
         }
+
+        body.theme-dark .progress-summary {
+            background: #2a2a3d;
+        }
+
+        body.theme-dark .progress-item .value {
+            color: #fff;
+        }
+
+        body.theme-dark .progress-item .label {
+            color: #aaa;
+        }
+
+        body.theme-dark .auth-notice {
+            background: #2a2a3d;
+            color: #ffd700;
+            border-color: #ffd700;
+        }
+
+        body.theme-dark .auth-notice a {
+            color: #ffd700;
+        }
     </style>
 </head>
 
 <body>
 
-    <button class="back-button" onclick="location.href='index.html'" data-i18n="back_menu">← Главное меню</button>
-    <button id="langToggleBtn" class="lang-btn" onclick="toggleLanguage()">🌐 RU</button>
+    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px; align-self: flex-start;">
+        <button class="back-button" onclick="location.href='index.html'" data-i18n="back_menu" style="margin-bottom: 0;">← Главное меню</button>
+        <button id="langToggleBtn" class="lang-btn" onclick="toggleLanguage()">🌐 RU</button>
+    </div>
 
     <div class="achievements-container">
         <h1 data-i18n="achievements_title">実績 (Достижения)</h1>
         <p class="subtitle" data-i18n="achievements_subtitle">Твой личный прогресс и награды 🏆</p>
 
-        <div id="authNotice" class="auth-notice hidden">
+        <!-- Статистика прогресса -->
+        <div class="progress-summary" id="progressSummary">
+            <div class="progress-item">
+                <div class="value" id="progress-correct">0</div>
+                <div class="label" data-i18n="progress_correct">Правильных ответов</div>
+            </div>
+            <div class="progress-item">
+                <div class="value" id="progress-streak">0</div>
+                <div class="label" data-i18n="progress_streak">Дней подряд</div>
+            </div>
+            <div class="progress-item">
+                <div class="value" id="progress-level">1</div>
+                <div class="label" data-i18n="progress_level">Уровень</div>
+            </div>
+        </div>
+
+        <div id="authNotice" class="auth-notice">
             <span data-i18n="not_logged_notice">Вы не вошли в аккаунт.</span> 
-            <a href="index.html" style="color: #856404; font-weight: bold;" data-i18n="login_link">Войдите на главной странице</a>, 
+            <a href="index.html" data-i18n="login_link">Войдите на главной странице</a>, 
             <span data-i18n="not_logged_suffix">чтобы сохранять свой прогресс и получать достижения!</span>
         </div>
 
@@ -187,12 +299,47 @@
     <script src="script.js"></script>
     <script src="translations.js"></script>
     <script>
+        // ==========================================
+        // 1. ДАННЫЕ ДОСТИЖЕНИЙ С ПЕРЕВОДАМИ
+        // ==========================================
         const achievementsData = [
-            { id: 'first_step', icon: '🐣', titleKey: 'ach_first_step_title', descKey: 'ach_first_step_desc' },
-            { id: 'hundred_correct', icon: '🎯', titleKey: 'ach_hundred_correct_title', descKey: 'ach_hundred_correct_desc' },
-            { id: 'week_marathon', icon: '🔥', titleKey: 'ach_week_marathon_title', descKey: 'ach_week_marathon_desc' },
-            { id: 'shogun', icon: '🏯', titleKey: 'ach_shogun_title', descKey: 'ach_shogun_desc' }
+            { 
+                id: 'first_step', 
+                icon: '🐣', 
+                titleKey: 'ach_first_step_title', 
+                descKey: 'ach_first_step_desc',
+                progressKey: 'ach_first_step_progress',
+                requirement: 'Дайте 1 правильный ответ'
+            },
+            { 
+                id: 'hundred_correct', 
+                icon: '🎯', 
+                titleKey: 'ach_hundred_correct_title', 
+                descKey: 'ach_hundred_correct_desc',
+                progressKey: 'ach_hundred_correct_progress',
+                requirement: 'Дайте 100 правильных ответов'
+            },
+            { 
+                id: 'week_marathon', 
+                icon: '🔥', 
+                titleKey: 'ach_week_marathon_title', 
+                descKey: 'ach_week_marathon_desc',
+                progressKey: 'ach_week_marathon_progress',
+                requirement: 'Занимайтесь 7 дней подряд'
+            },
+            { 
+                id: 'shogun', 
+                icon: '🏯', 
+                titleKey: 'ach_shogun_title', 
+                descKey: 'ach_shogun_desc',
+                progressKey: 'ach_shogun_progress',
+                requirement: 'Достигните 20 уровня'
+            }
         ];
+
+        // ==========================================
+        // 2. ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ
+        // ==========================================
 
         function getTranslation(key, fallback) {
             const currentLang = localStorage.getItem('app_lang') || 'ru';
@@ -202,8 +349,7 @@
             return fallback;
         }
 
-        // Те же условия, что и check_and_unlock_achievements() в app.py —
-        // нужны, чтобы у гостя (без аккаунта) достижения тоже честно считались.
+        // Вычисляем достижения локально (для гостей)
         function computeLocalUnlocked() {
             const correct = parseInt(localStorage.getItem('correctCount')) || 0;
             const streak = parseInt(localStorage.getItem('streakDays')) || 0;
@@ -217,36 +363,91 @@
             return unlocked;
         }
 
+        // Получаем прогресс для каждого достижения
+        function getProgress(achId) {
+            const correct = parseInt(localStorage.getItem('correctCount')) || 0;
+            const streak = parseInt(localStorage.getItem('streakDays')) || 0;
+            const level = Math.floor(correct / 10) + 1;
+
+            switch(achId) {
+                case 'first_step':
+                    return { current: Math.min(correct, 1), max: 1, percent: Math.min((correct / 1) * 100, 100) };
+                case 'hundred_correct':
+                    return { current: Math.min(correct, 100), max: 100, percent: Math.min((correct / 100) * 100, 100) };
+                case 'week_marathon':
+                    return { current: Math.min(streak, 7), max: 7, percent: Math.min((streak / 7) * 100, 100) };
+                case 'shogun':
+                    return { current: Math.min(level, 20), max: 20, percent: Math.min((level / 20) * 100, 100) };
+                default:
+                    return { current: 0, max: 1, percent: 0 };
+            }
+        }
+
+        // ==========================================
+        // 3. ОСНОВНАЯ ФУНКЦИЯ ЗАГРУЗКИ
+        // ==========================================
+
         async function loadAchievements() {
             const authNotice = document.getElementById('authNotice');
             let unlockedList;
+            let userData = null;
 
             try {
-                const res = await fetch('/api/achievements');
-                const data = await res.json();
-                if (data.status !== 'success') throw new Error('not logged in');
-
-                unlockedList = data.achievements
-                    .filter(a => a.unlocked)
-                    .map(a => a.id);
-                authNotice.classList.add('hidden');
+                // Проверяем авторизацию
+                const meRes = await fetch('/api/me');
+                const meData = await meRes.json();
+                
+                if (meData && meData.logged_in) {
+                    userData = meData.user;
+                    // Получаем достижения с сервера
+                    const res = await fetch('/api/achievements');
+                    const data = await res.json();
+                    if (data.status === 'success') {
+                        unlockedList = data.achievements
+                            .filter(a => a.unlocked)
+                            .map(a => a.id);
+                    }
+                    authNotice.classList.add('hidden');
+                } else {
+                    throw new Error('not logged in');
+                }
             } catch (err) {
                 // Не залогинен (или бэкенд недоступен) — считаем локально
                 unlockedList = computeLocalUnlocked();
                 authNotice.classList.remove('hidden');
+                // Загружаем локальные данные для статистики
+                const correct = parseInt(localStorage.getItem('correctCount')) || 0;
+                const streak = parseInt(localStorage.getItem('streakDays')) || 0;
+                userData = {
+                    correctCount: correct,
+                    streakDays: streak,
+                    level: Math.floor(correct / 10) + 1
+                };
             }
 
+            // Обновляем статистику прогресса
+            if (userData) {
+                document.getElementById('progress-correct').textContent = userData.correctCount || 0;
+                document.getElementById('progress-streak').textContent = userData.streakDays || 0;
+                document.getElementById('progress-level').textContent = userData.level || 1;
+            }
+
+            // Генерируем карточки достижений
             const container = document.getElementById('achievementsList');
             container.innerHTML = '';
 
             achievementsData.forEach(ach => {
                 const isUnlocked = unlockedList.includes(ach.id);
+                const progress = getProgress(ach.id);
                 
+                // Получаем переводы
                 const title = getTranslation(ach.titleKey, ach.id);
                 const desc = getTranslation(ach.descKey, '');
+                const progressText = getTranslation(ach.progressKey, '');
                 const statusText = isUnlocked 
                     ? getTranslation('unlocked_status', 'Разблокировано') 
                     : getTranslation('locked_status', 'Заблокировано');
+                const requirement = getTranslation('ach_requirement_prefix', 'Требуется:') + ' ' + ach.requirement;
 
                 const card = document.createElement('div');
                 card.className = `ach-card ${isUnlocked ? 'unlocked' : 'locked'}`;
@@ -256,6 +457,13 @@
                     <div class="ach-info">
                         <h3>${title}</h3>
                         <p>${desc}</p>
+                        <div class="ach-progress">
+                            ${progressText}
+                            <div style="margin-top: 4px; background: #e9ecef; border-radius: 10px; height: 6px; overflow: hidden; width: 100%;">
+                                <div style="background: ${isUnlocked ? '#2ed573' : '#ff6b6b'}; height: 100%; width: ${progress.percent}%; transition: width 0.5s ease;"></div>
+                            </div>
+                            <span style="font-size: 0.75rem; color: #888;">${requirement}</span>
+                        </div>
                         <span class="ach-status">${statusText}</span>
                     </div>
                 `;
@@ -264,12 +472,33 @@
             });
         }
 
-        window.onload = function() {
+        // ==========================================
+        // 4. ИНИЦИАЛИЗАЦИЯ
+        // ==========================================
+
+        document.addEventListener('DOMContentLoaded', function() {
             loadAchievements();
             if (typeof applyTranslations === 'function') {
                 applyTranslations();
             }
-        };
+        });
+
+        // Обновляем при смене языка
+        document.addEventListener('languageChanged', function() {
+            loadAchievements();
+        });
+
+        // Переопределяем toggleLanguage для обновления достижений
+        const originalToggleLanguage = window.toggleLanguage;
+        if (typeof originalToggleLanguage === 'function') {
+            window.toggleLanguage = function() {
+                originalToggleLanguage();
+                // Небольшая задержка для применения переводов
+                setTimeout(() => {
+                    loadAchievements();
+                }, 100);
+            };
+        }
     </script>
 </body>
 

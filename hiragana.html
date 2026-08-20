@@ -1,7 +1,55 @@
-<<!DOCTYPE html>
+<!DOCTYPE html>
+<script>
+    // Применяем тему ДО загрузки страницы
+    (function() {
+        const theme = localStorage.getItem('selectedTheme');
+        if (theme === 'theme-dark') {
+            document.documentElement.classList.add('theme-dark');
+        }
+        // Если тема не выбрана - по умолчанию светлая
+    })();
+</script>
+
 <html lang="ru">
 
 <head>
+
+<style>
+    /* Скрываем всё до загрузки */
+    html.loading * {
+        opacity: 0 !important;
+        transition: none !important;
+    }
+    html:not(.loading) * {
+        opacity: 1 !important;
+        transition: opacity 0.3s ease !important;
+    }
+</style>
+<script>
+    document.documentElement.classList.add('loading');
+    window.addEventListener('load', function() {
+        document.documentElement.classList.remove('loading');
+    });
+</script>
+
+<style>
+    /* Скрываем всё до загрузки */
+    html.loading * {
+        opacity: 0 !important;
+        transition: none !important;
+    }
+    html:not(.loading) * {
+        opacity: 1 !important;
+        transition: opacity 0.3s ease !important;
+    }
+</style>
+<script>
+    document.documentElement.classList.add('loading');
+    window.addEventListener('load', function() {
+        document.documentElement.classList.remove('loading');
+    });
+</script>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Хирагана — ひらがな</title>
@@ -62,6 +110,13 @@
             gap: 8px;
         }
 
+        .kana-grid-5 {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
         .kana-card {
             background: white;
             border: 1px solid #eee;
@@ -77,6 +132,11 @@
             border-color: #e63946;
         }
 
+        .kana-card.empty {
+            visibility: hidden;
+            pointer-events: none;
+        }
+
         .kana-symbol {
             font-size: 1.5rem;
             font-weight: bold;
@@ -88,7 +148,6 @@
             color: #666;
         }
 
-        /* Информационная панель справа */
         .info-panel {
             width: 250px;
             background: white;
@@ -124,14 +183,16 @@
         body.theme-dark .category-content { background-color: #181826 !important; }
         body.theme-dark .category-header { color: #ff4d6d !important; background-color: #1e1e2d !important; }
         body.theme-dark .kana-symbol, body.theme-dark .info-symbol { color: #ff4d6d !important; }
+        body.theme-dark .kana-romaji { color: #aaa !important; }
     </style>
 </head>
 
 <body>
 
-    <button class="back-button" onclick="location.href='index.html'" data-i18n="back_menu">← Главное меню</button>
-
-    <button id="langToggleBtn" class="lang-btn" onclick="toggleLanguage()">🌐 RU</button>
+    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px; align-self: flex-start;">
+        <button class="back-button" onclick="location.href='index.html'" data-i18n="back_menu" style="margin-bottom: 0;">← Главное меню</button>
+        <button id="langToggleBtn" class="lang-btn" onclick="toggleLanguage()">🌐 RU</button>
+    </div>
 
     <h1 data-i18n="hiragana_title">ひらがな (Хирагана)</h1>
 
@@ -347,14 +408,101 @@
             <h3 style="margin: 0; color: #666; font-size: 0.9rem;" data-i18n="info_title">Информация</h3>
             <div id="info-char" class="info-symbol">あ</div>
             <div id="info-reading" style="font-weight: bold; font-size: 1.1rem; margin-bottom: 10px;">[a]</div>
-            <div id="info-example" style="font-size: 0.9rem; color: #555;">Пример: <b>朝 (asa)</b> — утро</div>
+            <div id="info-example" style="font-size: 0.9rem; color: #555;"></div>
             <button onclick="speakCurrentInfo()" style="margin-top: 15px; background: #e63946; color: white; border: none; padding: 8px 15px; border-radius: 20px; cursor: pointer; font-weight: bold;" data-i18n="speak_btn">🔊 Озвучить</button>
         </div>
     </div>
 
     <script src="script.js"></script>
+    <script src="translations.js"></script>
     <script>
+        // ==========================================
+        // 1. ДАННЫЕ ДЛЯ ХИРАГАНЫ С ПЕРЕВОДАМИ
+        // ==========================================
+        const hiraganaDataWithTranslations = {
+            "あ": { reading: "a / а", example: "あさ", exampleReading: "asa / аса", meaning_ru: "утро", meaning_en: "morning" },
+            "い": { reading: "i / и", example: "いぬ", exampleReading: "inu / ину", meaning_ru: "собака", meaning_en: "dog" },
+            "う": { reading: "u / у", example: "うみ", exampleReading: "umi / уми", meaning_ru: "море", meaning_en: "sea" },
+            "え": { reading: "e / э", example: "えき", exampleReading: "eki / эки", meaning_ru: "станция", meaning_en: "station" },
+            "お": { reading: "o / о", example: "おちゃ", exampleReading: "ocha / оча", meaning_ru: "чай", meaning_en: "tea" },
+            "か": { reading: "ka / ка", example: "かさ", exampleReading: "kasa / каса", meaning_ru: "зонт", meaning_en: "umbrella" },
+            "き": { reading: "ki / ки", example: "き", exampleReading: "ki / ки", meaning_ru: "дерево", meaning_en: "tree" },
+            "く": { reading: "ku / ку", example: "くち", exampleReading: "kuchi / кучи", meaning_ru: "рот", meaning_en: "mouth" },
+            "け": { reading: "ke / кэ", example: "け", exampleReading: "ke / кэ", meaning_ru: "волосы", meaning_en: "hair" },
+            "こ": { reading: "ko / ко", example: "こえ", exampleReading: "koe / коэ", meaning_ru: "голос", meaning_en: "voice" },
+            "さ": { reading: "sa / са", example: "さかな", exampleReading: "sakana / сакана", meaning_ru: "рыба", meaning_en: "fish" },
+            "し": { reading: "shi / си", example: "しお", exampleReading: "shio / сио", meaning_ru: "соль", meaning_en: "salt" },
+            "す": { reading: "su / су", example: "すし", exampleReading: "sushi / суси", meaning_ru: "суши", meaning_en: "sushi" },
+            "せ": { reading: "se / сэ", example: "せんせい", exampleReading: "sensei / сэнсэй", meaning_ru: "учитель", meaning_en: "teacher" },
+            "そ": { reading: "so / со", example: "そら", exampleReading: "sora / сора", meaning_ru: "небо", meaning_en: "sky" },
+            "た": { reading: "ta / та", example: "たまご", exampleReading: "tamago / тамаго", meaning_ru: "яйцо", meaning_en: "egg" },
+            "ち": { reading: "chi / ти", example: "ちず", exampleReading: "chizu / тидзу", meaning_ru: "карта", meaning_en: "map" },
+            "つ": { reading: "tsu / цу", example: "つき", exampleReading: "tsuki / цуки", meaning_ru: "луна", meaning_en: "moon" },
+            "て": { reading: "te / тэ", example: "て", exampleReading: "te / тэ", meaning_ru: "рука", meaning_en: "hand" },
+            "と": { reading: "to / то", example: "とり", exampleReading: "tori / тори", meaning_ru: "птица", meaning_en: "bird" },
+            "な": { reading: "na / на", example: "なつ", exampleReading: "natsu / нацу", meaning_ru: "лето", meaning_en: "summer" },
+            "に": { reading: "ni / ни", example: "にく", exampleReading: "niku / нику", meaning_ru: "мясо", meaning_en: "meat" },
+            "ぬ": { reading: "nu / ну", example: "ぬの", exampleReading: "nuno / нуно", meaning_ru: "ткань", meaning_en: "cloth" },
+            "ね": { reading: "ne / нэ", example: "ねこ", exampleReading: "neko / нэко", meaning_ru: "кошка", meaning_en: "cat" },
+            "の": { reading: "no / но", example: "のみもの", exampleReading: "nomimono / номимоно", meaning_ru: "напиток", meaning_en: "drink" },
+            "は": { reading: "ha / ха", example: "はな", exampleReading: "hana / хана", meaning_ru: "цветок", meaning_en: "flower" },
+            "ひ": { reading: "hi / хи", example: "ひる", exampleReading: "hiru / хиру", meaning_ru: "день", meaning_en: "day" },
+            "ふ": { reading: "fu / фу", example: "ふね", exampleReading: "fune / фунэ", meaning_ru: "корабль", meaning_en: "ship" },
+            "へ": { reading: "he / хэ", example: "へや", exampleReading: "heya / хэя", meaning_ru: "комната", meaning_en: "room" },
+            "ほ": { reading: "ho / хо", example: "ほし", exampleReading: "hoshi / хоси", meaning_ru: "звезда", meaning_en: "star" },
+            "ま": { reading: "ma / ма", example: "まど", exampleReading: "mado / мадо", meaning_ru: "окно", meaning_en: "window" },
+            "み": { reading: "mi / ми", example: "みず", exampleReading: "mizu / мидзу", meaning_ru: "вода", meaning_en: "water" },
+            "む": { reading: "mu / му", example: "むし", exampleReading: "mushi / муси", meaning_ru: "насекомое", meaning_en: "insect" },
+            "め": { reading: "me / мэ", example: "め", exampleReading: "me / мэ", meaning_ru: "глаз", meaning_en: "eye" },
+            "も": { reading: "mo / мо", example: "もり", exampleReading: "mori / мори", meaning_ru: "лес", meaning_en: "forest" },
+            "や": { reading: "ya / я", example: "やま", exampleReading: "yama / яма", meaning_ru: "гора", meaning_en: "mountain" },
+            "ゆ": { reading: "yu / ю", example: "ゆき", exampleReading: "yuki / юки", meaning_ru: "снег", meaning_en: "snow" },
+            "よ": { reading: "yo / ё", example: "よる", exampleReading: "yoru / ёру", meaning_ru: "ночь", meaning_en: "night" },
+            "ら": { reading: "ra / ра", example: "らく", exampleReading: "raku / раку", meaning_ru: "лёгкий", meaning_en: "easy" },
+            "り": { reading: "ri / ри", example: "りんご", exampleReading: "ringo / ринго", meaning_ru: "яблоко", meaning_en: "apple" },
+            "る": { reading: "ru / ру", example: "るす", exampleReading: "rusu / русу", meaning_ru: "отсутствие", meaning_en: "absence" },
+            "れ": { reading: "re / рэ", example: "れきし", exampleReading: "rekishi / рэкиси", meaning_ru: "история", meaning_en: "history" },
+            "ろ": { reading: "ro / ро", example: "ろうか", exampleReading: "rouka / рока", meaning_ru: "коридор", meaning_en: "corridor" },
+            "わ": { reading: "wa / ва", example: "わたし", exampleReading: "watashi / ватаси", meaning_ru: "я", meaning_en: "I" },
+            "を": { reading: "o / о", example: "みずを", exampleReading: "mizu o / мидзу о", meaning_ru: "частица", meaning_en: "particle" },
+            "ん": { reading: "n / н", example: "ほん", exampleReading: "hon / хон", meaning_ru: "книга", meaning_en: "book" },
+            // Дакуон
+            "が": { reading: "ga / га", example: "がいこく", exampleReading: "gaikoku / гайкоку", meaning_ru: "заграница", meaning_en: "foreign country" },
+            "ぎ": { reading: "gi / ги", example: "ぎんこう", exampleReading: "ginkou / гинко", meaning_ru: "банк", meaning_en: "bank" },
+            "ぐ": { reading: "gu / гу", example: "ぐんじん", exampleReading: "gunjin / гундзин", meaning_ru: "военный", meaning_en: "soldier" },
+            "げ": { reading: "ge / гэ", example: "げんき", exampleReading: "genki / гэнки", meaning_ru: "бодрость", meaning_en: "energy" },
+            "ご": { reading: "go / го", example: "ごはん", exampleReading: "gohan / гохан", meaning_ru: "рис", meaning_en: "rice" },
+            "ざ": { reading: "za / дза", example: "ざっし", exampleReading: "zasshi / дзасси", meaning_ru: "журнал", meaning_en: "magazine" },
+            "じ": { reading: "ji / дзи", example: "じかん", exampleReading: "jikan / дзикан", meaning_ru: "время", meaning_en: "time" },
+            "ず": { reading: "zu / дзу", example: "みず", exampleReading: "mizu / мидзу", meaning_ru: "вода", meaning_en: "water" },
+            "ぜ": { reading: "ze / дзэ", example: "ぜんぶ", exampleReading: "zenbu / дзэмбу", meaning_ru: "всё", meaning_en: "all" },
+            "ぞ": { reading: "zo / дзо", example: "ぞう", exampleReading: "zou / дзо", meaning_ru: "слон", meaning_en: "elephant" },
+            "だ": { reading: "da / да", example: "だいがく", exampleReading: "daigaku / дайгаку", meaning_ru: "университет", meaning_en: "university" },
+            "ぢ": { reading: "ji / дзи", example: "ぢ", exampleReading: "ji / дзи", meaning_ru: "редкий знак", meaning_en: "rare sign" },
+            "づ": { reading: "zu / дзу", example: "つづく", exampleReading: "tsuduku / цудуку", meaning_ru: "продолжаться", meaning_en: "continue" },
+            "で": { reading: "de / дэ", example: "でんわ", exampleReading: "denwa / дэнва", meaning_ru: "телефон", meaning_en: "telephone" },
+            "ど": { reading: "do / до", example: "ドア", exampleReading: "doa / доа", meaning_ru: "дверь", meaning_en: "door" },
+            "ば": { reading: "ba / ба", example: "ばんごう", exampleReading: "bangou / банго", meaning_ru: "номер", meaning_en: "number" },
+            "び": { reading: "bi / би", example: "びょういん", exampleReading: "byouin / бёин", meaning_ru: "больница", meaning_en: "hospital" },
+            "ぶ": { reading: "bu / бу", example: "ぶた", exampleReading: "buta / бута", meaning_ru: "свинья", meaning_en: "pig" },
+            "べ": { reading: "be / бэ", example: "べんきょう", exampleReading: "benkyou / бэнкё", meaning_ru: "учеба", meaning_en: "study" },
+            "ぼ": { reading: "bo / бо", example: "ぼうし", exampleReading: "boushi / боси", meaning_ru: "шляпа", meaning_en: "hat" },
+            "ぱ": { reading: "pa / па", example: "パン", exampleReading: "pan / пан", meaning_ru: "хлеб", meaning_en: "bread" },
+            "ぴ": { reading: "pi / пи", example: "ピアニスト", exampleReading: "pianisuto / пианисуто", meaning_ru: "пианист", meaning_en: "pianist" },
+            "ぷ": { reading: "pu / пу", example: "プール", exampleReading: "puuru / пуру", meaning_ru: "бассейн", meaning_en: "pool" },
+            "ぺ": { reading: "pe / пэ", example: "ペット", exampleReading: "petto / пэтто", meaning_ru: "питомец", meaning_en: "pet" },
+            "ぽ": { reading: "po / по", example: "ポケット", exampleReading: "poketto / покэтто", meaning_ru: "карман", meaning_en: "pocket" }
+        };
+
+        // ==========================================
+        // 2. ПЕРЕМЕННЫЕ
+        // ==========================================
         let currentSelected = 'あ';
+        let currentKanaData = hiraganaDataWithTranslations;
+
+        // ==========================================
+        // 3. ФУНКЦИИ
+        // ==========================================
 
         function toggleCategory(button) {
             const block = button.parentElement;
@@ -365,34 +513,59 @@
             currentSelected = char;
             speakKana(char);
             
-            let data = typeof kanaData !== 'undefined' ? kanaData[char] : null;
+            const data = currentKanaData[char];
+            const currentLang = localStorage.getItem('app_lang') || 'ru';
+            
             document.getElementById('info-char').textContent = char;
             
-            const currentLang = localStorage.getItem('app_lang') || 'ru';
-            const exampleWord = currentLang === 'en' ? 'Example:' : 'Пример:';
-
             if (data) {
                 document.getElementById('info-reading').textContent = `[${data.reading}]`;
-                document.getElementById('info-example').innerHTML = `${exampleWord} <b>${data.example} (${data.exampleReading})</b> — ${data.meaning}`;
+                
+                // Выбираем перевод в зависимости от языка
+                const meaning = currentLang === 'en' ? data.meaning_en : data.meaning_ru;
+                const exampleWord = currentLang === 'en' ? 'Example:' : 'Пример:';
+                
+                document.getElementById('info-example').innerHTML = 
+                    `${exampleWord} <b>${data.example} (${data.exampleReading})</b> — ${meaning}`;
             } else {
                 document.getElementById('info-reading').textContent = `[-]`;
-                document.getElementById('info-example').textContent = currentLang === 'en' ? 'Info updated soon' : 'Информация пополняется';
+                document.getElementById('info-example').textContent = 
+                    currentLang === 'en' ? 'Info updated soon' : 'Информация пополняется';
             }
         }
 
         function speakCurrentInfo() {
             speakKana(currentSelected);
         }
-    </script>
-    
-    <script src="translations.js"></script>
-    <script>
-        window.onload = function() {
+
+        // ==========================================
+        // 4. ИНИЦИАЛИЗАЦИЯ
+        // ==========================================
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Применяем переводы
             if (typeof applyTranslations === 'function') {
                 applyTranslations();
             }
-        };
+            
+            // Выбираем первый знак
+            selectKana('あ');
+        });
+
+        // Слушаем изменения языка
+        document.addEventListener('languageChanged', function() {
+            selectKana(currentSelected);
+        });
+
+        // Переопределяем toggleLanguage чтобы обновлять информацию
+        const originalToggleLanguage = window.toggleLanguage;
+        if (typeof originalToggleLanguage === 'function') {
+            window.toggleLanguage = function() {
+                originalToggleLanguage();
+                selectKana(currentSelected);
+            };
+        }
     </script>
 </body>
 
-</html>\
+</html>
