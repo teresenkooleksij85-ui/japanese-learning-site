@@ -176,6 +176,33 @@ button:active,
     box-shadow: 0 4px 10px rgba(0,0,0,0.15);
 }
 
+/* Переключатель языков */
+.lang-btn {
+    position: fixed;
+    top: 15px;
+    right: 15px;
+    background: #1d3557;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 0.9rem;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    transition: all 0.2s ease;
+    z-index: 1000;
+    width: auto !important; /* Гарантирует, что кнопка не растянется */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.lang-btn:hover {
+    background: #457b9d;
+    transform: scale(1.05);
+}
+
 /* Базовые экшен-кнопки */
 .action-btn {
     background-color: var(--primary-color);
@@ -536,7 +563,7 @@ button:active,
     box-shadow: var(--shadow-soft);
 }
 
-/* --- 7. КАНЫ I ТАБЛИЦЫ (HIRAGANA.HTML, KATAKANA.HTML) --- */
+/* --- 7. КАНЫ И ТАБЛИЦЫ (HIRAGANA.HTML, KATAKANA.HTML) --- */
 .kana-layout {
     display: flex;
     gap: 20px;
@@ -707,36 +734,22 @@ button:active,
     border: 1px solid var(--border-color);
 }
 
-/* АДАПТИВНОСТЬ МОБИЛОК */
+/* --- 10. АДАПТИВНОСТЬ ДЛЯ МОБИЛЬНЫХ УСТРОЙСТВ --- */
 @media (max-width: 768px) {
-    body { padding: 12px; }
-    .kana-layout { flex-direction: column-reverse; }
-    .info-panel { width: 100%; position: static; }
-    .menu-grid { grid-template-columns: 1fr; }
-    .menu-card[style*="grid-column"] { grid-column: auto !important; }
-}
-    visibility: hidden;
-    pointer-events: none;
-}
-
-.lang-btn {
-    position: fixed;
-    top: 15px;
-    right: 15px;
-    background: #1d3557;
-    color: white;
-    border: none;
-    padding: 8px 14px;
-    border-radius: 20px;
-    cursor: pointer;
-    font-weight: bold;
-    font-size: 0.9rem;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-    transition: all 0.2s ease;
-    z-index: 1000;
-}
-
-.lang-btn:hover {
-    background: #457b9d;
-    transform: scale(1.05);
+    body { 
+        padding: 12px; 
+    }
+    .kana-layout { 
+        flex-direction: column-reverse; 
+    }
+    .info-panel { 
+        width: 100%; 
+        position: static; 
+    }
+    .menu-grid { 
+        grid-template-columns: 1fr; 
+    }
+    .menu-card[style*="grid-column"] { 
+        grid-column: auto !important; 
+    }
 }

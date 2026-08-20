@@ -1,76 +1,408 @@
 const translations = {
     ru: {
-        back_main: "← На главную",
-        back_menu: "← Главное меню",
-        about_title: "О проекте 🌸",
-        about_desc: "Этот сайт создан для того, чтобы сделать изучение японского языка простым, интерактивным и интересным!",
-        mission_title: "🎯 Наша миссия",
-        mission_desc: "Помочь новичкам освоить азбуки Хирагана и Катакана, базовую грамматику и словарный запас без нудной зубрёжки.",
-        roadmap_title: "🗺️ Планы по развитию (Roadmap)",
-        roadmap_1: "Запуск базовой версии сайта и бэкенда на Flask",
-        roadmap_2: "Размещение сайта в интернете",
-        roadmap_3: "Интерактивные тренажёры для запоминания Иероглифов (Кандзи)",
-        roadmap_4: "Система личного кабинета и сохранения прогресса",
-        roadmap_5: "Аудио-произношение для всех слов и фразочек",
-        roadmap_6: "Мини-игры для проверки знаний",
-        feedback_title: "💬 Обратная связь",
-        feedback_desc: "Проект активно развивается! Если у вас есть идеи или вы нашли ошибку, пишите нам!",
-        achievements_title: "実績 (Достижения)",
-        achievements_subtitle: "Твой личный прогресс и награды 🏆",
-        grammar_title: "文法 (Грамматика)",
-        grammar_subtitle: "Базовые и продвинутые конструкции японского языка для изучения 📚"
+        // Навигация и общие кнопки
+        "back_menu": "← Главное меню",
+        "lang_btn": "🌐 RU",
+        "speak_btn": "🔊 Озвучить",
+        "info_title": "Информация",
+        "examples_header": "Примеры (нажмите для озвучки):",
+        "loading_achievements": "Загрузка достижений...",
+        "not_logged_notice": "Вы не вошли в аккаунт.",
+        "login_link": "Войдите на главной странице",
+        "not_logged_suffix": "чтобы сохранять свой прогресс и получать достижения!",
+        "unlocked_status": "Разблокировано",
+        "locked_status": "Заблокировано",
+        "server_error": "Ошибка подключения к серверу",
+
+        // Страница "О проекте"
+        "about_title": "О проекте 🌸",
+        "about_desc": "Этот сайт создан для того, чтобы сделать изучение японского языка простым, интерактивным и интересным!",
+        "mission_title": "🎯 Наша миссия",
+        "mission_desc": "Помочь новичкам освоить азбуки Хирагана и Катакана, базовую грамматику и словарный запас без нудной зубрёжки.",
+        "roadmap_title": "🗺️ Планы по развитию (Roadmap)",
+        "roadmap_1": "Запуск базовой версии сайта и бэкенда на Flask",
+        "roadmap_2": "Размещение сайта в интернете",
+        "roadmap_3": "Интерактивные тренажёры для запоминания Иероглифов (Кандзи)",
+        "roadmap_4": "Система личного кабинета и сохранения прогресса",
+        "roadmap_5": "Аудио-произношение для всех слов и фразочек",
+        "roadmap_6": "Мини-игры для проверки знаний",
+        "feedback_title": "💬 Обратная связь",
+        "feedback_desc": "Проект активно развивается! Если у вас есть идеи или вы нашли ошибку, пишите нам!",
+
+        // Азбука (Категории)
+        "hiragana_title": "ひらがな (Хирагана)",
+        "katakana_title": "カタカナ (Катакана)",
+        "kana_cat_base": "1. Базовые знаки (清音)",
+        "kana_cat_voiced": "2. Озвончённые знаки (濁音・半濁音)",
+        "kana_cat_combo": "3. Составные знаки (拗音)",
+
+        // Практика
+        "practice_title": "練習 (Практика)",
+        "practice_subtitle": "Проверь свои знания азбуки и слов!",
+        "mode_hiragana": "Хирагана",
+        "mode_katakana": "Катакана",
+        "mode_words": "Слова",
+        "score_correct": "Верно:",
+        "score_wrong": "Ошибок:",
+
+        // Достижения (Заголовки и описания)
+        "achievements_title": "実績 (Достижения)",
+        "achievements_subtitle": "Твой личный прогресс и награды 🏆",
+        "ach_first_step_title": "Первый шаг",
+        "ach_first_step_desc": "Завершите свою первую тренировку",
+        "ach_hundred_correct_title": "Снайпер",
+        "ach_hundred_correct_desc": "Дайте 100 правильных ответов",
+        "ach_week_marathon_title": "Марафонец",
+        "ach_week_marathon_desc": "Занимайтесь 7 дней подряд",
+        "ach_shogun_title": "Сёгун",
+        "ach_shogun_desc": "Изучите все базовые знаки азбуки",
+
+        // Грамматика
+        "grammar_title": "文法 (Грамматика)",
+        "grammar_subtitle": "Базовые и продвинутые конструкции японского языка для изучения 📚",
+        "g_topic_1": "1. Конструкция «A является B» (です - desu)",
+        "g_desc_1": "В японском языке связка です (desu) ставится в самом конце предложения и соответствует глаголам «есть», «является».",
+        "g_formula_1": "[Существительное A] + は (wa) + [Существительное B] + です (desu)",
+        "g_part_1": "Частица は (читается как wa): указывает на главную тему предложения.",
+        "ex_1_1": "Я (есть) Танака.",
+        "ex_1_2": "Это (есть) книга.",
+        "ex_1_3": "Он студент.",
+
+        "g_topic_2": "2. Отрицание «Не является...» (ではありません / じゃないです)",
+        "g_desc_2": "Чтобы сказать «НЕ является», мы меняем です на ではありません (dewa arimasen) или じゃないです (janai desu).",
+        "g_formula_2": "[Существительное A] + は (wa) + [Существительное B] + ではありません",
+        "ex_2_1": "Я не учитель.",
+        "ex_2_2": "Это не моя сумка.",
+
+        "g_topic_3": "3. Вопросы с частицей か (ka)",
+        "g_desc_3": "Чтобы сделать предложение вопросительным, в самом конце просто добавляется частица か (ka).",
+        "g_formula_3": "[Утвердительное предложение] + か (ka)",
+        "ex_3_1": "Вы учитель?",
+        "ex_3_2": "Это чай?",
+
+        "g_topic_4": "4. Принадлежность ( の - no )",
+        "g_desc_4": "Частица の (no) объединяет два существительных и связывает их по принципу «Чей? Кого? Какого?».",
+        "g_formula_4": "[Обладатель] + の (no) + [Предмет / Качество]",
+        "ex_4_1": "Моя книга.",
+        "ex_4_2": "Учитель японского языка.",
+
+        "g_topic_5": "5. Тоже / Также ( も - mo )",
+        "g_desc_5": "Частица も (mo) заменяет частицы は (wa) или が (ga) и означает «тоже», «также».",
+        "g_formula_5": "[Существительное] + も (mo) + [Качество / Действие]",
+        "ex_5_1": "Я тоже студент.",
+
+        "g_topic_6": "6. Винительный падеж ( を - wo/o )",
+        "g_desc_6": "Частица を (пишется wo, произносится o) показывает, над каким предметом совершается действие.",
+        "g_formula_6": "[Предмет] + を (o) + [Действие / Глагол]",
+        "ex_6_1": "Пью воду.",
+
+        "g_topic_7": "7. Место и цель ( に - ni / で - de )",
+        "g_desc_7": "• に (ni) — указывает на время или направление движения.\n• で (de) — указывает на место, где происходит активное действие.",
+        "g_formula_7": "[Место] + に (ni) + いきます\n[Место] + で (de) + [Действие]",
+        "ex_7_1": "Еду в Токио.",
+
+        "g_topic_8": "8. Быть / Находиться ( あります / います )",
+        "g_desc_8": "• あります (arimasu) — для предметов и растений.\n• います (imasu) — для людей и животных.",
+        "g_formula_8": "[Предмет] + が (ga) + あります / います",
+        "ex_8_1": "Есть книга.",
+
+        "g_topic_9": "9. Прошедшее время ( でした / ました )",
+        "g_desc_9": "• Для существительных: です ➔ でした\n• Для глаголов: 〜ます ➔ 〜ました",
+        "g_formula_9": "たべます ➔ たべました",
+        "ex_9_1": "Вчера я смотрел фильм.",
+
+        "g_topic_10": "10. Выражение желания ( 〜たいです )",
+        "g_desc_10": "У основы глагола отбрасывается 〜ます и добавляется 〜たいです (-tai desu).",
+        "g_formula_10": "[Глагол без ます] + たいです",
+        "ex_10_1": "Я хочу выпить воды.",
+
+        // Танго (Словарь)
+        "tango_title": "単語 (Слова)",
+        "tango_subtitle": "Выберите категорию и нажимайте на карточки для озвучки 🔊",
+        "cat_base": "🌱 Базовые слова и Местоимения",
+        "cat_family": "👨‍👩‍👧‍👦 Семья",
+        "cat_animals": "🐱 Животные",
+        "cat_food": "🍱 Еда и напитки",
+        "cat_time": "⏰ Время и Дни",
+        "cat_colors": "🎨 Цвета",
+        "cat_places": "🏙️ Места и Город",
+        "cat_verbs": "🏃 Основные Глаголы",
+
+        // Перевод отдельных слов
+        "w_watashi": "Я",
+        "w_anata": "Вы / Ты",
+        "w_kare": "Он",
+        "w_kanojo": "Она",
+        "w_hai": "Да",
+        "w_iie": "Нет",
+        "w_kore": "Это (рядом со мной)",
+        "w_sore": "То (рядом с тобой)",
+        "w_are": "Вон то (далеко)",
+        "w_dare": "Кто?",
+        "w_nani": "Что?",
+        "w_kazoku": "Семья",
+        "w_chichi": "Отец (свой)",
+        "w_haha": "Мать (своя)",
+        "w_ani": "Старший брат",
+        "w_ane": "Старшая сестра",
+        "w_otouto": "Младший брат",
+        "w_imouto": "Младшая сестра",
+        "w_tomodachi": "Друг",
+        "w_neko": "Кошка",
+        "w_inu": "Собака",
+        "w_tori": "Птица",
+        "w_sakana": "Рыба",
+        "w_uma": "Лошадь",
+        "w_buta": "Свинья",
+        "w_usagi": "Кролик",
+        "w_kuma": "Медведь",
+        "w_mizu": "Вода",
+        "w_ocha": "Чай",
+        "w_gohan": "Рис / Еда",
+        "w_ramen": "Рамен",
+        "w_pan": "Хлеб",
+        "w_niku": "Мясо",
+        "w_kudamono": "Фрукты",
+        "w_gyuunyuu": "Молоко",
+        "w_kyou": "Сегодня",
+        "w_ashita": "Завтра",
+        "w_kinou": "Вчера",
+        "w_ima": "Сейчас",
+        "w_asa": "Утро",
+        "w_hiru": "День",
+        "w_yoru": "Ночь",
+        "w_aka": "Красный",
+        "w_ao": "Синий",
+        "w_shiro": "Белый",
+        "w_kuro": "Черный",
+        "w_kiiro": "Желтый",
+        "w_midori": "Зеленый",
+        "w_ie": "Дом",
+        "w_gakkou": "Школа",
+        "w_eki": "Станция / Вокзал",
+        "w_mise": "Магазин",
+        "w_byouin": "Больница",
+        "w_kouen": "Парк",
+        "w_taberu": "Есть / Кушать",
+        "w_nomu": "Пить",
+        "w_iku": "Идти / Ехать",
+        "w_kuru": "Приходить",
+        "w_miru": "Смотреть",
+        "w_kiku": "Слушать / Спрашивать",
+        "w_suru": "Делать"
     },
     en: {
-        back_main: "← Back to Main",
-        back_menu: "← Main Menu",
-        about_title: "About the Project 🌸",
-        about_desc: "This website was created to make learning Japanese simple, interactive, and fun!",
-        mission_title: "🎯 Our Mission",
-        mission_desc: "To help beginners master Hiragana and Katakana alphabets, basic grammar, and core vocabulary without tedious cramming.",
-        roadmap_title: "🗺️ Roadmap",
-        roadmap_1: "Launch basic website version and Flask backend",
-        roadmap_2: "Deploy website online",
-        roadmap_3: "Interactive trainers for memorizing Kanji",
-        roadmap_4: "User account system and progress tracking",
-        roadmap_5: "Audio pronunciation for all words and phrases",
-        roadmap_6: "Mini-games to test your knowledge",
-        feedback_title: "💬 Feedback",
-        feedback_desc: "The project is actively developing! If you have ideas or found a bug, write to us!",
-        achievements_title: "実績 (Achievements)",
-        achievements_subtitle: "Your personal progress and awards 🏆",
-        grammar_title: "文法 (Grammar)",
-        grammar_subtitle: "Basic and advanced Japanese language structures for learning 📚"
+        "back_menu": "← Main Menu",
+        "lang_btn": "🌐 EN",
+        "speak_btn": "🔊 Speak",
+        "info_title": "Information",
+        "examples_header": "Examples (click to listen):",
+        "loading_achievements": "Loading achievements...",
+        "not_logged_notice": "You are not logged in.",
+        "login_link": "Log in on the home page",
+        "not_logged_suffix": "to save your progress and unlock achievements!",
+        "unlocked_status": "Unlocked",
+        "locked_status": "Locked",
+        "server_error": "Server connection error",
+
+        "about_title": "About the Project 🌸",
+        "about_desc": "This site was created to make learning Japanese simple, interactive, and fun!",
+        "mission_title": "🎯 Our Mission",
+        "mission_desc": "To help beginners master Hiragana and Katakana alphabets, basic grammar, and vocabulary without boring cramming.",
+        "roadmap_title": "🗺️ Development Roadmap",
+        "roadmap_1": "Launch base version of website and Flask backend",
+        "roadmap_2": "Deploy website to the internet",
+        "roadmap_3": "Interactive trainers for learning Kanji characters",
+        "roadmap_4": "User profile system and progress tracking",
+        "roadmap_5": "Audio pronunciation for all words and phrases",
+        "roadmap_6": "Mini-games for testing knowledge",
+        "feedback_title": "💬 Feedback",
+        "feedback_desc": "The project is actively developing! If you have ideas or found a bug, write to us!",
+
+        "hiragana_title": "ひらがな (Hiragana)",
+        "katakana_title": "カタカナ (Katakana)",
+        "kana_cat_base": "1. Main Characters (清音)",
+        "kana_cat_voiced": "2. Voiced Characters (濁音・半濁音)",
+        "kana_cat_combo": "3. Combination Characters (拗音)",
+
+        "practice_title": "練習 (Practice)",
+        "practice_subtitle": "Test your knowledge of alphabets and words!",
+        "mode_hiragana": "Hiragana",
+        "mode_katakana": "Katakana",
+        "mode_words": "Words",
+        "score_correct": "Correct:",
+        "score_wrong": "Wrong:",
+
+        "achievements_title": "実績 (Achievements)",
+        "achievements_subtitle": "Your personal progress and rewards 🏆",
+        "ach_first_step_title": "First Step",
+        "ach_first_step_desc": "Complete your first training session",
+        "ach_hundred_correct_title": "Sniper",
+        "ach_hundred_correct_desc": "Give 100 correct answers",
+        "ach_week_marathon_title": "Marathoner",
+        "ach_week_marathon_desc": "Study 7 days in a row",
+        "ach_shogun_title": "Shogun",
+        "ach_shogun_desc": "Learn all basic alphabet characters",
+
+        "grammar_title": "文法 (Grammar)",
+        "grammar_subtitle": "Basic and advanced Japanese structures to study 📚",
+        "g_topic_1": "1. Construction «A is B» (です - desu)",
+        "g_desc_1": "In Japanese, the copula です (desu) is placed at the end of the sentence and corresponds to 'is/am/are'.",
+        "g_formula_1": "[Noun A] + は (wa) + [Noun B] + です (desu)",
+        "g_part_1": "Particle は (read as wa): marks the main topic of the sentence.",
+        "ex_1_1": "I am Tanaka.",
+        "ex_1_2": "This is a book.",
+        "ex_1_3": "He is a student.",
+
+        "g_topic_2": "2. Negation «Is not...» (ではありません / じゃないです)",
+        "g_desc_2": "To say 'is NOT', we change です to ではありません (dewa arimasen) or じゃないです (janai desu).",
+        "g_formula_2": "[Noun A] + は (wa) + [Noun B] + ではありません",
+        "ex_2_1": "I am not a teacher.",
+        "ex_2_2": "This is not my bag.",
+
+        "g_topic_3": "3. Questions with particle か (ka)",
+        "g_desc_3": "To make a sentence interrogative, simply add particle か (ka) at the end.",
+        "g_formula_3": "[Statement sentence] + か (ka)",
+        "ex_3_1": "Are you a teacher?",
+        "ex_3_2": "Is this tea?",
+
+        "g_topic_4": "4. Possession ( の - no )",
+        "g_desc_4": "Particle の (no) connects two nouns, indicating ownership or relation.",
+        "g_formula_4": "[Owner] + の (no) + [Item / Quality]",
+        "ex_4_1": "My book.",
+        "ex_4_2": "Japanese language teacher.",
+
+        "g_topic_5": "5. Also / Too ( も - mo )",
+        "g_desc_5": "Particle も (mo) replaces は (wa) or が (ga) and means 'also' or 'too'.",
+        "g_formula_5": "[Noun] + も (mo) + [Quality / Action]",
+        "ex_5_1": "I am a student too.",
+
+        "g_topic_6": "6. Direct Object ( を - wo/o )",
+        "g_desc_6": "Particle を (written wo, pronounced o) indicates the object of an action.",
+        "g_formula_6": "[Object] + を (o) + [Action / Verb]",
+        "ex_6_1": "Drink water.",
+
+        "g_topic_7": "7. Place and Target ( に - ni / で - de )",
+        "g_desc_7": "• に (ni) — indicates time or direction of movement.\n• で (de) — indicates the location where an active action occurs.",
+        "g_formula_7": "[Place] + に (ni) + いきます\n[Place] + で (de) + [Action]",
+        "ex_7_1": "Going to Tokyo.",
+
+        "g_topic_8": "8. Existence ( あります / います )",
+        "g_desc_8": "• あります (arimasu) — for inanimate objects and plants.\n• います (imasu) — for living people and animals.",
+        "g_formula_8": "[Item] + が (ga) + あります / います",
+        "ex_8_1": "There is a book.",
+
+        "g_topic_9": "9. Past Tense ( でした / ました )",
+        "g_desc_9": "• For nouns: です ➔ でした\n• For verbs: 〜ます ➔ 〜ました",
+        "g_formula_9": "たべます ➔ たべました",
+        "ex_9_1": "I watched a movie yesterday.",
+
+        "g_topic_10": "10. Expressing Desire ( 〜たいです )",
+        "g_desc_10": "Remove 〜ます from the verb stem and add 〜たいです (-tai desu).",
+        "g_formula_10": "[Verb stem] + たいです",
+        "ex_10_1": "I want to drink water.",
+
+        "tango_title": "単語 (Words)",
+        "tango_subtitle": "Select a category and click on cards to listen 🔊",
+        "cat_base": "🌱 Basic Words & Pronouns",
+        "cat_family": "👨‍👩‍👧‍👦 Family",
+        "cat_animals": "🐱 Animals",
+        "cat_food": "🍱 Food & Drinks",
+        "cat_time": "⏰ Time & Days",
+        "cat_colors": "🎨 Colors",
+        "cat_places": "🏙️ Places & City",
+        "cat_verbs": "🏃 Basic Verbs",
+
+        "w_watashi": "I",
+        "w_anata": "You",
+        "w_kare": "He",
+        "w_kanojo": "She",
+        "w_hai": "Yes",
+        "w_iie": "No",
+        "w_kore": "This (near me)",
+        "w_sore": "That (near you)",
+        "w_are": "That over there",
+        "w_dare": "Who?",
+        "w_nani": "What?",
+        "w_kazoku": "Family",
+        "w_chichi": "Father (own)",
+        "w_haha": "Mother (own)",
+        "w_ani": "Older brother",
+        "w_ane": "Older sister",
+        "w_otouto": "Younger brother",
+        "w_imouto": "Younger sister",
+        "w_tomodachi": "Friend",
+        "w_neko": "Cat",
+        "w_inu": "Dog",
+        "w_tori": "Bird",
+        "w_sakana": "Fish",
+        "w_uma": "Horse",
+        "w_buta": "Pig",
+        "w_usagi": "Rabbit",
+        "w_kuma": "Bear",
+        "w_mizu": "Water",
+        "w_ocha": "Tea",
+        "w_gohan": "Rice / Meal",
+        "w_ramen": "Ramen",
+        "w_pan": "Bread",
+        "w_niku": "Meat",
+        "w_kudamono": "Fruits",
+        "w_gyuunyuu": "Milk",
+        "w_kyou": "Today",
+        "w_ashita": "Tomorrow",
+        "w_kinou": "Yesterday",
+        "w_ima": "Now",
+        "w_asa": "Morning",
+        "w_hiru": "Day / Noon",
+        "w_yoru": "Night",
+        "w_aka": "Red",
+        "w_ao": "Blue",
+        "w_shiro": "White",
+        "w_kuro": "Black",
+        "w_kiiro": "Yellow",
+        "w_midori": "Green",
+        "w_ie": "House",
+        "w_gakkou": "School",
+        "w_eki": "Station",
+        "w_mise": "Shop / Store",
+        "w_byouin": "Hospital",
+        "w_kouen": "Park",
+        "w_taberu": "Eat",
+        "w_nomu": "Drink",
+        "w_iku": "Go",
+        "w_kuru": "Come",
+        "w_miru": "Watch / See",
+        "w_kiku": "Listen / Ask",
+        "w_suru": "Do"
     }
 };
 
-// Функция переключения и сохранения языка
-function setLanguage(lang) {
-    localStorage.setItem('selected_lang', lang);
+function applyTranslations() {
+    const currentLang = localStorage.getItem('app_lang') || 'ru';
     
-    // Находим все элементы с атрибутом data-i18n
-    document.querySelectorAll('[data-i18n]').forEach(el => {
-        const key = el.getAttribute('data-i18n');
-        if (translations[lang] && translations[lang][key]) {
-            el.textContent = translations[lang][key];
+    document.querySelectorAll('[data-i18n]').forEach(element => {
+        const key = element.getAttribute('data-i18n');
+        if (translations[currentLang] && translations[currentLang][key]) {
+            element.innerText = translations[currentLang][key];
         }
     });
 
-    // Обновляем текст на самой кнопке
     const langBtn = document.getElementById('langToggleBtn');
     if (langBtn) {
-        langBtn.textContent = lang === 'ru' ? '🌐 RU' : '🌐 EN';
+        langBtn.innerText = currentLang === 'ru' ? '🌐 RU' : '🌐 EN';
     }
 }
 
-// Вызывается при нажатии на кнопку
-window.toggleLanguage = function() {
-    const currentLang = localStorage.getItem('selected_lang') || 'ru';
+function toggleLanguage() {
+    const currentLang = localStorage.getItem('app_lang') || 'ru';
     const newLang = currentLang === 'ru' ? 'en' : 'ru';
-    setLanguage(newLang);
-};
+    localStorage.setItem('app_lang', newLang);
+    
+    applyTranslations();
 
-// Автоматически применяем выбранный язык при загрузке
-document.addEventListener('DOMContentLoaded', () => {
-    const savedLang = localStorage.getItem('selected_lang') || 'ru';
-    setLanguage(savedLang);
-});
+    if (typeof loadAchievements === 'function') {
+        loadAchievements();
+    }
+}
+
+document.addEventListener('DOMContentLoaded', applyTranslations);

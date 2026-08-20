@@ -1,82 +1,166 @@
 <!DOCTYPE html>
 <html lang="ru">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>О проекте — Учим японский</title>
+    <title>О проекте — 概要</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        .about-container {
-            max-width: 800px;
-            margin: 40px auto;
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f6f9;
+            margin: 0;
             padding: 20px;
-            font-family: Arial, sans-serif;
             color: #333;
         }
-        .card {
-            background: #f9f9f9;
-            border-left: 5px solid #ff4757;
-            padding: 15px 20px;
-            margin-bottom: 20px;
-            border-radius: 4px;
+
+        .back-button {
+            background: #1d3557;
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            transition: background 0.2s;
+            margin-bottom: 15px;
         }
+
+        .back-button:hover {
+            background: #457b9d;
+        }
+
+        .about-container {
+            max-width: 750px;
+            margin: 20px auto;
+            background: white;
+            border-radius: 16px;
+            padding: 35px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+        }
+
+        h1 {
+            color: #1d3557;
+            text-align: center;
+            margin-top: 0;
+        }
+
+        p.lead {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: #4a5568;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .about-section {
+            margin-bottom: 30px;
+        }
+
+        .about-section h2 {
+            color: #e63946;
+            font-size: 1.3rem;
+            border-bottom: 2px solid #ffebeb;
+            padding-bottom: 8px;
+            margin-bottom: 15px;
+        }
+
+        .about-section p {
+            line-height: 1.6;
+            color: #4a5568;
+        }
+
         .roadmap-list {
             list-style: none;
             padding: 0;
         }
+
         .roadmap-list li {
-            padding: 10px 0;
-            border-bottom: 1px dashed #ccc;
-            display: flex;
-            align-items: center;
+            position: relative;
+            padding-left: 30px;
+            margin-bottom: 12px;
+            line-height: 1.5;
+            color: #2d3748;
         }
+
         .roadmap-list li::before {
-            content: "🚀";
-            margin-right: 10px;
-        }
-        .done::before {
-            content: "✅" !important;
-        }
-        .back-btn {
-            display: inline-block;
-            margin-bottom: 20px;
-            text-decoration: none;
-            color: #ff4757;
+            content: "✓";
+            position: absolute;
+            left: 0;
+            top: 0;
+            color: #2ed573;
             font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .roadmap-list li.planned::before {
+            content: "📌";
+            font-size: 0.9rem;
+        }
+
+        body.theme-dark .about-container {
+            background-color: #1e1e2d !important;
+            color: #fff !important;
+        }
+
+        body.theme-dark h1 {
+            color: #ff4d6d !important;
+        }
+
+        body.theme-dark p.lead,
+        body.theme-dark .about-section p,
+        body.theme-dark .roadmap-list li {
+            color: #e2e8f0 !important;
+        }
+
+        body.theme-dark .about-section h2 {
+            border-bottom-color: #3a3a52;
         }
     </style>
 </head>
+
 <body>
 
+    <button class="back-button" onclick="location.href='index.html'" data-i18n="back_menu">← Главное меню</button>
     <button id="langToggleBtn" class="lang-btn" onclick="toggleLanguage()">🌐 RU</button>
 
     <div class="about-container">
-        <a href="index.html" class="back-btn" data-i18n="back_main">← На главную</a>
-        
         <h1 data-i18n="about_title">О проекте 🌸</h1>
-        <p data-i18n="about_desc">Этот сайт создан для того, чтобы сделать изучение японского языка простым, интерактивным и интересным!</p>
+        <p class="lead" data-i18n="about_desc">Этот сайт создан для того, чтобы сделать изучение японского языка простым, интерактивным и интересным!</p>
 
-        <div class="card">
-            <h3 data-i18n="mission_title">🎯 Наша миссия</h3>
+        <div class="about-section">
+            <h2 data-i18n="mission_title">🎯 Наша миссия</h2>
             <p data-i18n="mission_desc">Помочь новичкам освоить азбуки Хирагана и Катакана, базовую грамматику и словарный запас без нудной зубрёжки.</p>
         </div>
 
-        <h2 data-i18n="roadmap_title">🗺️ Планы по развитию (Roadmap)</h2>
-        <ul class="roadmap-list">
-            <li class="done" data-i18n="roadmap_1">Запуск базовой версии сайта и бэкенда на Flask</li>
-            <li class="done" data-i18n="roadmap_2">Размещение сайта в интернете</li>
-            <li data-i18n="roadmap_3">Интерактивные тренажёры для запоминания Иероглифов (Кандзи)</li>
-            <li data-i18n="roadmap_4">Система личного кабинета и сохранения прогресса</li>
-            <li data-i18n="roadmap_5">Аудио-произношение для всех слов и фразочек</li>
-            <li data-i18n="roadmap_6">Мини-игры для проверки знаний</li>
-        </ul>
+        <div class="about-section">
+            <h2 data-i18n="roadmap_title">🗺️ Планы по развитию (Roadmap)</h2>
+            <ul class="roadmap-list">
+                <li data-i18n="roadmap_1">Запуск базовой версии сайта и бэкенда на Flask</li>
+                <li data-i18n="roadmap_2">Размещение сайта в интернете</li>
+                <li class="planned" data-i18n="roadmap_3">Интерактивные тренажёры для запоминания Иероглифов (Кандзи)</li>
+                <li class="planned" data-i18n="roadmap_4">Система личного кабинета и сохранения прогресса</li>
+                <li class="planned" data-i18n="roadmap_5">Аудио-произношение для всех слов и фразочек</li>
+                <li class="planned" data-i18n="roadmap_6">Мини-игры для проверки знаний</li>
+            </ul>
+        </div>
 
-        <div class="card" style="border-color: #2ed573; margin-top: 30px;">
-            <h3 data-i18n="feedback_title">💬 Обратная связь</h3>
+        <div class="about-section">
+            <h2 data-i18n="feedback_title">💬 Обратная связь</h2>
             <p data-i18n="feedback_desc">Проект активно развивается! Если у вас есть идеи или вы нашли ошибку, пишите нам!</p>
         </div>
     </div>
 
+    <script src="script.js"></script>
     <script src="translations.js"></script>
+    <script>
+        window.onload = function() {
+            if (typeof applyTranslations === 'function') {
+                applyTranslations();
+            }
+        };
+    </script>
 </body>
+
 </html>

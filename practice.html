@@ -23,6 +23,49 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            position: relative;
+        }
+
+        .user-header-widget {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: #ffffff;
+            padding: 8px 16px;
+            border-radius: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            font-size: 0.95rem;
+        }
+
+        .user-avatar {
+            background: #e63946;
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .logout-btn {
+            background: #f8f9fa;
+            border: 1px solid #ccc;
+            padding: 5px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: background 0.2s;
+        }
+
+        .logout-btn:hover {
+            background: #ffebeb;
+            color: #e63946;
+            border-color: #e63946;
         }
 
         .back-button {
@@ -34,6 +77,30 @@
             border-radius: 8px;
             cursor: pointer;
             margin-bottom: 15px;
+        }
+
+        .lang-btn {
+            /* Раньше здесь было position: fixed; left: 170px —
+               на узких экранах (~375px) это растягивало кнопку
+               почти на всю правую половину страницы, поверх
+               остального контента. Теперь кнопка — обычный элемент
+               в потоке документа, в одном ряду с кнопкой "Назад",
+               и никуда не наезжает. */
+            background: #1d3557;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 0.9rem;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+            transition: all 0.2s ease;
+        }
+
+        .lang-btn:hover {
+            background: #457b9d;
+            transform: scale(1.05);
         }
 
         h1 { margin-bottom: 5px; color: var(--primary-color); }
@@ -70,7 +137,7 @@
         }
 
         .row-selection { margin-top: 10px; }
-        .hidden { display: none; }
+        .hidden { display: none !important; }
 
         .select-buttons {
             display: flex;
@@ -189,12 +256,19 @@
 
 <body>
 
-    <button class="back-button" onclick="location.href='index.html'">← Главное меню</button>
+    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px; align-self: flex-start;">
+        <button class="back-button" onclick="location.href='index.html'" data-i18n="back_menu" style="margin-bottom: 0;">← Главное меню</button>
+        <button id="langToggleBtn" class="lang-btn" onclick="toggleLanguage()">🌐 RU</button>
+    </div>
 
-<button id="langToggleBtn" class="lang-btn" onclick="toggleLanguage()">🌐 RU</button>
+    <div class="user-header-widget" id="userWidget">
+        <div class="user-avatar" id="userAvatar">U</div>
+        <span id="userName">Гость</span>
+        <button class="logout-btn" onclick="logout()" id="logoutBtn" data-i18n="logout_btn">Выйти</button>
+    </div>
 
-    <h1>練習</h1>
-    <p>Выбери знаки или слова для тренировки</p>
+    <h1 data-i18n="practice_title">練習</h1>
+    <p data-i18n="practice_subtitle">Выбери знаки или слова для тренировки</p>
 
     <div class="script-settings" id="script-settings">
 
@@ -203,8 +277,8 @@
             <button type="button" class="toggle-btn" onclick="toggleRows('hiragana')">ひらがな (Хирагана)</button>
             <div id="hiragana-rows" class="row-selection hidden">
                 <div class="select-buttons">
-                    <button type="button" onclick="selectAll('hiragana', true)">Выбрать всё</button>
-                    <button type="button" onclick="selectAll('hiragana', false)">Снять всё</button>
+                    <button type="button" onclick="selectAll('hiragana', true)" data-i18n="select_all">Выбрать всё</button>
+                    <button type="button" onclick="selectAll('hiragana', false)" data-i18n="deselect_all">Снять всё</button>
                 </div>
                 <hr style="margin: 10px 0; border: 0; border-top: 1px solid #ccc;">
                 
@@ -334,8 +408,8 @@
             <button type="button" class="toggle-btn" onclick="toggleRows('katakana')">カタカナ (Катакана)</button>
             <div id="katakana-rows" class="row-selection hidden">
                 <div class="select-buttons">
-                    <button type="button" onclick="selectAll('katakana', true)">Выбрать всё</button>
-                    <button type="button" onclick="selectAll('katakana', false)">Снять всё</button>
+                    <button type="button" onclick="selectAll('katakana', true)" data-i18n="select_all">Выбрать всё</button>
+                    <button type="button" onclick="selectAll('katakana', false)" data-i18n="deselect_all">Снять всё</button>
                 </div>
                 <hr style="margin: 10px 0; border: 0; border-top: 1px solid #ccc;">
                 
@@ -453,48 +527,48 @@
 
     </div>
 
-    <p id="select-warning" style="text-align: center; font-weight: bold; margin-bottom: 15px;">
+    <p id="select-warning" style="text-align: center; font-weight: bold; margin-bottom: 15px;" data-i18n="select_symbol_warning">
         Выберите хотя бы один символ выше ⬆️
     </p>
 
     <!-- Выбор режима и количества вопросов -->
     <div class="test-config" style="background: white; padding: 15px; border-radius: 12px; margin-bottom: 20px; text-align: center; max-width: 500px; width: 100%;">
         <label style="margin-right: 15px;">
-            <b>Тип теста:</b>
+            <b data-i18n="test_type">Тип теста:</b>
             <select id="test-type" onchange="switchTestType()" style="padding: 5px; border-radius: 6px;">
-                <option value="kana">Азбука (Кана)</option>
-                <option value="words">Слова (単語)</option>
+                <option value="kana" data-i18n="opt_type_kana">Азбука (Кана)</option>
+                <option value="words" data-i18n="opt_type_words">Слова (単語)</option>
             </select>
         </label>
 
         <label style="margin-right: 15px;">
-            <b>Режим:</b>
+            <b data-i18n="test_mode">Режим:</b>
             <select id="test-mode" onchange="applySelectedRows()" style="padding: 5px; border-radius: 6px;">
-                <option value="write">Кана → Ввод чтения</option>
-                <option value="choice">Чтение → Выбор каны</option>
+                <option value="write" data-i18n="opt_mode_write">Кана → Ввод чтения</option>
+                <option value="choice" data-i18n="opt_mode_choice">Чтение → Выбор каны</option>
             </select>
         </label>
 
         <label>
-            <b>Вопросов:</b>
+            <b data-i18n="questions_limit">Вопросов:</b>
             <select id="test-limit" onchange="applySelectedRows()" style="padding: 5px; border-radius: 6px;">
                 <option value="10">10</option>
                 <option value="20">20</option>
                 <option value="50">50</option>
-                <option value="inf" selected>∞ Бесконечно</option>
+                <option value="inf" selected data-i18n="opt_limit_inf">∞ Бесконечно</option>
             </select>
         </label>
     </div>
 
     <div id="kana-test">
-        <h2>Тестирование</h2>
+        <h2 data-i18n="testing_header">Тестирование</h2>
         <p id="test-kana" style="font-size: 70px; margin: 10px 0; color: #e63946;">-</p>
         
         <div id="input-container">
             <input type="text" id="test-answer" placeholder="чтение (a, ka, i...)">
             <br>
-            <button class="action-btn" onclick="checkAnswer()">Проверить</button>
-            <button class="hint-btn" onclick="showHint()">💡 Подсказка</button>
+            <button class="action-btn" onclick="checkAnswer()" data-i18n="btn_check">Проверить</button>
+            <button class="hint-btn" onclick="showHint()" data-i18n="btn_hint">💡 Подсказка</button>
         </div>
 
         <div id="choice-container" class="choice-grid hidden">
@@ -505,14 +579,15 @@
         <div id="test-hint"></div>
 
         <hr style="margin: 15px 0; border: 0; border-top: 1px solid #eee;">
-        <p>Правильно: <span id="correct-count" style="color: green; font-weight: bold;">0</span> | Неправильно: <span id="wrong-count" style="color: red; font-weight: bold;">0</span></p>
+        <p><span data-i18n="stat_correct">Правильно:</span> <span id="correct-count" style="color: green; font-weight: bold;">0</span> | <span data-i18n="stat_wrong">Неправильно:</span> <span id="wrong-count" style="color: red; font-weight: bold;">0</span></p>
 
-        <button onclick="resetStats()" style="margin-top: 10px; background-color: #ff4d4d; color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer;">
+        <button onclick="resetStats()" style="margin-top: 10px; background-color: #ff4d4d; color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer;" data-i18n="btn_reset_stats">
             🔄 Сбросить статистику
         </button>
     </div>
 
     <script src="script.js"></script>
+    <script src="translations.js"></script>
     <script>
         // Общая база данных каны
         const allKanaMap = {
@@ -546,13 +621,22 @@
             'パ':'pa','ピ':'pi','プ':'pu','ペ':'pe','ポ':'po'
         };
 
-        // База слов
-        const wordsData = [
+        // Локальное имя (practiceWordsData), а не wordsData —
+        // script.js тоже объявляет const wordsData на верхнем уровне,
+        // и при одинаковом имени браузер выбрасывал SyntaxError
+        // "Identifier 'wordsData' has already been declared",
+        // из-за чего вообще весь тренажёр переставал работать.
+        const practiceWordsData = [
             { question: 'кошка', answer: 'ねこ', options: ['ねこ', 'いぬ', 'さかな', 'とり'] },
             { question: 'собака', answer: 'いぬ', options: ['いぬ', 'ねこ', 'うま', 'さる'] },
             { question: 'рыба', answer: 'さかな', options: ['さかな', 'ふね', 'みず', 'ほし'] },
             { question: 'книга', answer: 'ほん', options: ['ほん', 'ペン', 'つくえ', 'やま'] },
-            { question: 'вода', answer: 'みず', options: ['みず', 'おちゃ', 'さけ', '川'] }
+            { question: 'вода', answer: 'みず', options: ['みず', 'おちゃ', 'さけ', '川'] },
+            { question: 'дом', answer: 'いえ', options: ['いえ', 'みせ', 'えき', 'こうえん'] },
+            { question: 'друг', answer: 'ともだち', options: ['ともだち', 'かぞく', 'せんせい', 'がくせい'] },
+            { question: 'утро', answer: 'あさ', options: ['あさ', 'ひる', 'よる', 'いま'] },
+            { question: 'красный', answer: 'あか', options: ['あか', 'あお', 'しろ', 'くろ'] },
+            { question: 'пить', answer: 'のむ', options: ['のむ', 'たべる', 'いく', 'みる'] }
         ];
 
         let activePool = [];
@@ -597,7 +681,7 @@
             const type = document.getElementById('test-type').value;
 
             if (type === 'words') {
-                activePool = wordsData;
+                activePool = practiceWordsData;
                 document.getElementById('select-warning').classList.add('hidden');
             } else {
                 const checked = document.querySelectorAll('.kana-checkbox:checked');
@@ -646,7 +730,6 @@
                 } else {
                     document.getElementById('test-kana').innerText = currentItem.romaji;
                     
-                    // Генерируем 4 варианта ответов для каны
                     let options = [currentItem.char];
                     while (options.length < 4) {
                         const randomChar = Object.keys(allKanaMap)[Math.floor(Math.random() * Object.keys(allKanaMap).length)];
@@ -694,7 +777,6 @@
                 resultDisplay.style.color = 'green';
                 resultDisplay.innerText = 'Правильно! 🎉';
 
-                // 🚀 ОТПРАВЛЯЕМ УСПЕХ НА СЕРВЕР ДЛЯ ВЫДАЧИ АЧИВОК
                 if (typeof recordAnswer === 'function') {
                     recordAnswer(true);
                 }
@@ -706,7 +788,6 @@
                 resultDisplay.style.color = 'red';
                 resultDisplay.innerText = `❌ Ошибка! Правильно: "${expected}"`;
 
-                // ❌ ОТПРАВЛЯЕМ ОШИБКУ НА СЕРВЕР
                 if (typeof recordAnswer === 'function') {
                     recordAnswer(false);
                 }
@@ -729,64 +810,34 @@
             document.getElementById('test-result').innerText = 'Статистика сброшена';
         }
 
+        function logout() {
+            localStorage.removeItem('user');
+            location.href = 'index.html';
+        }
+
         document.getElementById('test-answer').addEventListener('keypress', function(e) {
             if (e.key === 'Enter') checkAnswer();
         });
 
-        // Запуск при загрузке
         window.onload = function() {
-            // Выбираем первые 5 букв Хираганы по умолчанию
             const defaultCbs = document.querySelectorAll('.h-a');
             defaultCbs.forEach(cb => cb.checked = true);
             applySelectedRows();
+
+            const savedUser = JSON.parse(localStorage.getItem('user') || 'null');
+            if (savedUser && savedUser.username) {
+                document.getElementById('userName').innerText = savedUser.username;
+                document.getElementById('userAvatar').innerText = savedUser.username[0].toUpperCase();
+            } else {
+                document.getElementById('userName').innerText = 'Гость';
+                document.getElementById('logoutBtn').style.display = 'none';
+            }
+
+            if (typeof applyTranslations === 'function') {
+                applyTranslations();
+            }
         };
     </script>
-    
-    <script src="translations.js"></script>
-    
 </body>
 
 </html>
-
-/* Шапка авторизации вверху страницы */
-.user-header-widget {
-    position: absolute;
-    top: 15px;
-    right: 20px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    background: #ffffff;
-    padding: 8px 16px;
-    border-radius: 20px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    font-size: 0.95rem;
-}
-
-.user-avatar {
-    background: #e63946;
-    color: white;
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: bold;
-}
-
-.logout-btn {
-    background: #f8f9fa;
-    border: 1px solid #ccc;
-    padding: 5px 10px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 0.85rem;
-    transition: background 0.2s;
-}
-
-.logout-btn:hover {
-    background: #ffebeb;
-    color: #e63946;
-    border-color: #e63946;
-}

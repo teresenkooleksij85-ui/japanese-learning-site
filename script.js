@@ -1,4 +1,6 @@
-// База данных Хираганы
+// ==========================================
+// 1. БАЗА ДАННЫХ ХИРАГАНЫ
+// ==========================================
 const kanaData = {
     "あ": { reading: "a / а", example: "あさ", exampleReading: "asa / аса", meaning: "утро" },
     "い": { reading: "i / и", example: "いぬ", exampleReading: "inu / ину", meaning: "собака" },
@@ -75,7 +77,9 @@ const kanaData = {
     "ぽ": { reading: "po / по", example: "ポケット", exampleReading: "poketto / покэтто", meaning: "карман" }
 };
 
-// База данных Катаканы
+// ==========================================
+// 2. БАЗА ДАННЫХ КАТАКАНЫ
+// ==========================================
 const katakanaData = {
     "ア": { reading: "a / а", example: "アニメ", exampleReading: "anime / анимэ", meaning: "аниме" },
     "イ": { reading: "i / и", example: "イギリス", exampleReading: "igirisu / игирису", meaning: "Великобритания" },
@@ -130,6 +134,16 @@ const katakanaData = {
     "グ": { reading: "gu / гу", example: "グループ", exampleReading: "guruupu / гурупу", meaning: "группа" },
     "ゲ": { reading: "ge / гэ", example: "ゲーム", exampleReading: "geemu / гэйму", meaning: "игра" },
     "ゴ": { reading: "go / го", example: "ゴルフ", exampleReading: "gorufu / горуфу", meaning: "гольф" },
+    "ザ": { reading: "za / дза", example: "ザ", exampleReading: "za / дза", meaning: "озвончённый за" },
+    "ジ": { reading: "ji / дзи", example: "ジーンズ", exampleReading: "jiinzu / дзи:ндзу", meaning: "джинсы" },
+    "ズ": { reading: "zu / дзу", example: "ズボン", exampleReading: "zubon / дзубон", meaning: "брюки" },
+    "ゼ": { reading: "ze / дзэ", example: "ゼロ", exampleReading: "zero / дзэро", meaning: "ноль" },
+    "ゾ": { reading: "zo / дзо", example: "ゾンビ", exampleReading: "zonbi / дзомби", meaning: "зомби" },
+    "ダ": { reading: "da / да", example: "ダンス", exampleReading: "dansu / дансу", meaning: "танец" },
+    "ヂ": { reading: "ji / дзи", example: "ヂ", exampleReading: "ji / дзи", meaning: "редкий знак" },
+    "ヅ": { reading: "zu / дзу", example: "ヅ", exampleReading: "zu / дзу", meaning: "редкий знак" },
+    "デ": { reading: "de / дэ", example: "デスク", exampleReading: "desuku / дэсуку", meaning: "стол" },
+    "ド": { reading: "do / до", example: "ドア", exampleReading: "doa / доа", meaning: "дверь" },
     "バ": { reading: "ba / ба", example: "バス", exampleReading: "basu / басу", meaning: "автобус" },
     "ビ": { reading: "bi / би", example: "ビル", exampleReading: "biru / биру", meaning: "здание" },
     "ブ": { reading: "bu / бу", example: "ブログ", exampleReading: "burogu / бурогу", meaning: "блог" },
@@ -142,7 +156,49 @@ const katakanaData = {
     "ポ": { reading: "po / по", example: "ポスト", exampleReading: "posuto / посуто", meaning: "почтовый ящик" }
 };
 
-// Озвучка
+// ==========================================
+// 3. БАЗА ДАННЫХ СЛОВ
+// ==========================================
+const wordsData = [
+    // Люди и местоимения
+    { jp: "私", reading: "watashi", ru: "я" },
+    { jp: "あなた", reading: "anata", ru: "ты" },
+    { jp: "友達", reading: "tomodachi", ru: "друг" },
+    { jp: "先生", reading: "sensei", ru: "учитель" },
+    { jp: "学生", reading: "gakusei", ru: "студент" },
+
+    // Вежливость / База
+    { jp: "はい", reading: "hai", ru: "да" },
+    { jp: "いいえ", reading: "iie", ru: "нет" },
+    { jp: "ありがとう", reading: "arigatou", ru: "спасибо" },
+    { jp: "さようなら", reading: "sayounara", ru: "до свидания" },
+
+    // Животные
+    { jp: "猫", reading: "neko", ru: "кошка" },
+    { jp: "犬", reading: "inu", ru: "собака" },
+    { jp: "鳥", reading: "tori", ru: "птица" },
+    { jp: "魚", reading: "sakana", ru: "рыба" },
+
+    // Еда и напитки
+    { jp: "水", reading: "mizu", ru: "вода" },
+    { jp: "お茶", reading: "ocha", ru: "чай" },
+    { jp: "ご飯", reading: "gohan", ru: "рис" },
+    { jp: "ラーメン", reading: "raamen", ru: "рамен" },
+    { jp: "パン", reading: "pan", ru: "хлеб" },
+    { jp: "肉", reading: "niku", ru: "мясо" },
+
+    // Места и объекты
+    { jp: "家", reading: "ie", ru: "дом" },
+    { jp: "学校", reading: "gakkou", ru: "школа" },
+    { jp: "本", reading: "hon", ru: "книга" },
+    { jp: "車", reading: "kuruma", ru: "машина" },
+    { jp: "山", reading: "yama", ru: "гора" },
+    { jp: "川", reading: "kawa", ru: "река" }
+];
+
+// ==========================================
+// 4. ОЗВУЧКА (СИНТЕЗ РЕЧИ)
+// ==========================================
 function speakKana(text) {
     if (!('speechSynthesis' in window)) return;
     window.speechSynthesis.cancel();
@@ -152,18 +208,13 @@ function speakKana(text) {
     window.speechSynthesis.speak(utterance);
 }
 
-// Глобальные переменные теста
-let activeQuestions = [];
-let currentQuestion = 0;
+// ==========================================
+// 5. ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ И ИНИЦИАЛИЗАЦИЯ
+// ==========================================
 let correctCount = parseInt(localStorage.getItem("correctCount")) || 0;
 let wrongCount = parseInt(localStorage.getItem("wrongCount")) || 0;
-let currentMode = "write";
-let totalQuestionsLimit = Infinity;
-let questionsAnswered = 0;
 
-// Инициализация событий при загрузке страницы
 document.addEventListener("DOMContentLoaded", function () {
-    // 1. Клики для таблиц хираганы и катаканы
     const kanaElements = document.querySelectorAll(".kana:not(.empty)");
     kanaElements.forEach(element => {
         element.addEventListener("click", function () {
@@ -188,22 +239,23 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 
-    // 2. Нажатие Enter в тестировании
-    const testAnswer = document.getElementById("test-answer");
-    if (testAnswer) {
-        testAnswer.addEventListener("keydown", function(event) {
-            if (event.key === "Enter") {
-                checkAnswer();
-            }
-        });
-    }
-
-    // 3. Запуск тестов при открытии practice.html
-    if (document.getElementById("kana-test")) {
-        updateStatsUI();
-        applySelectedRows();
-    }
+    initTheme();
+    initProfile();
 });
+
+// Определяет, залогинен ли пользователь, и только после этого решает,
+// показывать ли гостевой (локальный) прогресс или серверный.
+// Раньше updateProfileUI() и checkAuthStatus() запускались параллельно,
+// и гостевые (устаревшие/нулевые) данные из localStorage могли затереть
+// свежий прогресс на сервере — особенно при первом входе на новом устройстве.
+async function initProfile() {
+    const loggedIn = await checkAuthStatus();
+    if (!loggedIn) {
+        updateProfileUI();
+    }
+}
+
+// Тренажёр живёт в practice.js — здесь его больше нет.
 
 function updateStatsUI() {
     const cCount = document.getElementById("correct-count");
@@ -212,12 +264,9 @@ function updateStatsUI() {
     if (wCount) wCount.textContent = wrongCount;
 }
 
-function toggleRows(script) {
-    let element = document.getElementById(script + "-rows");
-    if (element) {
-        element.classList.toggle("hidden");
-    }
-}
+// ==========================================
+// 7. БЛОК ГЕЙМИФИКАЦИИ И ПРОФИЛЯ
+// ==========================================
 
 function toggleRowGroup(masterCheckbox, groupClass) {
     let checkboxes = document.querySelectorAll("." + groupClass);
@@ -229,6 +278,33 @@ function selectAll(script, state) {
     let checkboxes = document.querySelectorAll("#" + script + "-rows input[type='checkbox']");
     checkboxes.forEach(cb => cb.checked = state);
     applySelectedRows();
+}
+
+function switchTestType() {
+    const typeSelect = document.getElementById("test-type");
+    const scriptSettings = document.querySelector(".script-settings");
+    
+    if (!typeSelect) return;
+
+    if (typeSelect.value === "words") {
+        if (scriptSettings) scriptSettings.style.display = "none";
+        
+        activeQuestions = wordsData.map(w => ({
+            jp: w.jp,
+            kana: w.jp,
+            answers: [w.ru],
+            reading: w.reading,
+            meaning: w.ru,
+            speech: w.reading
+        }));
+        
+        activeQuestions.sort(() => Math.random() - 0.5);
+        currentQuestion = 0;
+        showQuestion();
+    } else {
+        if (scriptSettings) scriptSettings.style.display = "flex";
+        applySelectedRows();
+    }
 }
 
 function applySelectedRows() {
@@ -287,7 +363,6 @@ function showQuestion() {
     const isWordsMode = typeSelect && typeSelect.value === "words";
 
     if (currentMode === "write") {
-        // Если это слова — показываем ТОЛЬКО иероглиф/слово без скобок
         if (tKana) tKana.textContent = isWordsMode ? currentItem.jp : currentItem.kana;
         if (tAns) {
             tAns.style.display = "inline-block";
@@ -299,7 +374,7 @@ function showQuestion() {
     } else if (currentMode === "choice") {
         if (tKana) {
             if (isWordsMode) {
-                tKana.textContent = currentItem.answers[0]; // Показываем перевод
+                tKana.textContent = currentItem.answers[0];
             } else {
                 let rawReading = currentItem.answers[0].split('/')[0].trim();
                 tKana.textContent = rawReading;
@@ -309,11 +384,12 @@ function showQuestion() {
         renderChoiceButtons(currentItem.kana);
     }
 }
+
 function renderChoiceButtons(correctKana) {
     removeChoiceButtons();
     const container = document.getElementById("kana-test");
     const btnBox = document.createElement("div");
-    btnBox.id = "choice-container"; // Стили сетки 2х2 берутся из style.css!
+    btnBox.id = "choice-container";
 
     let choices = [correctKana];
     let allKeys = Object.keys({...kanaData, ...katakanaData});
@@ -358,7 +434,6 @@ function checkAnswer() {
     let currentItem = activeQuestions[currentQuestion];
     let isCorrect = false;
 
-    // Сверяем ответы
     currentItem.answers.forEach(rawAns => {
         let parts = rawAns.toLowerCase().split("/").map(a => a.trim());
         if (parts.includes(userAnswer)) {
@@ -376,7 +451,6 @@ function checkAnswer() {
 function handleCorrectAnswer() {
     let item = activeQuestions[currentQuestion];
     
-    // Озвучка: если это слово — озвучиваем иероглиф/слово, если кана — саму кану
     let textToSpeak = item.jp || item.kana;
     speakKana(textToSpeak);
 
@@ -389,7 +463,6 @@ function handleCorrectAnswer() {
     correctCount++;
     questionsAnswered++;
     
-    // Переход к следующему вопросу
     currentQuestion = (currentQuestion + 1) % activeQuestions.length;
     
     const hintElem = document.getElementById("test-hint");
@@ -399,6 +472,8 @@ function handleCorrectAnswer() {
     localStorage.setItem("wrongCount", wrongCount);
     updateStatsUI();
     
+    recordAnswer(true);
+
     setTimeout(() => {
         showQuestion();
     }, 500);
@@ -417,158 +492,12 @@ function handleWrongAnswer() {
     localStorage.setItem("wrongCount", wrongCount);
     updateStatsUI();
     
+    recordAnswer(false);
+
     const tAns = document.getElementById("test-answer");
     if (tAns) {
         tAns.value = "";
         tAns.focus();
-    }
-}
-
-function showHint() {
-    if (activeQuestions.length === 0) return;
-
-    let question = activeQuestions[currentQuestion].kana;
-    let data = katakanaData[question] || kanaData[question];
-
-    speakKana(question);
-
-    const hintElem = document.getElementById("test-hint");
-    if (hintElem && data) {
-        hintElem.innerHTML =
-            "<br><strong>" + question + "</strong><br>" +
-            "Читается: " + data.reading + "<br>" +
-            "Пример: " + data.example + " (" + data.exampleReading + ") — " + data.meaning;
-    }
-}
-
-function resetStats() {
-    if (confirm("Сбросить статистику?")) {
-        correctCount = 0;
-        wrongCount = 0;
-        localStorage.removeItem("correctCount");
-        localStorage.removeItem("wrongCount");
-        updateStatsUI();
-    }
-}
-
-// --- БЛОК ГЕЙМИФИКАЦИИ И ПРОФИЛЯ ---
-
-function updateStreakAndXP() {
-    let lastVisit = localStorage.getItem("lastVisitDate");
-    let today = new Date().toDateString();
-    let streak = parseInt(localStorage.getItem("streakDays")) || 0;
-
-    if (lastVisit !== today) {
-        let yesterday = new Date();
-        yesterday.setDate(yesterday.getDate() - 1);
-
-        if (lastVisit === yesterday.toDateString()) {
-            streak++;
-        } else if (!lastVisit) {
-            streak = 1;
-        } else {
-            streak = 1; // Сброс, если пропустил день
-        }
-        localStorage.setItem("streakDays", streak);
-        localStorage.setItem("lastVisitDate", today);
-    }
-}
-
-function updateProfileUI() {
-    updateStreakAndXP();
-
-    const streakElem = document.getElementById("streak-days");
-    const totalElem = document.getElementById("total-answers");
-    const levelElem = document.getElementById("user-level");
-    const rankElem = document.getElementById("user-rank");
-
-    let correct = parseInt(localStorage.getItem("correctCount")) || 0;
-    let streak = parseInt(localStorage.getItem("streakDays")) || 0;
-
-    // Расчет уровня (каждые 10 правильных ответов = +1 уровень)
-    let level = Math.floor(correct / 10) + 1;
-
-    // Определение ранга
-    let rank = "「初心者」Новичок";
-    if (level >= 5) rank = "「先輩」Сэмпай";
-    if (level >= 10) rank = "「先生」Сэнсэй";
-    if (level >= 20) rank = "「将軍」Сёгун";
-
-    if (streakElem) streakElem.textContent = `🔥 ${streak}`;
-    if (totalElem) totalElem.textContent = `🎯 ${correct}`;
-    if (levelElem) levelElem.textContent = `⭐ Lv. ${level}`;
-    if (rankElem) rankElem.textContent = rank;
-}
-
-// Автоматически обновляем профиль при загрузке любой страницы
-document.addEventListener("DOMContentLoaded", function () {
-    updateProfileUI();
-});
-
-// --- БАЗА СЛОВ И ТЕСТЫ ПО СЛОВАМ ---
-
-const wordsData = [
-    // Люди и местоимения
-    { jp: "私", reading: "watashi", ru: "я" },
-    { jp: "あなた", reading: "anata", ru: "ты" },
-    { jp: "友達", reading: "tomodachi", ru: "друг" },
-    { jp: "先生", reading: "sensei", ru: "учитель" },
-    { jp: "学生", reading: "gakusei", ru: "студент" },
-
-    // Вежливость / База
-    { jp: "はい", reading: "hai", ru: "да" },
-    { jp: "いいえ", reading: "iie", ru: "нет" },
-    { jp: "ありがとう", reading: "arigatou", ru: "спасибо" },
-    { jp: "さようなら", reading: "sayounara", ru: "до свидания" },
-
-    // Животные
-    { jp: "猫", reading: "neko", ru: "кошка" },
-    { jp: "犬", reading: "inu", ru: "собака" },
-    { jp: "鳥", reading: "tori", ru: "птица" },
-    { jp: "魚", reading: "sakana", ru: "рыба" },
-
-    // Еда и напитки
-    { jp: "水", reading: "mizu", ru: "вода" },
-    { jp: "お茶", reading: "ocha", ru: "чай" },
-    { jp: "ご飯", reading: "gohan", ru: "рис" },
-    { jp: "ラーメン", reading: "raamen", ru: "рамен" },
-    { jp: "パン", reading: "pan", ru: "хлеб" },
-    { jp: "肉", reading: "niku", ru: "мясо" },
-
-    // Места и объекты
-    { jp: "家", reading: "ie", ru: "дом" },
-    { jp: "学校", reading: "gakkou", ru: "школа" },
-    { jp: "本", reading: "hon", ru: "книга" },
-    { jp: "車", reading: "kuruma", ru: "машина" },
-    { jp: "山", reading: "yama", ru: "гора" },
-    { jp: "川", reading: "kawa", ru: "река" }
-];
-
-function switchTestType() {
-    const typeSelect = document.getElementById("test-type");
-    const scriptSettings = document.querySelector(".script-settings");
-    
-    if (!typeSelect) return;
-
-    if (typeSelect.value === "words") {
-        if (scriptSettings) scriptSettings.style.display = "none";
-        
-        // Создаем чистые объекты для слов
-        activeQuestions = wordsData.map(w => ({
-            jp: w.jp,
-            kana: w.jp,
-            answers: [w.ru],
-            reading: w.reading,
-            meaning: w.ru,
-            speech: w.reading
-        }));
-        
-        activeQuestions.sort(() => Math.random() - 0.5);
-        currentQuestion = 0;
-        showQuestion();
-    } else {
-        if (scriptSettings) scriptSettings.style.display = "flex";
-        applySelectedRows();
     }
 }
 
@@ -601,8 +530,71 @@ function showHint() {
     }
 }
 
-// --- БЛОК ТЕМ (СВЕТЛАЯ / ТЁМНАЯ / CАКУРА) ---
+function resetStats() {
+    if (confirm("Сбросить статистику?")) {
+        correctCount = 0;
+        wrongCount = 0;
+        localStorage.removeItem("correctCount");
+        localStorage.removeItem("wrongCount");
+        updateStatsUI();
+    }
+}
 
+// ==========================================
+// 7. БЛОК ГЕЙМИФИКАЦИИ И ПРОФИЛЯ
+// ==========================================
+function updateStreakAndXP() {
+    let lastVisit = localStorage.getItem("lastVisitDate");
+    let today = new Date().toDateString();
+    let streak = parseInt(localStorage.getItem("streakDays")) || 0;
+
+    if (lastVisit !== today) {
+        let yesterday = new Date();
+        yesterday.setDate(yesterday.getDate() - 1);
+
+        if (lastVisit === yesterday.toDateString()) {
+            streak++;
+        } else if (!lastVisit) {
+            streak = 1;
+        } else {
+            streak = 1;
+        }
+        localStorage.setItem("streakDays", streak);
+        localStorage.setItem("lastVisitDate", today);
+    }
+}
+
+function updateProfileUI() {
+    updateStreakAndXP();
+
+    const streakElem = document.getElementById("streak-days");
+    const totalElem = document.getElementById("total-answers");
+    const levelElem = document.getElementById("user-level");
+    const rankElem = document.getElementById("user-rank");
+
+    let correct = parseInt(localStorage.getItem("correctCount")) || 0;
+    let streak = parseInt(localStorage.getItem("streakDays")) || 0;
+
+    let level = Math.floor(correct / 10) + 1;
+
+    let rank = "「初心者」Новичок";
+    if (level >= 5) rank = "「先輩」Сэмпай";
+    if (level >= 10) rank = "「先生」Сэнсэй";
+    if (level >= 20) rank = "「将軍」Сёгун";
+
+    if (streakElem) streakElem.textContent = `🔥 ${streak}`;
+    if (totalElem) totalElem.textContent = `🎯 ${correct}`;
+    if (levelElem) levelElem.textContent = `⭐ Lv. ${level}`;
+    if (rankElem) rankElem.textContent = rank;
+
+    // syncWithServer() здесь больше не вызывается: эта функция вызывается
+    // только для гостей (см. initProfile), а прогресс залогиненных
+    // пользователей и так пишется на сервер поштучно через recordAnswer().
+}
+
+// ==========================================
+// 8. БЛОК ТЕМ (СВЕТЛАЯ / ТЁМНАЯ / CАКУРА)
+// ==========================================
 function setTheme(themeName) {
     document.body.className = themeName;
     localStorage.setItem("selectedTheme", themeName);
@@ -613,45 +605,60 @@ function initTheme() {
     document.body.className = savedTheme;
 }
 
-// Запускаем установку темы при загрузке каждой страницы
-document.addEventListener("DOMContentLoaded", function () {
-    initTheme();
-});
+// ==========================================
+// 9. СИНХРОНИЗАЦИЯ С PYTHON FLASK БЭКЕНДОМ
+// ==========================================
+async function checkAuthStatus() {
+    try {
+        const res = await fetch('/api/me');
+        if (!res.ok) throw new Error('Сеть не ответила');
+        const data = await res.json();
 
-// Синхронизация с Python бэкендом
-// Проверка авторизации при загрузке страницы
-function checkAuthStatus() {
-    fetch('/api/me')
-        .then(res => {
-            if (!res.ok) throw new Error('Сеть не ответила');
-            return res.json();
-        })
-        .then(data => {
-            const authText = document.getElementById('auth-status-text');
-            const authBtn = document.getElementById('auth-main-btn');
-            const userNameElem = document.getElementById('user-name');
+        const authText = document.getElementById('auth-status-text');
+        const authBtn = document.getElementById('auth-main-btn');
+        const userNameElem = document.getElementById('user-name');
 
-            if (data && data.logged_in) {
-                const user = data.user;
-                if (authText) authText.textContent = `Привет, ${user.username}!`;
-                if (authBtn) {
-                    authBtn.textContent = 'Выйти';
-                    authBtn.onclick = logoutUser;
-                }
-                if (userNameElem) userNameElem.textContent = user.username;
-
-                localStorage.setItem("userName", user.username);
-                localStorage.setItem("correctCount", user.correctCount);
-                localStorage.setItem("wrongCount", user.wrongCount);
-                localStorage.setItem("streakDays", user.streakDays);
-
-                updateProfileUI();
+        if (data && data.logged_in) {
+            const user = data.user;
+            if (authText) authText.textContent = `Привет, ${user.username}!`;
+            if (authBtn) {
+                authBtn.textContent = 'Выйти';
+                authBtn.onclick = logoutUser;
             }
-        })
-        .catch(() => {
-            // Если сервера нет — просто работаем локально без ошибок
-            console.log("Режим автономной работы (LocalStorage)");
-        });
+            if (userNameElem) userNameElem.textContent = user.username;
+
+            // Сервер — источник истины для залогиненного пользователя:
+            // localStorage здесь только зеркалирует его, а не наоборот.
+            localStorage.setItem("userName", user.username);
+            localStorage.setItem("correctCount", user.correctCount);
+            localStorage.setItem("wrongCount", user.wrongCount);
+            localStorage.setItem("streakDays", user.streakDays);
+            correctCount = user.correctCount;
+            wrongCount = user.wrongCount;
+
+            const streakElem = document.getElementById("streak-days");
+            const totalElem = document.getElementById("total-answers");
+            const levelElem = document.getElementById("user-level");
+            const rankElem = document.getElementById("user-rank");
+
+            let level = Math.floor(user.correctCount / 10) + 1;
+            let rank = "「初心者」Новичок";
+            if (level >= 5) rank = "「先輩」Сэмпай";
+            if (level >= 10) rank = "「先生」Сэнсэй";
+            if (level >= 20) rank = "「将軍」Сёгун";
+
+            if (streakElem) streakElem.textContent = `🔥 ${user.streakDays}`;
+            if (totalElem) totalElem.textContent = `🎯 ${user.correctCount}`;
+            if (levelElem) levelElem.textContent = `⭐ Lv. ${level}`;
+            if (rankElem) rankElem.textContent = rank;
+
+            return true;
+        }
+        return false;
+    } catch (err) {
+        console.log("Режим автономной работы (LocalStorage)");
+        return false;
+    }
 }
 
 function logoutUser() {
@@ -660,38 +667,8 @@ function logoutUser() {
         .catch(() => location.reload());
 }
 
-function syncWithServer() {
-    let username = localStorage.getItem("userName");
-    if (!username || username === "Ученик") return;
-
-    let correct = parseInt(localStorage.getItem("correctCount")) || 0;
-    let wrong = parseInt(localStorage.getItem("wrongCount")) || 0;
-    let streak = parseInt(localStorage.getItem("streakDays")) || 0;
-    let level = Math.floor(correct / 10) + 1;
-
-    fetch(`/api/profile/${encodeURIComponent(username)}`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-            correctCount: correct,
-            wrongCount: wrong,
-            streakDays: streak,
-            level: level
-        })
-    }).catch(() => {});
-}
-
-// Вызываем синхронизацию при обновлении UI
-const originalUpdateProfileUI = updateProfileUI;
-updateProfileUI = function() {
-    originalUpdateProfileUI();
-    syncWithServer();
-};
-
-// Функция для добавления правильных/неправильных ответов на сервер
 async function recordAnswer(isCorrect = true) {
     try {
-        // 1. Узнаем, кто сейчас вошел
         const meRes = await fetch('/api/me');
         const meData = await meRes.json();
 
@@ -702,17 +679,15 @@ async function recordAnswer(isCorrect = true) {
 
         const user = meData.user;
         
-        // 2. Увеличиваем счетчики
-        let correctCount = user.correctCount + (isCorrect ? 1 : 0);
-        let wrongCount = user.wrongCount + (isCorrect ? 0 : 1);
+        let cCount = user.correctCount + (isCorrect ? 1 : 0);
+        let wCount = user.wrongCount + (isCorrect ? 0 : 1);
 
-        // 3. Отправляем обновленный счет на сервер (сервер сам пересчитает уровень и ачивки)
         const saveRes = await fetch(`/api/profile/${user.username}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                correctCount: correctCount,
-                wrongCount: wrongCount,
+                correctCount: cCount,
+                wrongCount: wCount,
                 streakDays: user.streakDays
             })
         });

@@ -1,12 +1,28 @@
 from flask import Flask, jsonify, request, send_from_directory, session
 import os
 import sqlite3
-import hashlib
+from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__, static_folder='.')
-app.secret_key = 'japanese_learning_super_secret_key'
+# Секретный ключ берём из переменной окружения на проде.
+# Локально (если переменная не задана) используем запасной ключ,
+# чтобы сайт не падал при разработке.
+app.secret_key = os.environ.get('SECRET_KEY', 'dev-only-key-change-me')
+
+# На проде (HTTPS) кука сессии должна ходить только по HTTPS.
+# Если сайт крутится за HTTPS-хостингом — выставляем эти флаги.
+app.config['SESSION_COOKIE_SECURE'] = os.environ.get('FLASK_ENV') == 'production'
+app.config['SESSION_COOKIE_HTTPONLY'] = True
+app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
 
 DB_NAME = 'database.db'
+
+# Файлы и папки, которые МОЖНО отдавать напрямую по URL.
+# Всё остальное (app.py, database.db, requirements.txt, .git и т.д.)
+# отдавать нельзя — это было дырой, через которую можно было
+# скачать базу с паролями или исходники с секретным ключом.
+ALLOWED_STATIC_EXTENSIONS = {'.html', '.css', '.js', '.png', '.jpg', '.jpeg',
+                              '.gif', '.svg', '.ico', '.webp', '.woff', '.woff2'}
 
 # Список всех достижений в системе
 ACHIEVEMENTS_LIST = {
@@ -56,7 +72,7 @@ def get_db_connection():
     return conn
 
 def hash_password(password):
-    return hashlib.sha256(password.encode('utf-8')).hexdigest()
+    return generate_password_hash(password)
 
 def check_and_unlock_achievements(cursor, user_id, user_data):
     """Проверяет условия и выдает ачивки"""
@@ -91,8 +107,18 @@ def index():
 
 @app.route('/<path:path>')
 def serve_file(path):
-    if os.path.exists(path):
-        return send_from_directory('.', path)
+    # os.path.exists(path) отдавал ЛЮБОЙ файл проекта, включая
+    # database.db (пароли пользователей) и app.py (секретный ключ).
+    # Теперь отдаём только файлы из белого списка расширений и
+    # запрещаем выход за пределы папки проекта (../../etc/passwd и т.п.).
+    safe_path = os.path.normpath(path)
+    if safe_path.startswith('..') or os.path.isabs(safe_path):
+        return send_from_directory('.', 'index.html')
+
+    _, ext = os.path.splitext(safe_path)
+    if ext.lower() in ALLOWED_STATIC_EXTENSIONS and os.path.isfile(safe_path):
+        return send_from_directory('.', safe_path)
+
     return send_from_directory('.', 'index.html')
 
 @app.route('/api/register', methods=['POST'])
@@ -134,7 +160,7 @@ def login():
     user = cursor.fetchone()
     conn.close()
 
-    if user and user['password_hash'] == hash_password(password):
+    if user and check_password_hash(user['password_hash'], password):
         session['username'] = username
         return jsonify({
             "status": "success",
@@ -260,4 +286,4 @@ def get_achievements():
 
 if __name__ == '__main__':
     print("🚀 Сервер запущен на http://127.0.0.1:5000")
-    app.run(debug=True, port=5000)
+    app.run(debug=os.environ.get('FLASK_ENV') != 'production', port=5000)
