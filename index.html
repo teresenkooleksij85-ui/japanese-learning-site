@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NihongoGo — Японский с огоньком</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Уведомление -->
+    <div class="notification" id="notification">
+        <span class="notif-icon" id="notifIcon">🎉</span>
+        <span id="notifTitle">Achievement!</span>
+        <div class="notif-sub" id="notifSub">+5 XP</div>
+    </div>
+
+    <!-- Звуки -->
+    <audio id="soundCorrect" preload="auto">
+        <source src="https://assets.mixkit.co/active_storage/sfx/2003/2003-preview.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="soundWrong" preload="auto">
+        <source src="https://assets.mixkit.co/active_storage/sfx/2000/2000-preview.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="soundLevelUp" preload="auto">
+        <source src="https://assets.mixkit.co/active_storage/sfx/2010/2010-preview.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Шапка -->
+    <header class="header">
+        <div class="logo">🇯🇵 Nihongo<span>Go</span></div>
+        <div class="nav">
+            <a class="active" data-page="home" data-ru="Главная" data-en="Home">Главная</a>
+            <a data-page="profile" data-ru="Профиль" data-en="Profile">Профиль</a>
+            <a data-page="quests" data-ru="Задания" data-en="Quests">Задания</a>
+            <a data-page="alphabet" data-ru="Азбука" data-en="Alphabet">Азбука</a>
+            <a data-page="kanji" data-ru="Кандзи" data-en="Kanji">Кандзи</a>
+            <a data-page="grammar" data-ru="Грамматика" data-en="Grammar">Грамматика</a>
+            <a data-page="vocab" data-ru="Слова" data-en="Vocabulary">Слова</a>
+            <a data-page="achievements" data-ru="🏆 Достижения" data-en="🏆 Achievements">🏆 Достижения</a>
+            <a data-page="hangman" data-ru="🎮 Виселица" data-en="🎮 Hangman">🎮 Виселица</a>
+            
+            <div class="search-container">
+                <input type="text" id="globalSearch" placeholder="🔍 Поиск..." data-ru-placeholder="🔍 Поиск..." data-en-placeholder="🔍 Search..." style="padding:4px 12px; border-radius:30px; border:1px solid #2a2a4a; background:#0f0e17; color:white; font-size:12px; outline:none; width:140px; transition:0.3s;" onfocus="this.style.width='220px'" onblur="this.style.width='140px'" oninput="globalSearch(this.value)">
+                <div id="searchResults" style="display:none; position:absolute; top:38px; right:0; background:#1a1a2e; border:1px solid #e94560; border-radius:12px; padding:8px 0; max-width:400px; min-width:250px; max-height:350px; overflow-y:auto; z-index:9999; box-shadow:0 8px 32px rgba(0,0,0,0.8);"></div>
+            </div>
+            
+            <span class="user-info" id="userDisplay">👤 <strong id="usernameDisplay" data-ru="Гость" data-en="Guest">Гость</strong></span>
+            <button class="logout-btn hidden" id="logoutBtn" data-ru="Выйти" data-en="Logout">Выйти</button>
+            <button class="lang-btn active" data-lang="ru" onclick="switchLanguage('ru')">RU</button>
+            <button class="lang-btn" data-lang="en" onclick="switchLanguage('en')">EN</button>
+            <button class="theme-btn active" data-theme="dark" onclick="setTheme('dark')" title="🌙 Тёмная">🌙</button>
+            <button class="theme-btn" data-theme="light" onclick="setTheme('light')" title="☀️ Светлая">☀️</button>
+            <button class="theme-btn" data-theme="green" onclick="setTheme('green')" title="🌿 Зелёная">🌿</button>
+            <button class="lang-btn" onclick="toggleSound()" title="🔊 Звук">🔊</button>
+        </div>
+    </header>
+
+    <!-- ===== СТРАНИЦЫ ===== -->
+    
+    <!-- HOME -->
+    <div class="page active" id="page-home">
+        <div class="hero">
+            <h1 data-ru="Тишина храмов, шум мегаполисов и красота иероглифов." data-en="The silence of temples, the buzz of megacities, and the beauty of characters.">Тишина храмов, шум мегаполисов и красота иероглифов.</h1>
+            <p data-ru="Японский язык — это мелодия, которую мы поможем тебе услышать." data-en="The Japanese language is a melody that we will help you hear.">Японский язык — это мелодия, которую мы поможем тебе услышать.</p>
+            <p style="color: #6c6e8a; font-size: 14px; margin-bottom: 12px;" data-ru="Сделай первый шаг в страну восходящего солнца прямо сейчас." data-en="Take your first step into the land of the rising sun right now.">Сделай первый шаг в страну восходящего солнца прямо сейчас.</p>
+            <button class="btn-primary" onclick="switchPage('alphabet')" data-ru="🚀 Начать учиться" data-en="🚀 Start learning">🚀 Начать учиться</button>
+        </div>
+
+        <!-- СТАТИСТИКА НА ГЛАВНОЙ -->
+        <div id="homeStats" style="display:none; max-width:700px; margin:20px auto 0; background:#1a1a2e; border-radius:16px; padding:16px 20px; border:1px solid #2a2a4a;">
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+                <div>
+                    <span style="color:#6c6e8a; font-size:12px;" data-ru="Сегодня" data-en="Today">Сегодня</span>
+                    <div style="font-size:20px; font-weight:700; color:#fffffe;" id="todayCorrect">0</div>
+                    <span style="color:#a7a9be; font-size:12px;" data-ru="правильных ответов" data-en="correct answers">правильных ответов</span>
+                </div>
+                <div>
+                    <span style="color:#6c6e8a; font-size:12px;" data-ru="Всего за сегодня" data-en="Total today">Всего за сегодня</span>
+                    <div style="font-size:20px; font-weight:700; color:#e94560;" id="todayTotal">0</div>
+                    <span style="color:#a7a9be; font-size:12px;" data-ru="ответов" data-en="answers">ответов</span>
+                </div>
+                <div>
+                    <span style="color:#6c6e8a; font-size:12px;" data-ru="XP сегодня" data-en="XP today">XP сегодня</span>
+                    <div style="font-size:20px; font-weight:700; color:#FFD700;" id="todayXP">+0</div>
+                    <span style="color:#a7a9be; font-size:12px;" data-ru="заработано" data-en="earned">заработано</span>
+                </div>
+                <div>
+                    <span style="color:#6c6e8a; font-size:12px;" data-ru="Выучено" data-en="Learned">Выучено</span>
+                    <div style="font-size:20px; font-weight:700; color:#4CAF50;" id="todayLearned">0</div>
+                    <span style="color:#a7a9be; font-size:12px;" data-ru="новых кандзи/слов" data-en="new kanji/words">новых кандзи/слов</span>
+                </div>
+            </div>
+            <div style="margin-top:10px; background:#0f0e17; border-radius:8px; height:4px; overflow:hidden;">
+                <div id="todayProgressBar" style="height:100%; width:0%; background:linear-gradient(90deg,#e94560,#FFD700); border-radius:8px; transition:0.5s;"></div>
+            </div>
+            <div style="display:flex; justify-content:space-between; color:#6c6e8a; font-size:10px; margin-top:4px;">
+                <span>0%</span>
+                <span id="todayGoalText" data-ru="Цель: 20 ответов" data-en="Goal: 20 answers">Цель: 20 ответов</span>
+                <span>100%</span>
+            </div>
+        </div>
+
+        <div class="features">
+            <div class="feature-card">
+                <div class="icon">📖</div>
+                <h3 data-ru="Хирагана &amp; Катакана" data-en="Hiragana &amp; Katakana">Хирагана &amp; Катакана</h3>
+                <p data-ru="Изучай азбуки в удобном тренажёре." data-en="Learn alphabets in a user-friendly trainer.">Изучай азбуки в удобном тренажёре.</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon">✍️</div>
+                <h3 data-ru="Кандзи по уровням" data-en="Kanji by levels">Кандзи по уровням</h3>
+                <p data-ru="От N5 до N1 — более 2000 иероглифов." data-en="From N5 to N1 — over 2000 characters.">От N5 до N1 — более 2000 иероглифов.</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon">🏆</div>
+                <h3 data-ru="Система званий" data-en="Ranking system">Система званий</h3>
+                <p data-ru="От простолюдина до императора." data-en="From commoner to emperor.">От простолюдина до императора.</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon">🌍</div>
+                <h3 data-ru="Друзья &amp; Комментарии" data-en="Friends &amp; Comments">Друзья &amp; Комментарии</h3>
+                <p data-ru="Общайся и поддерживай других." data-en="Chat and support others.">Общайся и поддерживай других.</p>
+            </div>
+        </div>
+
+        <!-- Аутентификация -->
+        <div id="authContainer" style="margin-top: 20px;">
+            <div id="loginForm" class="auth-form">
+                <h2 data-ru="🔐 Вход" data-en="🔐 Login">🔐 Вход</h2>
+                <div id="loginError" class="auth-error hidden"></div>
+                <input type="text" id="loginUsername" placeholder="Имя пользователя" data-ru-placeholder="Имя пользователя" data-en-placeholder="Username">
+                <input type="password" id="loginPassword" placeholder="Пароль" data-ru-placeholder="Пароль" data-en-placeholder="Password">
+                <button onclick="login()" data-ru="Войти" data-en="Login">Войти</button>
+                <div class="switch-link">
+                    <span data-ru="Нет аккаунта?" data-en="No account?">Нет аккаунта?</span> <a onclick="showRegister()" data-ru="Зарегистрироваться" data-en="Register">Зарегистрироваться</a>
+                </div>
+            </div>
+            <div id="registerForm" class="auth-form hidden">
+                <h2 data-ru="📝 Регистрация" data-en="📝 Register">📝 Регистрация</h2>
+                <div id="registerError" class="auth-error hidden"></div>
+                <div id="registerSuccess" class="auth-success hidden"></div>
+                <input type="text" id="regUsername" placeholder="Имя пользователя" data-ru-placeholder="Имя пользователя" data-en-placeholder="Username">
+                <input type="password" id="regPassword" placeholder="Пароль (минимум 4 символа)" data-ru-placeholder="Пароль (минимум 4 символа)" data-en-placeholder="Password (min 4 chars)">
+                <button onclick="register()" data-ru="Создать аккаунт" data-en="Create account">Создать аккаунт</button>
+                <div class="switch-link">
+                    <span data-ru="Уже есть аккаунт?" data-en="Already have an account?">Уже есть аккаунт?</span> <a onclick="showLogin()" data-ru="Войти" data-en="Login">Войти</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Реклама -->
+        <div class="ad-container" id="adHome">
+            <div class="ad-label" data-ru="📢 Реклама" data-en="📢 Ad">📢 Реклама</div>
+            <div class="ad-placeholder">
+                <strong data-ru="Здесь будет ваша реклама" data-en="Your ad here">Здесь будет ваша реклама</strong><br>
+                <span data-ru="Google AdSense / Я.Директ" data-en="Google AdSense / Yandex">Google AdSense / Я.Директ</span>
+            </div>
+        </div>
+
+        <!-- ГОСТЕВАЯ КНИГА -->
+        <div style="max-width: 700px; margin: 30px auto 0; background: #1a1a2e; border-radius: 20px; padding: 20px 24px; border: 1px solid #2a2a4a;">
+            <h3 style="color: #e94560; margin-bottom: 12px; font-size: 20px;" data-ru="💬 Сообщения" data-en="💬 Messages">💬 Сообщения</h3>
+            
+            <div id="messageForm" style="display: none; margin-bottom: 16px;">
+                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                    <input type="text" id="messageInput" placeholder="Напиши сообщение..." data-ru-placeholder="Напиши сообщение..." data-en-placeholder="Write a message..." style="flex: 1; min-width: 200px; padding: 10px 14px; border-radius: 12px; border: 1px solid #2a2a4a; background: #0f0e17; color: white; font-size: 14px; outline: none;">
+                    <button onclick="sendMessage()" style="background: #e94560; color: white; border: none; padding: 10px 24px; border-radius: 12px; font-weight: 700; cursor: pointer; font-size: 14px; transition: 0.3s;" data-ru="📤 Отправить" data-en="📤 Send">📤 Отправить</button>
+                </div>
+                <div id="messageError" class="auth-error hidden" style="margin-top: 6px;"></div>
+            </div>
+            
+            <div id="guestMessage" style="color: #a7a9be; font-size: 14px; padding: 10px 0;" data-ru="🔐 Войди в аккаунт, чтобы писать сообщения." data-en="🔐 Log in to write messages.">🔐 Войди в аккаунт, чтобы писать сообщения.</div>
+            
+            <div id="messagesList" style="max-height: 600px; overflow-y: auto; margin-top: 12px;"></div>
+        </div>
+    </div>
+
+    <!-- PROFILE -->
+    <div class="page" id="page-profile">
+        <h2 style="font-size: 24px; color: #e94560; text-align: center;" data-ru="👤 Профиль" data-en="👤 Profile">👤 Профиль</h2>
+        
+        <div class="profile-grid">
+            <div class="profile-card">
+                <h3 data-ru="📊 Общая статистика" data-en="📊 Overall Stats">📊 Общая статистика</h3>
+                <div class="stat"><span data-ru="Всего ответов" data-en="Total answers">Всего ответов</span> <strong id="pTotal">0</strong></div>
+                <div class="stat"><span data-ru="✅ Правильно" data-en="✅ Correct">✅ Правильно</span> <strong id="pCorrect">0</strong></div>
+                <div class="stat"><span data-ru="❌ Ошибок" data-en="❌ Wrong">❌ Ошибок</span> <strong id="pWrong">0</strong></div>
+                <div class="stat"><span data-ru="📈 Точность" data-en="📈 Accuracy">📈 Точность</span> <strong id="pAccuracy">0%</strong></div>
+                <div class="stat"><span data-ru="⭐️ Всего XP" data-en="⭐️ Total XP">⭐️ Всего XP</span> <strong id="pXP">0</strong></div>
+                <div class="stat"><span data-ru="📅 Дней в школе" data-en="📅 Days">📅 Дней в школе</span> <strong id="pDays">1</strong></div>
+                <div class="stat"><span data-ru="🔥 Стрик" data-en="🔥 Streak">🔥 Стрик</span> <strong id="pStreak">0</strong> <span id="pStreakBonus" style="color:#e94560;font-size:11px;"></span></div>
+            </div>
+            
+            <div class="profile-card">
+                <h3 data-ru="🏅 Звание и Уровень" data-en="🏅 Rank &amp; Level">🏅 Звание и Уровень</h3>
+                <div class="rank-badge" id="pRank">Простолюдин</div>
+                <div class="level-badge"><span data-ru="Уровень" data-en="Level">Уровень</span>: <strong id="pLevel">0</strong></div>
+                <div style="margin-top: 6px; text-align: center; color: #a7a9be; font-size: 12px;">
+                    <span data-ru="До следующего звания" data-en="Next rank in">До следующего звания</span>: <strong id="pNextRankXP">10</strong> XP
+                </div>
+                <div style="margin-top: 4px; background: #0f0e17; border-radius: 6px; height: 6px; overflow: hidden;">
+                    <div id="pRankBar" style="height: 100%; width: 0%; background: #e94560; border-radius: 6px; transition: 0.5s;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- СТАТИСТИКА ПО РАЗДЕЛАМ -->
+        <div style="margin-top: 14px; display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+            <div class="profile-card" onclick="switchPage('alphabet')" style="cursor:pointer; transition:0.3s;" onmouseenter="this.style.borderColor='#e94560'" onmouseleave="this.style.borderColor='#2a2a4a'">
+                <h3 style="display:flex; justify-content:space-between; align-items:center;">
+                    <span data-ru="📖 Азбука" data-en="📖 Alphabet">📖 Азбука</span>
+                    <span style="font-size:12px; color:#e94560;">➜</span>
+                </h3>
+                <div class="stat"><span data-ru="✅ Правильно" data-en="✅ Correct">✅ Правильно</span> <strong id="pAlphabetCorrect">0</strong></div>
+                <div class="stat"><span data-ru="❌ Ошибок" data-en="❌ Wrong">❌ Ошибок</span> <strong id="pAlphabetWrong">0</strong></div>
+                <div class="stat"><span data-ru="📊 Точность" data-en="📊 Accuracy">📊 Точность</span> <strong id="pAlphabetAccuracy">0%</strong></div>
+                <div style="margin-top:4px; background:#0f0e17; border-radius:4px; height:4px; overflow:hidden;">
+                    <div id="pAlphabetBar" style="height:100%; width:0%; background:#4CAF50; border-radius:4px; transition:0.5s;"></div>
+                </div>
+            </div>
+
+            <div class="profile-card" onclick="switchPage('kanji')" style="cursor:pointer; transition:0.3s;" onmouseenter="this.style.borderColor='#e94560'" onmouseleave="this.style.borderColor='#2a2a4a'">
+                <h3 style="display:flex; justify-content:space-between; align-items:center;">
+                    <span data-ru="🀄 Кандзи" data-en="🀄 Kanji">🀄 Кандзи</span>
+                    <span style="font-size:12px; color:#e94560;">➜</span>
+                </h3>
+                <div class="stat"><span data-ru="✅ Выучено" data-en="✅ Learned">✅ Выучено</span> <strong id="pKanjiLearned">0</strong></div>
+                <div class="stat"><span data-ru="✅ Правильно" data-en="✅ Correct">✅ Правильно</span> <strong id="pKanjiCorrect">0</strong></div>
+                <div class="stat"><span data-ru="❌ Ошибок" data-en="❌ Wrong">❌ Ошибок</span> <strong id="pKanjiWrong">0</strong></div>
+                <div style="margin-top:4px; background:#0f0e17; border-radius:4px; height:4px; overflow:hidden;">
+                    <div id="pKanjiBar" style="height:100%; width:0%; background:#e94560; border-radius:4px; transition:0.5s;"></div>
+                </div>
+            </div>
+
+            <div class="profile-card" onclick="switchPage('grammar')" style="cursor:pointer; transition:0.3s;" onmouseenter="this.style.borderColor='#e94560'" onmouseleave="this.style.borderColor='#2a2a4a'">
+                <h3 style="display:flex; justify-content:space-between; align-items:center;">
+                    <span data-ru="📚 Грамматика" data-en="📚 Grammar">📚 Грамматика</span>
+                    <span style="font-size:12px; color:#e94560;">➜</span>
+                </h3>
+                <div class="stat"><span data-ru="✅ Пройдено" data-en="✅ Completed">✅ Пройдено</span> <strong id="pGrammarCompleted">0</strong></div>
+                <div class="stat"><span data-ru="✅ Правильно" data-en="✅ Correct">✅ Правильно</span> <strong id="pGrammarCorrect">0</strong></div>
+                <div class="stat"><span data-ru="❌ Ошибок" data-en="❌ Wrong">❌ Ошибок</span> <strong id="pGrammarWrong">0</strong></div>
+                <div style="margin-top:4px; background:#0f0e17; border-radius:4px; height:4px; overflow:hidden;">
+                    <div id="pGrammarBar" style="height:100%; width:0%; background:#FF9800; border-radius:4px; transition:0.5s;"></div>
+                </div>
+            </div>
+
+            <div class="profile-card" onclick="switchPage('vocab')" style="cursor:pointer; transition:0.3s;" onmouseenter="this.style.borderColor='#e94560'" onmouseleave="this.style.borderColor='#2a2a4a'">
+                <h3 style="display:flex; justify-content:space-between; align-items:center;">
+                    <span data-ru="📖 Слова" data-en="📖 Vocabulary">📖 Слова</span>
+                    <span style="font-size:12px; color:#e94560;">➜</span>
+                </h3>
+                <div class="stat"><span data-ru="✅ Выучено" data-en="✅ Learned">✅ Выучено</span> <strong id="pVocabLearned">0</strong></div>
+                <div class="stat"><span data-ru="✅ Правильно" data-en="✅ Correct">✅ Правильно</span> <strong id="pVocabCorrect">0</strong></div>
+                <div class="stat"><span data-ru="❌ Ошибок" data-en="❌ Wrong">❌ Ошибок</span> <strong id="pVocabWrong">0</strong></div>
+                <div style="margin-top:4px; background:#0f0e17; border-radius:4px; height:4px; overflow:hidden;">
+                    <div id="pVocabBar" style="height:100%; width:0%; background:#9C27B0; border-radius:4px; transition:0.5s;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ДОСТИЖЕНИЯ И КНОПКИ -->
+        <div class="profile-card" style="margin-top: 14px; padding: 14px;">
+            <h3 data-ru="🏆 Достижения" data-en="🏆 Achievements">🏆 Достижения</h3>
+            <div id="achievementsList" style="display:flex; flex-wrap:wrap; gap:6px; color:#a7a9be; font-size:13px;">
+                <span data-ru="Пока нет достижений. Продолжай учиться!" data-en="No achievements yet. Keep learning!">Пока нет достижений. Продолжай учиться!</span>
+            </div>
+            <div style="display:flex; gap:8px; margin-top:10px; flex-wrap:wrap;">
+                <button onclick="showErrors()" style="flex:1; background:#2a2a4a; color:white; border:none; padding:6px 14px; border-radius:30px; font-weight:700; cursor:pointer; font-size:13px; transition:0.3s;" data-ru="❌ Показать ошибки" data-en="❌ Show errors">❌ Показать ошибки</button>
+                <button onclick="switchPage('achievements')" style="flex:1; background:#FFD700; color:#1a1a2e; border:none; padding:6px 14px; border-radius:30px; font-weight:700; cursor:pointer; font-size:13px; transition:0.3s;" data-ru="🏆 Все достижения" data-en="🏆 All achievements">🏆 Все достижения</button>
+                <button onclick="showRewardedAd()" style="flex:1; background:#e94560; color:white; border:none; padding:6px 14px; border-radius:30px; font-weight:700; cursor:pointer; font-size:13px; transition:0.3s;" data-ru="📺 Реклама (+10 XP)" data-en="📺 Watch ad (+10 XP)">📺 Реклама (+10 XP)</button>
+            </div>
+        </div>
+
+        <div class="ad-container" id="adProfile" style="margin-top: 10px;">
+            <div class="ad-label" data-ru="📢 Реклама" data-en="📢 Ad">📢 Реклама</div>
+            <div class="ad-placeholder">
+                <strong data-ru="Рекламный блок" data-en="Ad block">Рекламный блок</strong><br>
+                <span data-ru="Здесь может быть ваше предложение" data-en="Your offer here">Здесь может быть ваше предложение</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- МОДАЛЬНОЕ ОКНО С ОШИБКАМИ -->
+    <div id="errorsModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:9999; justify-content:center; align-items:center;">
+        <div style="background:#1a1a2e; border-radius:20px; padding:24px; max-width:500px; width:90%; max-height:80vh; overflow-y:auto; border:1px solid #e94560;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                <h3 style="color:#e94560;" data-ru="❌ Ошибки по разделам" data-en="❌ Errors by section">❌ Ошибки по разделам</h3>
+                <button onclick="document.getElementById('errorsModal').style.display='none'" style="background:transparent; border:none; color:#fffffe; font-size:24px; cursor:pointer;">✕</button>
+            </div>
+            <div id="errorsList">
+                <p style="color:#a7a9be;">Загрузка...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- QUESTS -->
+    <div class="page" id="page-quests">
+        <h2 style="font-size: 24px; color: #e94560; text-align: center;" data-ru="📋 Ежедневные задания" data-en="📋 Daily quests">📋 Ежедневные задания</h2>
+        <p style="text-align: center; color: #a7a9be; margin-bottom: 12px; font-size: 13px;" data-ru="Задания подбираются под твой уровень. Выполни все 5 и получи бонус +50 XP!" data-en="Quests are tailored to your level. Complete all 5 and get +50 XP bonus!">Задания подбираются под твой уровень. Выполни все 5 и получи бонус +50 XP!</p>
+        <div style="max-width: 550px; margin: 0 auto; background: #1a1a2e; border-radius: 18px; padding: 14px 16px; border: 1px solid #2a2a4a;">
+            <div id="questsList"></div>
+            <div style="margin-top: 10px; text-align: center; padding: 8px; background: #0f0e17; border-radius: 10px;">
+                <span style="color: #a7a9be; font-size: 13px;" data-ru="Бонус за все задания: " data-en="Bonus for all quests: ">Бонус за все задания: </span>
+                <span style="color: #e94560; font-size: 18px; font-weight: 900;" id="questBonusStatus">+0 XP</span>
+            </div>
+            <button class="btn-primary" style="width: 100%; margin-top: 8px; padding: 6px; font-size: 13px;" id="resetQuestsBtn" data-ru="🔄 Обновить задания" data-en="🔄 Refresh quests">🔄 Обновить задания</button>
+        </div>
+    </div>
+
+    <!-- ALPHABET -->
+    <div class="page" id="page-alphabet">
+        <h2 style="font-size: 24px; color: #e94560; text-align: center; margin-bottom: 10px;" data-ru="📖 Азбука" data-en="📖 Alphabet">📖 Азбука</h2>
+        <div style="display: flex; gap: 6px; justify-content: center; margin-bottom: 12px; flex-wrap: wrap;">
+            <button class="btn-azbuka-table active" data-table="hiragana" onclick="switchTable('hiragana')" style="background:#e94560; color:white; border:none; padding:5px 14px; border-radius:30px; font-weight:700; cursor:pointer; font-size:12px; transition:0.3s;">ひらがな</button>
+            <button class="btn-azbuka-table" data-table="hiragana_full" onclick="switchTable('hiragana_full')" style="background:#2a2a4a; color:#a7a9be; border:none; padding:5px 14px; border-radius:30px; font-weight:700; cursor:pointer; font-size:12px; transition:0.3s;" data-ru="ひらがな 全" data-en="Hiragana Full">ひらがな 全</button>
+            <button class="btn-azbuka-table" data-table="katakana" onclick="switchTable('katakana')" style="background:#2a2a4a; color:#a7a9be; border:none; padding:5px 14px; border-radius:30px; font-weight:700; cursor:pointer; font-size:12px; transition:0.3s;">カタカナ</button>
+            <button class="btn-azbuka-table" data-table="katakana_full" onclick="switchTable('katakana_full')" style="background:#2a2a4a; color:#a7a9be; border:none; padding:5px 14px; border-radius:30px; font-weight:700; cursor:pointer; font-size:12px; transition:0.3s;" data-ru="カタカナ 全" data-en="Katakana Full">カタカナ 全</button>
+            <button class="btn-azbuka-table" data-table="train" onclick="switchTable('train')" style="background:#2a2a4a; color:#a7a9be; border:none; padding:5px 14px; border-radius:30px; font-weight:700; cursor:pointer; font-size:12px; transition:0.3s;" data-ru="🎯 Тренажёр" data-en="🎯 Trainer">🎯 Тренажёр</button>
+        </div>
+        <div id="alphabetTable" style="max-width: 700px; margin: 0 auto; overflow-x: auto;"></div>
+        <div id="alphabetTrainer" style="display: none; max-width: 440px; margin: 0 auto;">
+            <div class="filter-panel" id="filterPanel">
+                <div class="filter-title" data-ru="🎯 Выбери, что учить" data-en="🎯 Choose what to learn">🎯 Выбери, что учить</div>
+                <div class="filter-rows" id="filterRows"></div>
+                <div class="filter-chars" id="filterChars"></div>
+                <div class="filter-actions">
+                    <button onclick="filterSelectAll()" data-ru="✅ Все" data-en="✅ All">✅ Все</button>
+                    <button onclick="filterSelectNone()" data-ru="❌ Ничего" data-en="❌ None">❌ Ничего</button>
+                    <button onclick="filterResetToDefault()" data-ru="🔄 Сбросить" data-en="🔄 Reset">🔄 Сбросить</button>
+                </div>
+            </div>
+            <div class="trainer-wrapper">
+                <div class="kanji-display" id="kanjiDisplay">あ</div>
+                <div class="options" id="optionsContainer">
+                    <button class="option-btn" data-index="0">A</button>
+                    <button class="option-btn" data-index="1">I</button>
+                    <button class="option-btn" data-index="2">U</button>
+                    <button class="option-btn" data-index="3">E</button>
+                </div>
+                <div class="message" id="message"></div>
+                <div class="score-box">
+                    <div>✅ <span id="correctCount">0</span></div>
+                    <div>❌ <span id="wrongCount">0</span></div>
+                    <div>📊 <span id="totalCount">0</span></div>
+                </div>
+                <button class="reset-btn" id="resetBtn" data-ru="🔄 Начать заново" data-en="🔄 Restart">🔄 Начать заново</button>
+                <div class="ad-container ad-trainer" id="adTrainer">
+                    <div class="ad-label" data-ru="📢 Реклама" data-en="📢 Ad">📢 Реклама</div>
+                    <div class="ad-placeholder">
+                        <strong data-ru="Поддержи проект — посмотри рекламу" data-en="Support the project — watch an ad">Поддержи проект — посмотри рекламу</strong><br>
+                        <span data-ru="+5 XP за просмотр (скоро)" data-en="+5 XP for watching (soon)">+5 XP за просмотр (скоро)</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- KANJI -->
+    <div class="page" id="page-kanji">
+        <h2 style="font-size: 24px; color: #e94560; text-align: center; margin-bottom: 4px;" data-ru="🀄 Кандзи" data-en="🀄 Kanji">🀄 Кандзи</h2>
+        <p style="text-align: center; color: #a7a9be; margin-bottom: 12px; font-size: 13px;" data-ru="Первые 100 базовых кандзи (JLPT N5)" data-en="First 100 basic kanji (JLPT N5)">Первые 100 базовых кандзи (JLPT N5)</p>
+        
+        <div style="display: flex; gap: 6px; justify-content: center; margin-bottom: 12px; flex-wrap: wrap;">
+            <button class="btn-kanji-tab active" data-tab="list" onclick="switchKanjiTab('list')" style="background:#e94560; color:white; border:none; padding:5px 14px; border-radius:30px; font-weight:700; cursor:pointer; font-size:12px; transition:0.3s;" data-ru="📚 Список" data-en="📚 List">📚 Список</button>
+            <button class="btn-kanji-tab" data-tab="train" onclick="switchKanjiTab('train')" style="background:#2a2a4a; color:#a7a9be; border:none; padding:5px 14px; border-radius:30px; font-weight:700; cursor:pointer; font-size:12px; transition:0.3s;" data-ru="🎯 Тренажёр" data-en="🎯 Trainer">🎯 Тренажёр</button>
+            <button class="btn-kanji-tab" data-tab="progress" onclick="switchKanjiTab('progress')" style="background:#2a2a4a; color:#a7a9be; border:none; padding:5px 14px; border-radius:30px; font-weight:700; cursor:pointer; font-size:12px; transition:0.3s;" data-ru="📊 Прогресс" data-en="📊 Progress">📊 Прогресс</button>
+        </div>
+        
+        <div style="max-width:750px; margin:0 auto 12px; display:flex; gap:8px; flex-wrap:wrap;">
+            <input type="text" id="kanjiSearch" placeholder="🔍 Поиск по кандзи (иероглиф, чтение, значение)..." data-ru-placeholder="🔍 Поиск по кандзи (иероглиф, чтение, значение)..." data-en-placeholder="🔍 Search kanji (character, reading, meaning)..." style="flex:1; min-width:200px; padding:8px 14px; border-radius:30px; border:1px solid #2a2a4a; background:#0f0e17; color:white; font-size:13px; outline:none;" oninput="filterKanjiList(this.value)">
+            <button onclick="document.getElementById('kanjiSearch').value=''; filterKanjiList('')" style="background:#2a2a4a; border:none; color:#a7a9be; border-radius:30px; padding:6px 14px; cursor:pointer;">✕</button>
+        </div>
+        
+        <div id="kanjiList" class="kanji-tab-content active">
+            <div class="kanji-group-filter" id="kanjiGroupFilter">
+                <button class="kanji-group-btn active" data-group="all" data-ru="📋 Все" data-en="📋 All" onclick="filterKanjiByGroup('all')">📋 Все</button>
+                <button class="kanji-group-btn" data-group="numbers" data-ru="🔢 Цифры" data-en="🔢 Numbers" onclick="filterKanjiByGroup('numbers')">🔢 Цифры</button>
+                <button class="kanji-group-btn" data-group="time" data-ru="⏰ Время" data-en="⏰ Time" onclick="filterKanjiByGroup('time')">⏰ Время</button>
+                <button class="kanji-group-btn" data-group="nature" data-ru="🌿 Природа" data-en="🌿 Nature" onclick="filterKanjiByGroup('nature')">🌿 Природа</button>
+                <button class="kanji-group-btn" data-group="food" data-ru="🍣 Еда" data-en="🍣 Food" onclick="filterKanjiByGroup('food')">🍣 Еда</button>
+                <button class="kanji-group-btn" data-group="places" data-ru="🏠 Места" data-en="🏠 Places" onclick="filterKanjiByGroup('places')">🏠 Места</button>
+                <button class="kanji-group-btn" data-group="actions" data-ru="⚡ Действия" data-en="⚡ Actions" onclick="filterKanjiByGroup('actions')">⚡ Действия</button>
+                <button class="kanji-group-btn" data-group="descriptions" data-ru="📝 Описания" data-en="📝 Descriptions" onclick="filterKanjiByGroup('descriptions')">📝 Описания</button>
+            </div>
+            <div id="kanjiGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 6px; max-width: 750px; margin: 0 auto;"></div>
+        </div>
+        
+        <div id="kanjiTrain" class="kanji-tab-content" style="display: none;">
+            <div class="filter-panel" id="kanjiFilterPanel">
+                <div class="filter-title" data-ru="🎯 Выбери кандзи для тренировки" data-en="🎯 Choose kanji for training">🎯 Выбери кандзи для тренировки</div>
+                <div class="filter-rows" id="kanjiFilterRows"></div>
+                <div class="filter-chars" id="kanjiFilterChars"></div>
+                <div class="filter-actions">
+                    <button onclick="kanjiFilterSelectAll()" data-ru="✅ Все" data-en="✅ All">✅ Все</button>
+                    <button onclick="kanjiFilterSelectNone()" data-ru="❌ Ничего" data-en="❌ None">❌ Ничего</button>
+                    <button onclick="kanjiFilterResetToDefault()" data-ru="🔄 Сбросить" data-en="🔄 Reset">🔄 Сбросить</button>
+                </div>
+            </div>
+            <div class="trainer-wrapper" style="max-width: 400px;">
+                <div style="text-align: center; font-size: 60px; font-weight: 700; color: #e94560; min-height: 70px; line-height: 1.2; cursor: pointer;" id="kanjiDisplayTrain" onclick="speakChar(currentKanjiChar)">一</div>
+                <div style="text-align: center; color: #a7a9be; font-size: 13px; margin-bottom: 8px;" id="kanjiQuestion" data-ru="Выбери правильное чтение" data-en="Choose the correct reading">Выбери правильное чтение</div>
+                <div class="options" id="kanjiOptions" style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px;">
+                    <button class="option-btn" data-index="0">いち</button>
+                    <button class="option-btn" data-index="1">に</button>
+                    <button class="option-btn" data-index="2">さん</button>
+                    <button class="option-btn" data-index="3">よん</button>
+                </div>
+                <div class="message" id="kanjiMessage"></div>
+                <div class="score-box">
+                    <div>✅ <span id="kanjiCorrect">0</span></div>
+                    <div>❌ <span id="kanjiWrong">0</span></div>
+                    <div>📊 <span id="kanjiTotal">0</span></div>
+                </div>
+                <button class="reset-btn" id="kanjiResetBtn" data-ru="🔄 Начать заново" data-en="🔄 Restart">🔄 Начать заново</button>
+            </div>
+        </div>
+        
+        <div id="kanjiProgress" class="kanji-tab-content" style="display: none;">
+            <div style="max-width: 450px; margin: 0 auto; background: #1a1a2e; border-radius: 18px; padding: 14px 16px; border: 1px solid #2a2a4a;">
+                <div class="stat"><span data-ru="Всего кандзи" data-en="Total kanji">Всего кандзи</span> <strong id="kanjiTotalCount" style="color: #fffffe;">100</strong></div>
+                <div class="stat"><span data-ru="✅ Выучено" data-en="✅ Learned">✅ Выучено</span> <strong id="kanjiLearnedCount" style="color: #4CAF50;">0</strong></div>
+                <div class="stat"><span data-ru="📈 Прогресс" data-en="📈 Progress">📈 Прогресс</span> <strong id="kanjiProgressPercent" style="color: #e94560;">0%</strong></div>
+                <div style="margin-top: 6px; background: #0f0e17; border-radius: 6px; height: 10px; overflow: hidden;">
+                    <div id="kanjiProgressBar" style="height: 100%; width: 0%; background: #e94560; border-radius: 6px; transition: 0.5s;"></div>
+                </div>
+                <p style="text-align: center; color: #6c6e8a; font-size: 11px; margin-top: 8px;" data-ru="💡 Кандзи считается выученным после 3 правильных ответов подряд" data-en="💡 A kanji is learned after 3 correct answers in a row">💡 Кандзи считается выученным после 3 правильных ответов подряд</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- GRAMMAR -->
+    <div class="page" id="page-grammar">
+        <h2 style="font-size: 24px; color: #e94560; text-align: center; margin-bottom: 4px;" data-ru="📚 Грамматика" data-en="📚 Grammar">📚 Грамматика</h2>
+        <p style="text-align: center; color: #a7a9be; margin-bottom: 12px; font-size: 13px;" data-ru="Базовые конструкции JLPT N5" data-en="Basic JLPT N5 grammar">Базовые конструкции JLPT N5</p>
+        
+        <div style="display: flex; gap: 6px; justify-content: center; margin-bottom: 12px; flex-wrap: wrap;">
+            <button class="btn-grammar-tab active" data-tab="list" onclick="switchGrammarTab('list')" style="background:#e94560; color:white; border:none; padding:5px 14px; border-radius:30px; font-weight:700; cursor:pointer; font-size:12px; transition:0.3s;" data-ru="📖 Список" data-en="📖 List">📖 Список</button>
+            <button class="btn-grammar-tab" data-tab="train" onclick="switchGrammarTab('train')" style="background:#2a2a4a; color:#a7a9be; border:none; padding:5px 14px; border-radius:30px; font-weight:700; cursor:pointer; font-size:12px; transition:0.3s;" data-ru="🎯 Тренажёр" data-en="🎯 Trainer">🎯 Тренажёр</button>
+            <button class="btn-grammar-tab" data-tab="progress" onclick="switchGrammarTab('progress')" style="background:#2a2a4a; color:#a7a9be; border:none; padding:5px 14px; border-radius:30px; font-weight:700; cursor:pointer; font-size:12px; transition:0.3s;" data-ru="📊 Прогресс" data-en="📊 Progress">📊 Прогресс</button>
+        </div>
+        
+        <div style="max-width:800px; margin:0 auto 12px; display:flex; gap:8px; flex-wrap:wrap;">
+            <input type="text" id="grammarSearch" placeholder="🔍 Поиск по грамматике (паттерн, значение, вопрос)..." data-ru-placeholder="🔍 Поиск по грамматике (паттерн, значение, вопрос)..." data-en-placeholder="🔍 Search grammar (pattern, meaning, question)..." style="flex:1; min-width:200px; padding:8px 14px; border-radius:30px; border:1px solid #2a2a4a; background:#0f0e17; color:white; font-size:13px; outline:none;" oninput="filterGrammarList(this.value)">
+            <button onclick="document.getElementById('grammarSearch').value=''; filterGrammarList('')" style="background:#2a2a4a; border:none; color:#a7a9be; border-radius:30px; padding:6px 14px; cursor:pointer;">✕</button>
+        </div>
+        
+        <div id="grammarList" class="grammar-tab-content active">
+            <div id="grammarGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px; max-width: 800px; margin: 0 auto;"></div>
+        </div>
+        
+        <div id="grammarTrain" class="grammar-tab-content" style="display: none;">
+            <div class="trainer-wrapper" style="max-width: 440px;">
+                <div id="grammarSentenceContainer" style="margin-bottom: 10px;">
+                    <div class="grammar-sentence" id="grammarSentence">
+                        <span id="grammarQuestionText">私___学生です。</span>
+                        <small id="grammarHintText">Частица は — тема предложения</small>
+                    </div>
+                    <div style="display: flex; justify-content: center; gap: 8px; flex-wrap: wrap;">
+                        <button class="speak-btn" id="grammarSpeakBtn" onclick="speakGrammarSentence()">🔊 Озвучить</button>
+                        <div class="auto-speak-toggle">
+                            <label for="autoSpeakGrammar">Авто-озвучка</label>
+                            <input type="checkbox" id="autoSpeakGrammar" checked>
+                        </div>
+                    </div>
+                </div>
+                <div class="options" id="grammarOptions" style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px;">
+                    <button class="option-btn" data-index="0">に</button>
+                    <button class="option-btn" data-index="1">へ</button>
+                    <button class="option-btn" data-index="2">で</button>
+                    <button class="option-btn" data-index="3">を</button>
+                </div>
+                <div class="message" id="grammarMessage"></div>
+                <div class="score-box">
+                    <div>✅ <span id="grammarCorrect">0</span></div>
+                    <div>❌ <span id="grammarWrong">0</span></div>
+                    <div>📊 <span id="grammarTotal">0</span></div>
+                </div>
+                <button class="reset-btn" id="grammarResetBtn" data-ru="🔄 Начать заново" data-en="🔄 Restart">🔄 Начать заново</button>
+            </div>
+        </div>
+        
+        <div id="grammarProgress" class="grammar-tab-content" style="display: none;">
+            <div style="max-width: 450px; margin: 0 auto; background: #1a1a2e; border-radius: 18px; padding: 14px 16px; border: 1px solid #2a2a4a;">
+                <div class="stat"><span data-ru="Всего тем" data-en="Total topics">Всего тем</span> <strong id="grammarTotalCount" style="color: #fffffe;">0</strong></div>
+                <div class="stat"><span data-ru="✅ Пройдено" data-en="✅ Completed">✅ Пройдено</span> <strong id="grammarCompletedCount" style="color: #4CAF50;">0</strong></div>
+                <div class="stat"><span data-ru="📈 Прогресс" data-en="📈 Progress">📈 Прогресс</span> <strong id="grammarProgressPercent" style="color: #e94560;">0%</strong></div>
+                <div style="margin-top: 6px; background: #0f0e17; border-radius: 6px; height: 10px; overflow: hidden;">
+                    <div id="grammarProgressBar" style="height: 100%; width: 0%; background: #e94560; border-radius: 6px; transition: 0.5s;"></div>
+                </div>
+                <p style="text-align: center; color: #6c6e8a; font-size: 11px; margin-top: 8px;" data-ru="💡 Тема считается пройденной после 2 правильных ответов подряд" data-en="💡 A topic is completed after 2 correct answers in a row">💡 Тема считается пройденной после 2 правильных ответов подряд</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- VOCABULARY -->
+    <div class="page" id="page-vocab">
+        <h2 style="font-size: 24px; color: #e94560; text-align: center; margin-bottom: 4px;" data-ru="📚 Слова" data-en="📚 Vocabulary">📚 Слова</h2>
+        <p style="text-align: center; color: #a7a9be; margin-bottom: 12px; font-size: 13px;" data-ru="Первые 100 слов JLPT N5" data-en="First 100 JLPT N5 words">Первые 100 слов JLPT N5</p>
+        
+        <div style="display: flex; gap: 6px; justify-content: center; margin-bottom: 12px; flex-wrap: wrap;">
+            <button class="btn-vocab-tab active" data-tab="list" onclick="switchVocabTab('list')" style="background:#e94560; color:white; border:none; padding:5px 14px; border-radius:30px; font-weight:700; cursor:pointer; font-size:12px; transition:0.3s;" data-ru="📖 Список" data-en="📖 List">📖 Список</button>
+            <button class="btn-vocab-tab" data-tab="train" onclick="switchVocabTab('train')" style="background:#2a2a4a; color:#a7a9be; border:none; padding:5px 14px; border-radius:30px; font-weight:700; cursor:pointer; font-size:12px; transition:0.3s;" data-ru="🎯 Тренажёр" data-en="🎯 Trainer">🎯 Тренажёр</button>
+            <button class="btn-vocab-tab" data-tab="progress" onclick="switchVocabTab('progress')" style="background:#2a2a4a; color:#a7a9be; border:none; padding:5px 14px; border-radius:30px; font-weight:700; cursor:pointer; font-size:12px; transition:0.3s;" data-ru="📊 Прогресс" data-en="📊 Progress">📊 Прогресс</button>
+        </div>
+        
+        <div style="max-width:850px; margin:0 auto 12px; display:flex; gap:8px; flex-wrap:wrap;">
+            <input type="text" id="vocabSearch" placeholder="🔍 Поиск по словам (слово, чтение, перевод)..." data-ru-placeholder="🔍 Поиск по словам (слово, чтение, перевод)..." data-en-placeholder="🔍 Search vocabulary (word, reading, translation)..." style="flex:1; min-width:200px; padding:8px 14px; border-radius:30px; border:1px solid #2a2a4a; background:#0f0e17; color:white; font-size:13px; outline:none;" oninput="filterVocabList(this.value)">
+            <button onclick="document.getElementById('vocabSearch').value=''; filterVocabList('')" style="background:#2a2a4a; border:none; color:#a7a9be; border-radius:30px; padding:6px 14px; cursor:pointer;">✕</button>
+        </div>
+        
+        <div id="vocabList" class="vocab-tab-content active">
+            <div id="vocabGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 8px; max-width: 850px; margin: 0 auto;"></div>
+        </div>
+        
+        <div id="vocabTrain" class="vocab-tab-content" style="display: none;">
+            <div class="trainer-wrapper" style="max-width: 420px;">
+                <div style="text-align: center; font-size: 28px; font-weight: 700; color: #e94560; min-height: 60px; line-height: 1.3; padding: 6px; background: #0f0e17; border-radius: 12px; margin-bottom: 6px; cursor: pointer;" id="vocabDisplay" onclick="speakChar(currentVocabWord)">食べる</div>
+                <div style="text-align: center; color: #a7a9be; font-size: 13px; margin-bottom: 4px;" id="vocabReading">たべる</div>
+                <div style="text-align: center; color: #a7a9be; font-size: 12px; margin-bottom: 8px;" id="vocabHint" data-ru="Выбери правильный перевод" data-en="Choose the correct translation">Выбери правильный перевод</div>
+                <div class="options" id="vocabOptions" style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px;">
+                    <button class="option-btn" data-index="0">есть</button>
+                    <button class="option-btn" data-index="1">пить</button>
+                    <button class="option-btn" data-index="2">готовить</button>
+                    <button class="option-btn" data-index="3">кушать</button>
+                </div>
+                <div class="message" id="vocabMessage"></div>
+                <div class="score-box">
+                    <div>✅ <span id="vocabCorrect">0</span></div>
+                    <div>❌ <span id="vocabWrong">0</span></div>
+                    <div>📊 <span id="vocabTotal">0</span></div>
+                </div>
+                <button class="reset-btn" id="vocabResetBtn" data-ru="🔄 Начать заново" data-en="🔄 Restart">🔄 Начать заново</button>
+            </div>
+        </div>
+        
+        <div id="vocabProgress" class="vocab-tab-content" style="display: none;">
+            <div style="max-width: 450px; margin: 0 auto; background: #1a1a2e; border-radius: 18px; padding: 14px 16px; border: 1px solid #2a2a4a;">
+                <div class="stat"><span data-ru="Всего слов" data-en="Total words">Всего слов</span> <strong id="vocabTotalCount" style="color: #fffffe;">0</strong></div>
+                <div class="stat"><span data-ru="✅ Выучено" data-en="✅ Learned">✅ Выучено</span> <strong id="vocabLearnedCount" style="color: #4CAF50;">0</strong></div>
+                <div class="stat"><span data-ru="📈 Прогресс" data-en="📈 Progress">📈 Прогресс</span> <strong id="vocabProgressPercent" style="color: #e94560;">0%</strong></div>
+                <div style="margin-top: 6px; background: #0f0e17; border-radius: 6px; height: 10px; overflow: hidden;">
+                    <div id="vocabProgressBar" style="height: 100%; width: 0%; background: #e94560; border-radius: 6px; transition: 0.5s;"></div>
+                </div>
+                <p style="text-align: center; color: #6c6e8a; font-size: 11px; margin-top: 8px;" data-ru="💡 Слово считается выученным после 3 правильных ответов подряд" data-en="💡 A word is learned after 3 correct answers in a row">💡 Слово считается выученным после 3 правильных ответов подряд</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ACHIEVEMENTS -->
+    <div class="page" id="page-achievements">
+        <h2 style="font-size: 24px; color: #e94560; text-align: center; margin-bottom: 4px;" data-ru="🏆 Достижения" data-en="🏆 Achievements">🏆 Достижения</h2>
+        <p style="text-align: center; color: #a7a9be; margin-bottom: 12px; font-size: 13px;" data-ru="Собирай достижения и получай XP!" data-en="Collect achievements and earn XP!">Собирай достижения и получай XP!</p>
+        
+        <div style="display: flex; gap: 6px; justify-content: center; margin-bottom: 12px; flex-wrap: wrap;">
+            <button class="btn-achievement-tab active" data-tab="all" onclick="switchAchievementsTab('all')" style="background:#e94560; color:white; border:none; padding:5px 14px; border-radius:30px; font-weight:700; cursor:pointer; font-size:12px; transition:0.3s;" data-ru="📋 Все" data-en="📋 All">📋 Все</button>
+            <button class="btn-achievement-tab" data-tab="categories" onclick="switchAchievementsTab('categories')" style="background:#2a2a4a; color:#a7a9be; border:none; padding:5px 14px; border-radius:30px; font-weight:700; cursor:pointer; font-size:12px; transition:0.3s;" data-ru="📊 По категориям" data-en="📊 By category">📊 По категориям</button>
+        </div>
+        
+        <div id="achievementsAll" class="achievement-tab-content active">
+            <div id="achievementsAllList" style="max-width:900px; margin:0 auto;"></div>
+        </div>
+        
+        <div id="achievementsCategories" class="achievement-tab-content" style="display:none;">
+            <div id="achievementsCategoriesList" style="max-width:600px; margin:0 auto;"></div>
+        </div>
+    </div>
+
+    <!-- HANGMAN -->
+    <div class="page" id="page-hangman">
+        <h2 style="font-size: 24px; color: #e94560; text-align: center; margin-bottom: 4px;" data-ru="🎮 Виселица" data-en="🎮 Hangman">🎮 Виселица</h2>
+        <p style="text-align: center; color: #a7a9be; margin-bottom: 12px; font-size: 13px;" data-ru="Угадай японское слово по буквам!" data-en="Guess the Japanese word letter by letter!">Угадай японское слово по буквам!</p>
+        
+        <div style="max-width: 500px; margin: 0 auto; background: #1a1a2e; border-radius: 20px; padding: 20px; border: 1px solid #2a2a4a;">
+            <div id="hangmanCanvas" style="text-align: center; min-height: 200px; margin-bottom: 10px;">
+                <svg width="200" height="200" viewBox="0 0 200 200" style="background: #0f0e17; border-radius: 12px;">
+                    <line x1="20" y1="180" x2="180" y2="180" stroke="#6c6e8a" stroke-width="3"/>
+                    <line x1="150" y1="180" x2="150" y2="20" stroke="#6c6e8a" stroke-width="3"/>
+                    <line x1="150" y1="20" x2="80" y2="20" stroke="#6c6e8a" stroke-width="3"/>
+                    <line x1="80" y1="20" x2="80" y2="50" stroke="#6c6e8a" stroke-width="3"/>
+                    <circle id="hangmanHead" cx="80" cy="65" r="15" fill="none" stroke="#6c6e8a" stroke-width="3" opacity="0"/>
+                    <line id="hangmanBody" x1="80" y1="80" x2="80" y2="130" stroke="#6c6e8a" stroke-width="3" opacity="0"/>
+                    <line id="hangmanLeftArm" x1="80" y1="95" x2="55" y2="115" stroke="#6c6e8a" stroke-width="3" opacity="0"/>
+                    <line id="hangmanRightArm" x1="80" y1="95" x2="105" y2="115" stroke="#6c6e8a" stroke-width="3" opacity="0"/>
+                    <line id="hangmanLeftLeg" x1="80" y1="130" x2="60" y2="160" stroke="#6c6e8a" stroke-width="3" opacity="0"/>
+                    <line id="hangmanRightLeg" x1="80" y1="130" x2="100" y2="160" stroke="#6c6e8a" stroke-width="3" opacity="0"/>
+                </svg>
+            </div>
+            
+            <div style="text-align: center; font-size: 32px; font-weight: 700; letter-spacing: 8px; color: #fffffe; min-height: 50px; padding: 10px; background: #0f0e17; border-radius: 12px; margin-bottom: 10px;" id="hangmanWord">
+                _ _ _ _ _
+            </div>
+            
+            <div style="text-align: center; color: #a7a9be; font-size: 14px; margin-bottom: 10px;" id="hangmanHint">
+                💡 Подсказка: 
+            </div>
+            
+            <div style="display: flex; flex-wrap: wrap; gap: 4px; justify-content: center; margin: 10px 0;" id="hangmanKeyboard">
+            </div>
+            
+            <div style="display: flex; justify-content: space-between; background: #0f0e17; border-radius: 10px; padding: 8px 12px; margin-top: 10px;">
+                <span style="color: #a7a9be;">✅ Побед: <strong id="hangmanWins" style="color: #4CAF50;">0</strong></span>
+                <span style="color: #a7a9be;">❌ Поражений: <strong id="hangmanLosses" style="color: #f44336;">0</strong></span>
+                <span style="color: #a7a9be;">🎯 Осталось: <strong id="hangmanAttempts" style="color: #e94560;">6</strong></span>
+            </div>
+            
+            <div style="display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap;">
+                <button onclick="startHangman()" style="flex:1; background: #e94560; color: white; border: none; padding: 8px 16px; border-radius: 30px; font-weight: 700; cursor: pointer; font-size: 13px; transition: 0.3s;" data-ru="🔄 Новое слово" data-en="🔄 New word">🔄 Новое слово</button>
+                <button onclick="resetHangmanStats()" style="flex:1; background: #2a2a4a; color: #a7a9be; border: none; padding: 8px 16px; border-radius: 30px; font-weight: 700; cursor: pointer; font-size: 13px; transition: 0.3s;" data-ru="📊 Сбросить счёт" data-en="📊 Reset score">📊 Сбросить счёт</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Подключаем скрипты -->
+<script src="data.js"></script>
+<script src="auth.js"></script>
+<script src="guestbook.js"></script>
+<script src="app.js"></script>
+<script src="trainer.js"></script>
+<script src="ui.js"></script>
+<script src="main.js"></script>
+
+</body>
+</html>
