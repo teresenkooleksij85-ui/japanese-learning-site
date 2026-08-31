@@ -1,9 +1,1 @@
-[tango.html](https://github.com/user-attachments/files/31227587/tango.html)
-[about.html](https://github.com/user-attachments/files/31227590/about.html)
-[practice.html](https://github.com/user-attachments/files/31227611/practice.html)
-[katakana.html](https://github.com/user-attachments/files/31227607/katakana.html)
-[index.html](https://github.com/user-attachments/files/31227605/index.html)
-[hiragana.html](https://github.com/user-attachments/files/31227600/hiragana.html)
-[bunpou.html](https://github.com/user-attachments/files/31227596/bunpou.html)
-[app.py](https://github.com/user-attachments/files/31227594/app.py)
-[achievements.html](https://github.com/user-attachments/files/31227593/achievements.html)
+
